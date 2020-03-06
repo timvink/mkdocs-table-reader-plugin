@@ -1,3 +1,11 @@
+[![Actions Status](https://github.com/timvink/mkdocs-table-reader-plugin/workflows/pytest/badge.svg)](https://github.com/timvink/mkdocs-table-reader-plugin/actions)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-table-reader-plugin)
+![PyPI](https://img.shields.io/pypi/v/mkdocs-table-reader-plugin)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/mkdocs-table-reader-plugin)
+[![codecov](https://codecov.io/gh/timvink/mkdocs-table-reader-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/timvink/mkdocs-table-reader-plugin)
+![GitHub contributors](https://img.shields.io/github/contributors/timvink/mkdocs-table-reader-plugin)
+![PyPI - License](https://img.shields.io/pypi/l/mkdocs-table-reader-plugin)
+
 # mkdocs-git-authors-plugin
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a `read_csv(path)` markdown tag to directly insert CSV files in a page.
