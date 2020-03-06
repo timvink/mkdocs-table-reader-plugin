@@ -6,7 +6,7 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/timvink/mkdocs-table-reader-plugin)
 ![PyPI - License](https://img.shields.io/pypi/l/mkdocs-table-reader-plugin)
 
-# mkdocs-git-authors-plugin
+# mkdocs-table-reader-plugin
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a `read_csv(path)` markdown tag to directly insert CSV files in a page.
 
