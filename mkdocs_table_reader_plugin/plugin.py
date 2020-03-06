@@ -1,7 +1,5 @@
 import re
-import os
 import pandas as pd
-from mkdocs.config import config_options
 from mkdocs.plugins import BasePlugin
 
 def read_csv(*args, **kwargs):
@@ -9,15 +7,15 @@ def read_csv(*args, **kwargs):
     # todo, make configable?
     return df.to_markdown(showindex=False)
 
-def read_table():
+def read_table(*args, **kwargs):
     df = pd.read_table(*args, **kwargs)
     return df.to_markdown(showindex=False)
 
-def read_fwf():
+def read_fwf(*args, **kwargs):
     df = pd.read_fwf(*args, **kwargs)
     return df.to_markdown(showindex=False)
 
-def read_excel():
+def read_excel(*args, **kwargs):
     df = pd.read_excel(*args, **kwargs)
     return df.to_markdown(showindex=False)
 
