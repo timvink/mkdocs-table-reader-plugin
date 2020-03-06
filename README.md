@@ -44,7 +44,7 @@ Under the hood this is basically:
 
 ```python
 import pandas as pd
-df = pd.read_csv(path)
+df = pd.read_csv('path_to_table.csv')
 df.to_markdown(showindex=False)
 ```
 
@@ -52,7 +52,7 @@ Which means you can pass all parameters of [pandas.read_csv()](https://pandas.py
 
 ### Available readers
 
-Table reader functions implemented from `pandas`: 
+The table reader functions implemented from `pandas`: 
 
 - `{{ read_csv() }}` passed to [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html).
 - `{{ read_table() }}` passed to [pandas.read_table()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_table.html)`.
