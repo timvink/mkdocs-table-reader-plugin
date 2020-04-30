@@ -10,7 +10,7 @@
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files in a page.
 
-This will aid building with reproducible sites. For more complex use cases, consider [pheasant](https://pheasant.daizutabi.net/) or [nbconvert](https://tanbro.github.io/mkdocs-nbconvert/).
+This helps to enable building reproducible reports. For more complex use cases, consider [pheasant](https://pheasant.daizutabi.net/) or [nbconvert](https://tanbro.github.io/mkdocs-nbconvert/).
 
 ## Setup
 
@@ -61,4 +61,4 @@ The table reader functions implemented from `pandas`:
 
 ## Contributing
 
-Very much open to contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before putting in any work.
+Contributions are very welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before putting in any work.
