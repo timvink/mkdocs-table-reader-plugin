@@ -1,10 +1,10 @@
 import re
 import pandas as pd
 from mkdocs.plugins import BasePlugin
+from ast import literal_eval
 
 def read_csv(*args, **kwargs):
     df = pd.read_csv(*args, **kwargs)
-    # todo, make configable?
     return df.to_markdown(showindex=False)
 
 def read_table(*args, **kwargs):
@@ -18,7 +18,6 @@ def read_fwf(*args, **kwargs):
 def read_excel(*args, **kwargs):
     df = pd.read_excel(*args, **kwargs)
     return df.to_markdown(showindex=False)
-
 
 class TableReaderPlugin(BasePlugin):
 
@@ -56,7 +55,7 @@ class TableReaderPlugin(BasePlugin):
         
         command = result.group(1)
         if command is not None and command != "":
-            markdown_table = eval(command)
+            markdown_table = literal_eval(command)
         
         return tag_pattern.sub(
             markdown_table,
