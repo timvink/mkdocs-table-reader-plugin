@@ -1,7 +1,8 @@
+import os
 import re
 import pandas as pd
 from mkdocs.plugins import BasePlugin
-from ast import literal_eval
+from .safe_eval import parse_argkwarg
 
 def read_csv(*args, **kwargs):
     df = pd.read_csv(*args, **kwargs)
@@ -18,6 +19,28 @@ def read_fwf(*args, **kwargs):
 def read_excel(*args, **kwargs):
     df = pd.read_excel(*args, **kwargs)
     return df.to_markdown(showindex=False)
+
+READERS = {
+    'read_csv' : read_csv,
+    'read_table' : read_table,
+    'read_fwf' : read_fwf,
+    'read_excel' : read_excel,
+}
+
+class cd:
+    """
+    Context manager for changing the current working directory
+    Credits: https://stackoverflow.com/a/13197763/5525118
+    """
+    def __init__(self, newPath):
+        self.newPath = os.path.expanduser(newPath)
+
+    def __enter__(self):
+        self.savedPath = os.getcwd()
+        os.chdir(self.newPath)
+
+    def __exit__(self, etype, value, traceback):
+        os.chdir(self.savedPath)
 
 class TableReaderPlugin(BasePlugin):
 
@@ -42,22 +65,45 @@ class TableReaderPlugin(BasePlugin):
             str: Markdown source text of page as string
         """
 
-        # Searches for {{ read_csv(..) }}
-        # and extracts command
-        tag_pattern = re.compile(
-            "\{\{ (read_csv\(.+\)) \}\}", 
-            flags=re.IGNORECASE
-        )
         
-        result = tag_pattern.search(markdown)
-        if not result:
-            return markdown
         
-        command = result.group(1)
-        if command is not None and command != "":
-            markdown_table = literal_eval(command)
-        
-        return tag_pattern.sub(
-            markdown_table,
-            markdown
-        )
+        for reader, function in READERS.items():
+            
+            # Searches for tag like {{ read_csv(..) }}
+            # and extracts command read_csv(..)
+            tag_pattern = re.compile(
+                "\{\{ (%s\(.+\)) \}\}" % reader, 
+                flags=re.IGNORECASE
+            )
+            
+            # If tag not present, do not alter markdown
+            result = tag_pattern.search(markdown)
+            if not result:
+                continue
+            command = result.group(1)
+            if command is None or command == "":
+                continue
+            
+            # Extract string with arguments (positional and keywords)
+            pattern = re.compile(
+                "^%s\((.+)\)$" % reader,
+                flags=re.IGNORECASE
+            )
+            result = pattern.search(command)
+            argkwarg_string = result.group(1)
+            
+            # Safely parse the arguments
+            args, kwargs = parse_argkwarg(argkwarg_string)
+            
+            # Insert markdown table
+            mkdocs_dir = os.path.dirname(config["config_file_path"])
+            with cd(mkdocs_dir):
+                markdown_table = function(*args, **kwargs)
+            
+            markdown = tag_pattern.sub(
+                markdown_table,
+                markdown
+            )
+            
+        return markdown
+
