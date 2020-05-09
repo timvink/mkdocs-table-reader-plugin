@@ -14,10 +14,10 @@ This helps to enable building reproducible reports. For more complex use cases, 
 
 ## Setup
 
-Install the plugin using pip:
+Install the plugin using `pip3`:
 
 ```bash
-pip install mkdocs-table-reader-plugin
+pip3 install mkdocs-table-reader-plugin
 ```
 
 Next, add the following lines to your `mkdocs.yml`:
@@ -38,7 +38,7 @@ In your markdown documents you can now use:
 {{ read_csv('path_to_table.csv') }}
 ```
 
-Where the path is relative to your project's root. 
+Where the path is relative to the location of your project's `mkdocs.yml` file.
 
 Under the hood this is basically:
 
@@ -52,7 +52,7 @@ Which means you can pass all parameters of [pandas.read_csv()](https://pandas.py
 
 ### Available readers
 
-The table reader functions implemented from `pandas`: 
+The table reader functions implemented from `pandas`:
 
 - `{{ read_csv() }}` passed to [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html).
 - `{{ read_table() }}` passed to [pandas.read_table()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_table.html)`.
