@@ -1,3 +1,4 @@
+import pytest
 from mkdocs_table_reader_plugin.safe_eval import safe_eval, parse_argkwarg
 
 
@@ -70,3 +71,10 @@ def test_parseargkwarg_5():
     args, kwargs = parse_argkwarg(s)
     assert args == ["assets/tables/table.csv"]
     assert kwargs == {"sep": "\r\t"}
+
+
+def test_parseargkwarg_error():
+
+    with pytest.raises(AssertionError):
+        s = "'assets/tables/table.csv', sep = '\r\t', 'another path'"
+        args, kwargs = parse_argkwarg(s)

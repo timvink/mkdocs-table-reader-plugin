@@ -72,35 +72,28 @@ class TableReaderPlugin(BasePlugin):
             str: Markdown source text of page as string
         """
 
+        mkdocs_dir = os.path.dirname(config["config_file_path"])
+
         for reader, function in READERS.items():
 
             # Searches for tag like {{ read_csv(..) }}
-            # and extracts command read_csv(..)
+            # and extract string with arguments (positional and keywords)
             tag_pattern = re.compile(
-                "\{\{ (%s\(.+\)) \}\}" % reader, flags=re.IGNORECASE
+                "\{\{ %s\((.+)\) \}\}" % reader, flags=re.IGNORECASE
             )
 
             # If tag not present, do not alter markdown
             result = tag_pattern.search(markdown)
             if not result:
                 continue
-            command = result.group(1)
-            if command is None or command == "":
-                continue
-
-            # Extract string with arguments (positional and keywords)
-            pattern = re.compile("^%s\((.+)\)$" % reader, flags=re.IGNORECASE)
-            result = pattern.search(command)
-            argkwarg_string = result.group(1)
 
             # Safely parse the arguments
+            argkwarg_string = result.group(1)
             args, kwargs = parse_argkwarg(argkwarg_string)
 
             # Insert markdown table
-            mkdocs_dir = os.path.dirname(config["config_file_path"])
             with cd(mkdocs_dir):
                 markdown_table = function(*args, **kwargs)
-
             markdown = tag_pattern.sub(markdown_table, markdown)
 
         return markdown

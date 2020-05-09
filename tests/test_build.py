@@ -92,6 +92,22 @@ def test_table_output(tmp_path):
     assert index_file.exists(), f"{index_file} does not exist"
 
     # Make sure with markdown tag has the output
-    page_with_tag = tmp_proj / "site/page_with_tag/index.html"
+    page_with_tag = tmp_proj / "site/page_read_csv/index.html"
     contents = page_with_tag.read_text()
     assert re.search(r"531456", contents)
+
+    # Make sure with markdown tag has the output
+    page_with_tag = tmp_proj / "site/page_read_table/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+    # Make sure with markdown tag has the output
+    page_with_tag = tmp_proj / "site/page_read_excel/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+    # Make sure with markdown tag has the output
+    page_with_tag = tmp_proj / "site/page_read_fwf/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"35000", contents)
+    assert re.search(r"Audi A4", contents)
