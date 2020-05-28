@@ -8,7 +8,7 @@
 
 # mkdocs-table-reader-plugin
 
-[MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files in a page.
+[MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page.
 
 This helps to enable building reproducible reports. For more complex use cases, consider [pheasant](https://pheasant.daizutabi.net/) or [nbconvert](https://tanbro.github.io/mkdocs-nbconvert/).
 
