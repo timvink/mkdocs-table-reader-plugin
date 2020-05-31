@@ -1,3 +1,3 @@
-# Test page
+# Home
 
 Hello there

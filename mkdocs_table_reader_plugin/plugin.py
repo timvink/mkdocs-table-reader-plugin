@@ -7,22 +7,22 @@ from .safe_eval import parse_argkwarg
 
 def read_csv(*args, **kwargs):
     df = pd.read_csv(*args, **kwargs)
-    return df.to_markdown(showindex=False)
+    return df.to_markdown(showindex=False, tablefmt="pipe")
 
 
 def read_table(*args, **kwargs):
     df = pd.read_table(*args, **kwargs)
-    return df.to_markdown(showindex=False)
+    return df.to_markdown(showindex=False, tablefmt="pipe")
 
 
 def read_fwf(*args, **kwargs):
     df = pd.read_fwf(*args, **kwargs)
-    return df.to_markdown(showindex=False)
+    return df.to_markdown(showindex=False, tablefmt="pipe")
 
 
 def read_excel(*args, **kwargs):
     df = pd.read_excel(*args, **kwargs)
-    return df.to_markdown(showindex=False)
+    return df.to_markdown(showindex=False, tablefmt="pipe")
 
 
 READERS = {
@@ -76,24 +76,22 @@ class TableReaderPlugin(BasePlugin):
 
         for reader, function in READERS.items():
 
-            # Searches for tag like {{ read_csv(..) }}
-            # and extract string with arguments (positional and keywords)
+            # Regex pattern for tags like {{ read_csv(..) }}
+            # with a match group to extract the arguments (positional and keywords)
             tag_pattern = re.compile(
                 "\{\{ %s\((.+)\) \}\}" % reader, flags=re.IGNORECASE
             )
 
-            # If tag not present, do not alter markdown
-            result = tag_pattern.search(markdown)
-            if not result:
-                continue
+            matches = re.findall(tag_pattern, markdown)
+            for result in matches:
 
-            # Safely parse the arguments
-            argkwarg_string = result.group(1)
-            args, kwargs = parse_argkwarg(argkwarg_string)
+                # Safely parse the arguments
+                args, kwargs = parse_argkwarg(result)
 
-            # Insert markdown table
-            with cd(mkdocs_dir):
-                markdown_table = function(*args, **kwargs)
-            markdown = tag_pattern.sub(markdown_table, markdown)
+                # Insert markdown table
+                # By replacing first occurance of the regex pattern
+                with cd(mkdocs_dir):
+                    markdown_table = function(*args, **kwargs)
+                markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
         return markdown

@@ -97,7 +97,7 @@ def test_table_output(tmp_path):
     assert re.search(r"531456", contents)
 
     # Make sure with markdown tag has the output
-    page_with_tag = tmp_proj / "site/page_read_table/index.html"
+    page_with_tag = tmp_proj / "site/page_read_txt/index.html"
     contents = page_with_tag.read_text()
     assert re.search(r"531456", contents)
 
@@ -111,3 +111,9 @@ def test_table_output(tmp_path):
     contents = page_with_tag.read_text()
     assert re.search(r"35000", contents)
     assert re.search(r"Audi A4", contents)
+
+    # Make sure multiple tags are supported
+    page_with_tag = tmp_proj / "site/page_read_two_csv/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"table1", contents)
+    assert re.search(r"table2", contents)
