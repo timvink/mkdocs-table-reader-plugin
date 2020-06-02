@@ -45,7 +45,7 @@ Under the hood this is basically:
 ```python
 import pandas as pd
 df = pd.read_csv('path_to_table.csv')
-df.to_markdown(showindex=False)
+df.to_markdown(showindex=False, tablefmt='pipe')
 ```
 
 Which means you can pass all parameters of [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html).
