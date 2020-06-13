@@ -51,7 +51,7 @@ class cd:
 
 
 class TableReaderPlugin(BasePlugin):
-    def on_page_markdown(self, markdown, page, config, files):
+    def on_page_markdown(self, markdown, page, config, files, **kwargs):
         """
         Replace jinja tag {{ read_csv() }} in markdown with markdown table.
 
