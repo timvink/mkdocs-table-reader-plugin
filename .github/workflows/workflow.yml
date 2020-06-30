@@ -26,7 +26,8 @@ jobs:
         pip install -e .
         pytest --cov=mkdocs_table_reader_plugin --cov-report=xml
 
-    - name: Upload coverage to Codecov  
+    - name: Upload coverage to Codecov
+      if: contains(env.USING_COVERAGE, matrix.python-version) && github.ref == 'refs/heads/master'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
