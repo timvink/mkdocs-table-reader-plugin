@@ -197,7 +197,5 @@ def test_wrong_path(tmp_path):
 
     result = build_docs_setup(tmp_proj)
     assert result.exit_code == 1, "'mkdocs build' command failed"
-    assert (
-        "[table-reader-plugin]: File does not exist: docs/non_existing_table.csv"
-        in result.output
-    )
+    assert "[table-reader-plugin]: File does not exist" in result.output
+    assert "non_existing_table.csv" in result.output
