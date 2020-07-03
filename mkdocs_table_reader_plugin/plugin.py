@@ -2,6 +2,8 @@ import os
 import re
 import pandas as pd
 from mkdocs.plugins import BasePlugin
+from mkdocs.config import config_options
+
 from .safe_eval import parse_argkwarg
 
 
@@ -51,6 +53,9 @@ class cd:
 
 
 class TableReaderPlugin(BasePlugin):
+
+    config_scheme = (("data_path", config_options.Type(str, default=".")),)
+
     def on_page_markdown(self, markdown, page, config, files, **kwargs):
         """
         Replace jinja tag {{ read_csv() }} in markdown with markdown table.
@@ -86,12 +91,28 @@ class TableReaderPlugin(BasePlugin):
             for result in matches:
 
                 # Safely parse the arguments
-                args, kwargs = parse_argkwarg(result)
+                pd_args, pd_kwargs = parse_argkwarg(result)
+
+                # Make sure the path is relative to "data_path"
+                if len(pd_args) > 0:
+                    pd_args[0] = os.path.join(self.config.get("data_path"), pd_args[0])
+                    file_path = pd_args[0]
+
+                if pd_kwargs.get("filepath_or_buffer"):
+                    file_path = pd_kwargs["filepath_or_buffer"]
+                    file_path = os.path.join(self.config.get("data_path"), file_path)
+                    pd_kwargs["filepath_or_buffer"] = file_path
 
                 # Insert markdown table
                 # By replacing first occurance of the regex pattern
                 with cd(mkdocs_dir):
-                    markdown_table = function(*args, **kwargs)
+                    if not os.path.exists(file_path):
+                        raise FileNotFoundError(
+                            "[table-reader-plugin]: File does not exist: %s" % file_path
+                        )
+
+                    markdown_table = function(*pd_args, **pd_kwargs)
+
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
         return markdown

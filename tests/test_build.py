@@ -55,10 +55,11 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
         os.path.join(os.path.dirname(mkdocs_yml_path), "docs"),
         testproject_path / "docs",
     )
-    shutil.copytree(
-        os.path.join(os.path.dirname(mkdocs_yml_path), "assets"),
-        testproject_path / "assets",
-    )
+    if os.path.exists(os.path.join(os.path.dirname(mkdocs_yml_path), "assets")):
+        shutil.copytree(
+            os.path.join(os.path.dirname(mkdocs_yml_path), "assets"),
+            testproject_path / "assets",
+        )
     shutil.copyfile(mkdocs_yml_path, testproject_path / "mkdocs.yml")
 
     return testproject_path
@@ -146,3 +147,55 @@ def test_compatibility_markdownextradata(tmp_path):
     assert re.search(r"531456", contents)
     # Make sure the extradata 'web' is inserted
     assert re.search(r"www.example.com", contents)
+
+
+def test_datapath_1(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/datapathproject/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the basic_table.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+    # Make sure the basic_table2.csv is inserted
+    page_with_tag = tmp_proj / "site/page2/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"539956", contents)
+
+
+def test_datapath_trailing(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/datapathproject/mkdocs_trailingslash.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the basic_table.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+    # Make sure the basic_table2.csv is inserted
+    page_with_tag = tmp_proj / "site/page2/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"539956", contents)
+
+
+def test_wrong_path(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/wrongpath/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 1, "'mkdocs build' command failed"
+    assert "[table-reader-plugin]: File does not exist" in result.output
+    assert "non_existing_table.csv" in result.output
