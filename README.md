@@ -59,6 +59,30 @@ The table reader functions implemented from `pandas`:
 - `{{ read_fwf() }}` passed to [pandas.read_fwf()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_fwf.html).
 - `{{ read_excel() }}` passed to [pandas.read_excel()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html).
 
+## Options
+
+You can customize the plugin by setting options in `mkdocs.yml`. For example:
+
+```yml
+plugins:
+  - table-reader:
+      data_path: "docs"
+```
+
+### `data_path`
+
+Default is `.`, which means the path to look for the table files is relative to the location of your project's `mkdocs.yml` file. If you specify the location of your table folder you shorten the path.
+
+If you set `data_path` to `docs/` in the project below, you will be able to use `{{ read_csv("basic_table.csv") }}` instead of `{{ read_csv("docs/basic_table.csv") }}` inside `index.md`.
+
+```nohighlight
+.
+├── docs
+│   ├── basic_table.csv
+│   └── index.md
+└── mkdocs.yml
+```
+
 ## Contributing
 
 Contributions are very welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before putting in any work.
