@@ -71,9 +71,9 @@ plugins:
 
 ### `data_path`
 
-Default is `.`, which means the path to look for the table files is relative to the location of your project's `mkdocs.yml` file. If you specify the location of your table folder you shorten the path.
+Default is `.`, which means you can specify the path to your table files relative to the location of your project's `mkdocs.yml` file. If you use a folder for all your table files you can shorten the path specification by setting `data_path`.
 
-If you set `data_path` to `docs/` in the project below, you will be able to use `{{ read_csv("basic_table.csv") }}` instead of `{{ read_csv("docs/basic_table.csv") }}` inside `index.md`.
+For example, if you set `data_path` to `docs/` in the project below, you will be able to use `{{ read_csv("basic_table.csv") }}` instead of `{{ read_csv("docs/basic_table.csv") }}` inside `index.md`.
 
 ```nohighlight
 .
