@@ -50,7 +50,7 @@ df.to_markdown(showindex=False, tablefmt='pipe')
 
 Which means you can pass all parameters of [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html).
 
-### Available readers
+#### Available readers
 
 The table reader functions implemented from `pandas`:
 
@@ -69,7 +69,7 @@ plugins:
       data_path: "docs"
 ```
 
-### `data_path`
+#### `data_path`
 
 Default is `.`, which means you can specify the path to your table files relative to the location of your project's `mkdocs.yml` file. If you use a folder for all your table files you can shorten the path specification by setting `data_path`.
 
