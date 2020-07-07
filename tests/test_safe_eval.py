@@ -33,7 +33,7 @@ def test_safe_eval5():
 
 
 def test_parseargkwarg_1():
-    s = "title='bah', name='john' purple='haze' none=None i=1"
+    s = "title='bah', name='john', purple='haze', none=None, i=1"
     args, kwargs = parse_argkwarg(s)
     assert args == []
     assert kwargs == {
@@ -70,6 +70,20 @@ def test_parseargkwarg_5():
     s = "'assets/tables/table.csv', sep = '\r\t'"
     args, kwargs = parse_argkwarg(s)
     assert args == ["assets/tables/table.csv"]
+    assert kwargs == {"sep": "\r\t"}
+
+
+def test_parseargkwarg_6():
+    s = "'assets/tables/table.csv' ,  sep = '\r\t'"
+    args, kwargs = parse_argkwarg(s)
+    assert args == ["assets/tables/table.csv"]
+    assert kwargs == {"sep": "\r\t"}
+
+
+def test_parseargkwarg_7():
+    s = "'table with space.csv', sep = '\r\t'"
+    args, kwargs = parse_argkwarg(s)
+    assert args == ["table with space.csv"]
     assert kwargs == {"sep": "\r\t"}
 
 

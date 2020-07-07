@@ -1,0 +1,7 @@
+site_name: test git_table_reader site
+use_directory_urls: true
+
+plugins:
+    - search
+    - table-reader:
+        data_path: "docs/folder with spaces"
