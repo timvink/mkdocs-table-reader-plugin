@@ -57,7 +57,7 @@ def safe_eval(string):
 
 def parse_argkwarg(string: str):
     """
-    Parses a string to detech both args and kwargs.
+    Parses a string to detect both args and kwargs.
     
     Adapted code from 
     https://stackoverflow.com/questions/9305387/string-of-kwargs-to-kwargs
@@ -69,12 +69,13 @@ def parse_argkwarg(string: str):
         args[List], kwargs[Dict]
     """
 
-    argkwargs = re.split(r"(?<!\=)(?:,? )(?!\=)", string)
+    argkwargs = re.split(r"(?<!\=)(?:,{1} )(?!\=)", string)
 
     args = []
     kwargs = []
 
     for i in argkwargs:
+        i = i.strip()
         if "=" in i:
             kwargs.append(i)
         else:

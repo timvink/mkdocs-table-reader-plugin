@@ -189,6 +189,36 @@ def test_datapath_trailing(tmp_path):
     assert re.search(r"539956", contents)
 
 
+def test_datapath_with_spaces(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/data_path_with_space/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the basic_table.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+
+def test_tablepath_with_spaces(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/table_path_with_space/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the basic_table.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+
 def test_wrong_path(tmp_path):
 
     tmp_proj = setup_clean_mkdocs_folder(
