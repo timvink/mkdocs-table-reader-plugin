@@ -9,22 +9,22 @@ from .safe_eval import parse_argkwarg
 
 def read_csv(*args, **kwargs):
     df = pd.read_csv(*args, **kwargs)
-    return df.to_markdown(showindex=False, tablefmt="pipe")
+    return df.to_markdown(index=False, tablefmt="pipe")
 
 
 def read_table(*args, **kwargs):
     df = pd.read_table(*args, **kwargs)
-    return df.to_markdown(showindex=False, tablefmt="pipe")
+    return df.to_markdown(index=False, tablefmt="pipe")
 
 
 def read_fwf(*args, **kwargs):
     df = pd.read_fwf(*args, **kwargs)
-    return df.to_markdown(showindex=False, tablefmt="pipe")
+    return df.to_markdown(index=False, tablefmt="pipe")
 
 
 def read_excel(*args, **kwargs):
     df = pd.read_excel(*args, **kwargs)
-    return df.to_markdown(showindex=False, tablefmt="pipe")
+    return df.to_markdown(index=False, tablefmt="pipe")
 
 
 READERS = {

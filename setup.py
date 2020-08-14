@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mkdocs-table-reader-plugin",
-    version="0.4.1",
+    version="0.4.2",
     description="MkDocs plugin to directly insert tables from files into markdown.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -24,7 +24,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
     ],
-    install_requires=["mkdocs>=1.0", "pandas>=1.0", "tabulate>=0.8.6"],
+    install_requires=["mkdocs>=1.0", "pandas>=1.1", "tabulate>=0.8.7"],
     packages=find_packages(),
     entry_points={
         "mkdocs.plugins": [
