@@ -128,6 +128,29 @@ def test_table_output(tmp_path):
     assert re.search(r"table2", contents)
 
 
+def test_compatibility_macros_plugin(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/basic_setup/mkdocs_w_macros_wrong_order.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 1, "'mkdocs build' command should have failed"
+
+    # Make sure correct error is raised
+    assert (
+        "[table-reader]: Incompatible plugin order:"
+        in result.output
+    )
+
+    # With correct order, no error
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/basic_setup/mkdocs_w_macros.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command should have succeeded"
+
 def test_compatibility_markdownextradata(tmp_path):
 
     tmp_proj = setup_clean_mkdocs_folder(

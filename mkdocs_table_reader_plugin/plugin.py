@@ -3,6 +3,7 @@ import re
 import pandas as pd
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
+from mkdocs.exceptions import ConfigurationError
 
 from .safe_eval import parse_argkwarg
 
@@ -55,6 +56,24 @@ class cd:
 class TableReaderPlugin(BasePlugin):
 
     config_scheme = (("data_path", config_options.Type(str, default=".")),)
+
+    def on_config(self, config):
+        """
+
+        See https://www.mkdocs.org/user-guide/plugins/#on_config
+        Args:
+            config
+
+        Returns:
+            Config
+        """
+
+        plugins = [p for p in config.get("plugins")]
+
+        if "macros" in plugins:
+            if plugins.index("table-reader") > plugins.index("macros"):
+                raise ConfigurationError("[table-reader]: Incompatible plugin order: Define 'table-reader' before 'macros' in your mkdocs.yml.")
+
 
     def on_page_markdown(self, markdown, page, config, files, **kwargs):
         """
