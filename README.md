@@ -8,7 +8,7 @@
 
 # mkdocs-table-reader-plugin
 
-[MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page.
+[MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page. See it in action at [timvink.github.io/mkdocs-table-reader-plugin/](https://timvink.github.io/mkdocs-table-reader-plugin/).
 
 This helps to enable building reproducible reports. For more complex use cases, consider [pheasant](https://pheasant.daizutabi.net/) or [nbconvert](https://tanbro.github.io/mkdocs-nbconvert/).
 
@@ -49,6 +49,8 @@ df.to_markdown(index=False, tablefmt='pipe')
 ```
 
 Which means you can pass all parameters of [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html).
+
+You can see an example usage in this repo (see `mkdocs.yml` and `docs/`) and the result at [timvink.github.io/mkdocs-table-reader-plugin/](https://timvink.github.io/mkdocs-table-reader-plugin/).
 
 #### Available readers
 
