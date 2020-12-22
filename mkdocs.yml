@@ -1,0 +1,10 @@
+site_name: example table-reader plugin site
+use_directory_urls: true
+
+theme:
+    name: material
+
+plugins:
+    - search
+    - table-reader:
+        data_path: "docs/assets"

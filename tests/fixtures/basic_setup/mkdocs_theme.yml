@@ -1,0 +1,9 @@
+site_name: test git_table_reader site
+use_directory_urls: true
+
+theme:
+    name: material
+
+plugins:
+    - search
+    - table-reader
