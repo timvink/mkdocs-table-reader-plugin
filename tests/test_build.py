@@ -88,6 +88,7 @@ def build_docs_setup(testproject_path):
         raise
 
 
+
 def test_table_output(tmp_path):
 
     tmp_proj = setup_clean_mkdocs_folder(

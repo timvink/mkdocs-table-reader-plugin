@@ -5,3 +5,4 @@ click
 xlrd>=1.0.0
 mkdocs-markdownextradata-plugin
 mkdocs-macros-plugin
+openpyxl

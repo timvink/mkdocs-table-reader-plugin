@@ -61,6 +61,12 @@ The table reader functions implemented from `pandas`:
 - `{{ read_fwf() }}` passed to [pandas.read_fwf()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_fwf.html).
 - `{{ read_excel() }}` passed to [pandas.read_excel()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html).
 
+#### Reading xlsx files
+
+You might get a `XLRDError('Excel xlsx file; not supported',)` error when trying to read modern excel files. That's because `xlrd` does not support `.xlsx` files ([stackoverflow post](https://stackoverflow.com/questions/65254535/xlrd-biffh-xlrderror-excel-xlsx-file-not-supported)). Instead, install [openpyxl](https://openpyxl.readthedocs.io/en/stable/) and use:
+
+`{{ read_excel('tables/excel_table.xlsx', engine='openpyxl') }}`
+
 ## Options
 
 You can customize the plugin by setting options in `mkdocs.yml`. For example:

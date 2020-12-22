@@ -8,3 +8,8 @@ plugins:
     - search
     - table-reader:
         data_path: "docs/assets"
+
+markdown_extensions:
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
