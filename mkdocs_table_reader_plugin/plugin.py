@@ -96,7 +96,7 @@ class TableReaderPlugin(BasePlugin):
             str: Markdown source text of page as string
         """
 
-        mkdocs_dir = os.path.dirname(config["config_file_path"])
+        mkdocs_dir = os.path.dirname(os.path.abspath(config["config_file_path"]))
 
         for reader, function in READERS.items():
 
