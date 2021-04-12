@@ -1,8 +1,13 @@
-site_name: example table-reader plugin site
+site_name: "example table-reader plugin site"
+site_description: "MkDocs plugin to directly insert tables from files into markdown."
 use_directory_urls: true
+repo_url: https://github.com/timvink/mkdocs-table-reader-plugin
+edit_uri: ""
 
 theme:
     name: material
+    icon:
+        repo: fontawesome/brands/github
 
 plugins:
     - search
