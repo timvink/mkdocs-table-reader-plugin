@@ -1,6 +1,7 @@
 import os
 import re
 import pandas as pd
+import yaml
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
@@ -28,11 +29,19 @@ def read_excel(*args, **kwargs):
     return df.to_markdown(index=False, tablefmt="pipe")
 
 
+def read_yaml(*args, **kwargs):
+    with open(args[0], "r") as f:
+        df = pd.json_normalize(yaml.safe_load(f), **kwargs)
+
+    return df.to_markdown(index=False, tablefmt="pipe")
+
+
 READERS = {
     "read_csv": read_csv,
     "read_table": read_table,
     "read_fwf": read_fwf,
     "read_excel": read_excel,
+    "read_yaml": read_yaml,
 }
 
 
