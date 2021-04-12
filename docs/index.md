@@ -26,3 +26,9 @@ The table below was inserted using the <code>\{\{ read_excel('tables/excel_table
 The table below was inserted using the <code>\{\{ read_fwf('tables/fixedwidth_table.txt') \}\}</code> tag:
 
 {{ read_fwf('tables/fixedwidth_table.txt') }}
+
+## read_yaml
+
+The latest numbers using `read_yaml()`:
+
+{{ read_yaml('tables/yaml_table.yml') }}

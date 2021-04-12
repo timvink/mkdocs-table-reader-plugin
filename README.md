@@ -10,7 +10,7 @@
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page. See it in action at [timvink.github.io/mkdocs-table-reader-plugin/](https://timvink.github.io/mkdocs-table-reader-plugin/).
 
-This helps to enable building reproducible reports. For more complex use cases, consider [pheasant](https://pheasant.daizutabi.net/) or [nbconvert](https://tanbro.github.io/mkdocs-nbconvert/).
+This makes it easier to build reproducible reports. For more complex use cases, consider [mknotebooks](https://github.com/greenape/mknotebooks), [mkdocs-markdownextradata-plugin](https://github.com/rosscdh/mkdocs-markdownextradata-plugin) or [mkdocs-macros-plugin](https://mkdocs-macros-plugin.readthedocs.io/en/latest/).
 
 ## Setup
 
@@ -52,9 +52,9 @@ Which means you can pass all parameters of [pandas.read_csv()](https://pandas.py
 
 You can see an example usage in this repo (see `mkdocs.yml` and `docs/`) and the result at [timvink.github.io/mkdocs-table-reader-plugin/](https://timvink.github.io/mkdocs-table-reader-plugin/).
 
-#### Available readers
+### Available readers
 
-The table reader functions implemented from `pandas`:
+The following table reader functions are available:
 
 - `{{ read_csv() }}` passed to [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html).
 - `{{ read_table() }}` passed to [pandas.read_table()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_table.html).
@@ -62,11 +62,20 @@ The table reader functions implemented from `pandas`:
 - `{{ read_excel() }}` passed to [pandas.read_excel()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html).
 - `{{ read_yaml() }}` is parsed with [yaml.safe_load()](https://pyyaml.org/wiki/PyYAMLDocumentation#loading-yaml) and passed to [pandas.json_normalize()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.json_normalize.html).
 
-#### Reading xlsx files
+<details>
+  <summary>Reading xlsx files</summary>
+  
+  You might get a `XLRDError('Excel xlsx file; not supported',)` error when trying to read modern excel files. That's because `xlrd` does not support `.xlsx` files ([stackoverflow post](https://stackoverflow.com/questions/65254535/xlrd-biffh-xlrderror-excel-xlsx-file-not-supported)). Instead, install [openpyxl](https://openpyxl.readthedocs.io/en/stable/) and use:
 
-You might get a `XLRDError('Excel xlsx file; not supported',)` error when trying to read modern excel files. That's because `xlrd` does not support `.xlsx` files ([stackoverflow post](https://stackoverflow.com/questions/65254535/xlrd-biffh-xlrderror-excel-xlsx-file-not-supported)). Instead, install [openpyxl](https://openpyxl.readthedocs.io/en/stable/) and use:
+  `{{ read_excel('tables/excel_table.xlsx', engine='openpyxl') }}`
+</details>
 
-`{{ read_excel('tables/excel_table.xlsx', engine='openpyxl') }}`
+<details>
+  <summary>Reading yaml variables</summary>
+
+  [mkdocs-markdownextradata-plugin](https://github.com/rosscdh/mkdocs-markdownextradata-plugin) is a great plugin to use when working 
+  with yaml files. It will read in all yaml files in a specified directory and make all keys available as jinja2 variables.
+</details>
 
 ## Options
 

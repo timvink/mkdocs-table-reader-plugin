@@ -8,10 +8,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: '3.x'
     
@@ -23,7 +23,7 @@ jobs:
     - name: Make sure unit tests succeed
       run: |
         pip install -r tests/test_requirements.txt
-        pip install -e .
+        pip install .
         pytest
     
     - name: Build and publish
@@ -33,3 +33,7 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/*
+
+    - name: Deploy mkdocs site
+      run: | 
+        mkdocs gh-deploy --force
