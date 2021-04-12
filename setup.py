@@ -22,6 +22,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=["mkdocs>=1.0", "pandas>=1.1", "tabulate>=0.8.7", "PyYAML>=5.4.1"],
