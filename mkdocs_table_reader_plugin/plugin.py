@@ -2,6 +2,8 @@ import os
 import re
 import pandas as pd
 import yaml
+import textwrap
+
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
@@ -110,16 +112,18 @@ class TableReaderPlugin(BasePlugin):
         for reader, function in READERS.items():
 
             # Regex pattern for tags like {{ read_csv(..) }}
-            # with a match group to extract the arguments (positional and keywords)
+            # match group 0: to extract any leading whitespace 
+            # match group 1: to extract the arguments (positional and keywords)
             tag_pattern = re.compile(
-                "\{\{ %s\((.+)\) \}\}" % reader, flags=re.IGNORECASE
+                "( *)\{\{ %s\((.+)\) \}\}" % reader, flags=re.IGNORECASE
             )
 
             matches = re.findall(tag_pattern, markdown)
+            
             for result in matches:
 
                 # Safely parse the arguments
-                pd_args, pd_kwargs = parse_argkwarg(result)
+                pd_args, pd_kwargs = parse_argkwarg(result[1])
 
                 # Make sure the path is relative to "data_path"
                 if len(pd_args) > 0:
@@ -131,8 +135,7 @@ class TableReaderPlugin(BasePlugin):
                     file_path = os.path.join(self.config.get("data_path"), file_path)
                     pd_kwargs["filepath_or_buffer"] = file_path
 
-                # Insert markdown table
-                # By replacing first occurance of the regex pattern
+                # Load the table
                 with cd(mkdocs_dir):
                     if not os.path.exists(file_path):
                         raise FileNotFoundError(
@@ -141,6 +144,22 @@ class TableReaderPlugin(BasePlugin):
 
                     markdown_table = function(*pd_args, **pd_kwargs)
 
+                # Deal with indentation
+                # f.e. relevant when used inside content tabs
+                leading_spaces = result[0]
+                # make sure it's in multiples of 4 spaces
+                leading_spaces = int(len(leading_spaces) / 4) * "    "
+                # indent entire table
+                lines = markdown_table.split('\n')
+                fixed_lines = []
+                for line in lines:
+                    fixed_lines.append(textwrap.indent(line, leading_spaces))
+                
+                markdown_table = "\n".join(fixed_lines)
+
+                # Insert markdown table
+                # By replacing first occurance of the regex pattern
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
+
 
         return markdown
