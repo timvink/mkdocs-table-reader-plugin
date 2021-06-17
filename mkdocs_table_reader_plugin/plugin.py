@@ -110,7 +110,7 @@ class TableReaderPlugin(BasePlugin):
         mkdocs_dir = os.path.dirname(os.path.abspath(config["config_file_path"]))
 
         for reader, function in READERS.items():
-
+            
             # Regex pattern for tags like {{ read_csv(..) }}
             # match group 0: to extract any leading whitespace 
             # match group 1: to extract the arguments (positional and keywords)
@@ -119,6 +119,7 @@ class TableReaderPlugin(BasePlugin):
             )
 
             matches = re.findall(tag_pattern, markdown)
+            
             
             for result in matches:
 
@@ -150,9 +151,8 @@ class TableReaderPlugin(BasePlugin):
                 # make sure it's in multiples of 4 spaces
                 leading_spaces = int(len(leading_spaces) / 4) * "    "
                 # indent entire table
-                lines = markdown_table.split('\n')
                 fixed_lines = []
-                for line in lines:
+                for line in markdown_table.split('\n'):
                     fixed_lines.append(textwrap.indent(line, leading_spaces))
                 
                 markdown_table = "\n".join(fixed_lines)
