@@ -81,9 +81,10 @@ class TableReaderPlugin(BasePlugin):
 
         plugins = [p for p in config.get("plugins")]
 
-        if "macros" in plugins:
-            if plugins.index("table-reader") > plugins.index("macros"):
-                raise ConfigurationError("[table-reader]: Incompatible plugin order: Define 'table-reader' before 'macros' in your mkdocs.yml.")
+        for post_load_plugin in ["macros", "markdownextradata"]:
+            if post_load_plugin in plugins:
+                if plugins.index("table-reader") > plugins.index(post_load_plugin):
+                    raise ConfigurationError(f"[table-reader]: Incompatible plugin order: Define 'table-reader' before '{post_load_plugin}' in your mkdocs.yml.")
 
 
     def on_page_markdown(self, markdown, page, config, files, **kwargs):
