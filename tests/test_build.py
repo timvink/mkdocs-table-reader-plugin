@@ -179,7 +179,7 @@ def test_compatibility_markdownextradata(tmp_path):
     assert re.search(r"www.example.com", contents)
 
     tmp_proj = setup_clean_mkdocs_folder(
-        "tests/fixtures/basic_setup/mkdocs_w_markdownextradata_wrong_order.yml", tmp_path
+        "tests/fixtures/markdownextradata/mkdocs_w_markdownextradata_wrong_order.yml", tmp_path
     )
 
     result = build_docs_setup(tmp_proj)
@@ -193,7 +193,7 @@ def test_compatibility_markdownextradata(tmp_path):
 
     # With correct order, no error
     tmp_proj = setup_clean_mkdocs_folder(
-        "tests/fixtures/basic_setup/mkdocs_w_markdownextradata.yml", tmp_path
+        "tests/fixtures/markdownextradata/mkdocs_w_markdownextradata.yml", tmp_path
     )
 
     result = build_docs_setup(tmp_proj)

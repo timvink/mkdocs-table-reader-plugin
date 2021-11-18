@@ -1,0 +1,13 @@
+site_name: test git_table_reader site
+use_directory_urls: true
+
+plugins:
+    - search
+    - markdownextradata
+    - table-reader
+
+extra:
+    customer:
+        name: Your name here
+        web: www.example.com
+        salt: salt.example.com
