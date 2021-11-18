@@ -36,4 +36,5 @@ jobs:
 
     - name: Deploy mkdocs site
       run: | 
+        pip install mkdocs-material
         mkdocs gh-deploy --force
