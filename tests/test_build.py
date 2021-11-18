@@ -178,6 +178,27 @@ def test_compatibility_markdownextradata(tmp_path):
     # Make sure the extradata 'web' is inserted
     assert re.search(r"www.example.com", contents)
 
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/markdownextradata/mkdocs_w_markdownextradata_wrong_order.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 1, "'mkdocs build' command should have failed"
+
+    # Make sure correct error is raised
+    assert (
+        "[table-reader]: Incompatible plugin order:"
+        in result.output
+    )
+
+    # With correct order, no error
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/markdownextradata/mkdocs_w_markdownextradata.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command should have succeeded"
+
 
 def test_datapath_1(tmp_path):
 

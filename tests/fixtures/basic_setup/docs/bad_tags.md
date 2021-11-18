@@ -8,9 +8,6 @@ some badly formatted tags:
 
 {{ read_csv() }}
 
-## Strange and wrong characters
-
-{{ read\_csv('path') }}
 
 ## No proper spaces
 
