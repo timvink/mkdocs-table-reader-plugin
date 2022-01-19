@@ -10,7 +10,7 @@
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page. See it in action at [timvink.github.io/mkdocs-table-reader-plugin/](https://timvink.github.io/mkdocs-table-reader-plugin/). 
 
-`mkdocs-table-reader-plugin` makes it easier to build reproducible reports. You could also make a chart from the same CSV file using [mkdocs-charts-plugin](https://github.com/timvink/mkdocs-charts-plugin). Other plugins that are great for building reproducible reports are [mknotebooks](https://github.com/greenape/mknotebooks) (insert jupyter notebooks), [mkdocs-markdownextradata-plugin](https://github.com/rosscdh/mkdocs-markdownextradata-plugin) (insert variables) or [mkdocs-macros-plugin](https://mkdocs-macros-plugin.readthedocs.io/en/latest/) (insert result from scripts).
+`mkdocs-table-reader-plugin` makes it easier to build reproducible reports (see the [blogpost](https://timvink.nl/reproducible-reports-with-mkdocs/)). You could also make a chart from the same CSV file using [mkdocs-charts-plugin](https://github.com/timvink/mkdocs-charts-plugin). Other plugins that are great for building reproducible reports are [mknotebooks](https://github.com/greenape/mknotebooks) (insert jupyter notebooks), [mkdocs-markdownextradata-plugin](https://github.com/rosscdh/mkdocs-markdownextradata-plugin) (insert variables) or [mkdocs-macros-plugin](https://mkdocs-macros-plugin.readthedocs.io/en/latest/) (insert result from scripts).
 
 ## Setup
 
