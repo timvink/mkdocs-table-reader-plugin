@@ -52,7 +52,7 @@ def read_table(*args, **kwargs):
 
 def read_fwf(*args, **kwargs):
     read_kwargs = kwargs_in_func(kwargs, pd.read_fwf)
-    df = pd.read_fwf(*args, **kwargs)
+    df = pd.read_fwf(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_fwf)
     if "index" not in markdown_kwargs:
