@@ -3,39 +3,92 @@ import re
 import pandas as pd
 import yaml
 import textwrap
+from inspect import signature 
 
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 
-from .safe_eval import parse_argkwarg
+from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
+
+
+def get_keywords(func):
+    return [p.name for p in signature(func).parameters.values() if p.kind == p.POSITIONAL_OR_KEYWORD]
+
+def kwargs_in_func(keywordargs, func):
+    return dict({(k,v) for k, v in keywordargs.items() if k in get_keywords(func)})
+
+def kwargs_not_in_func(keywordargs, func):
+    return dict({(k,v) for k, v in keywordargs.items() if k not in get_keywords(func)})
 
 
 def read_csv(*args, **kwargs):
-    df = pd.read_csv(*args, **kwargs)
-    return df.to_markdown(index=False, tablefmt="pipe")
+    
+    read_kwargs = kwargs_in_func(kwargs, pd.read_csv)
+    df = pd.read_csv(*args, **read_kwargs)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_csv)
+    if "index" not in markdown_kwargs:
+        markdown_kwargs["index"] = False
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+    
+    return df.to_markdown(**markdown_kwargs)
 
 
 def read_table(*args, **kwargs):
-    df = pd.read_table(*args, **kwargs)
-    return df.to_markdown(index=False, tablefmt="pipe")
+
+    read_kwargs = kwargs_in_func(kwargs, pd.read_table)
+    df = pd.read_table(*args, **read_kwargs)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_table)
+    if "index" not in markdown_kwargs:
+        markdown_kwargs["index"] = False
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+    
+    return df.to_markdown(**markdown_kwargs)
 
 
 def read_fwf(*args, **kwargs):
+    read_kwargs = kwargs_in_func(kwargs, pd.read_fwf)
     df = pd.read_fwf(*args, **kwargs)
-    return df.to_markdown(index=False, tablefmt="pipe")
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_fwf)
+    if "index" not in markdown_kwargs:
+        markdown_kwargs["index"] = False
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+    
+    return df.to_markdown(**markdown_kwargs)
 
 
 def read_excel(*args, **kwargs):
-    df = pd.read_excel(*args, **kwargs)
-    return df.to_markdown(index=False, tablefmt="pipe")
+    read_kwargs = kwargs_in_func(kwargs, pd.read_excel)
+    df = pd.read_excel(*args, **read_kwargs)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_excel)
+    if "index" not in markdown_kwargs:
+        markdown_kwargs["index"] = False
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+        
+    return df.to_markdown(**markdown_kwargs)
 
 
 def read_yaml(*args, **kwargs):
-    with open(args[0], "r") as f:
-        df = pd.json_normalize(yaml.safe_load(f), **kwargs)
 
-    return df.to_markdown(index=False, tablefmt="pipe")
+    json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
+    with open(args[0], "r") as f:
+        df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
+    if "index" not in markdown_kwargs:
+        markdown_kwargs["index"] = False
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+    
+    return df.to_markdown(**markdown_kwargs)
 
 
 READERS = {

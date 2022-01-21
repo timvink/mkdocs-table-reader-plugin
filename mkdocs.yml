@@ -1,20 +1,74 @@
-site_name: "example table-reader plugin site"
+site_name: "mkdocs-table-reader-plugin"
 site_description: "MkDocs plugin to directly insert tables from files into markdown."
 use_directory_urls: true
 repo_url: https://github.com/timvink/mkdocs-table-reader-plugin
 edit_uri: ""
 
+nav:
+    - index.md
+    - readers.md
+    - customization.md
+    - options.md
+
 theme:
     name: material
+    custom_dir: docs/overrides
     icon:
+        logo: material/file-table-box-outline
         repo: fontawesome/brands/github
+    features:
+        - content.tabs.link
+        - navigation.instant
+        - navigation.tracking
+        - navigation.tabs
+        - navigation.tabs.sticky
+        - navigation.sections
+        - navigation.expand
+    palette:
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          toggle:
+              icon: material/toggle-switch-off-outline
+              name: Switch to dark mode
+          primary: blue
+          accent: blue
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          toggle:
+              icon: material/toggle-switch
+              name: Switch to light mode
+          primary: blue
+          accent: blue
 
 plugins:
     - search
     - table-reader:
         data_path: "docs/assets"
+    - git-authors:
+            exclude:
+                - index.md
+    - git-revision-date-localized:
+        type: timeago
+        timezone: Europe/Amsterdam
+        locale: en
+        fallback_to_build_date: false
+        enable_creation_date: false
 
 markdown_extensions:
+    - tables
+    - meta
     - admonition
-    - pymdownx.details
+    - pymdownx.keys
+    - pymdownx.highlight
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
     - pymdownx.superfences
+    - pymdownx.details
+    - pymdownx.tabbed:
+        alternate_style: true 
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
+          options:
+              custom_icons:
+                  - site/overrides/.icons
