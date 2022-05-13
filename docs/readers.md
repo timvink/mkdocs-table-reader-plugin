@@ -5,7 +5,7 @@ hide:
 
 # Readers
 
-The following table reader functions are available"
+The following table reader functions are available:
 
 ## read_csv
 
