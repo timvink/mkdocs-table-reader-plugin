@@ -38,7 +38,7 @@ In your markdown documents you can now use:
 {{ read_csv('path_to_table.csv') }}
 ```
 
-Where the path is relative to the location of your project's `mkdocs.yml` file.
+Where the path is relative to the location of your project's `mkdocs.yml` file (although you can [change that](https://timvink.github.io/mkdocs-table-reader-plugin/options) to be relative to your `docs/` directory).
 
 ## Documentation
 

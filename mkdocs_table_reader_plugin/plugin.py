@@ -119,7 +119,10 @@ class cd:
 
 class TableReaderPlugin(BasePlugin):
 
-    config_scheme = (("data_path", config_options.Type(str, default=".")),)
+    config_scheme = (
+        ("data_path", config_options.Type(str, default=".")),
+        ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
+    )
 
     def on_config(self, config):
         """
@@ -161,8 +164,11 @@ class TableReaderPlugin(BasePlugin):
             str: Markdown source text of page as string
         """
 
-        mkdocs_dir = os.path.dirname(os.path.abspath(config["config_file_path"]))
-
+        if self.config.get("base_path") == "config_dir":
+            mkdocs_dir = os.path.dirname(os.path.abspath(config["config_file_path"]))
+        if self.config.get("base_path") == "docs_dir":
+            mkdocs_dir = os.path.abspath(config["docs_dir"])
+        
         for reader, function in READERS.items():
             
             # Regex pattern for tags like {{ read_csv(..) }}
