@@ -31,7 +31,8 @@ For example, if you set `data_path` to `docs/tables/` in the project below, you 
 
 #### `base_path`
 
-Either `docs_dir` or `config_dir`. Default is `config_dir`. This is the base path where `mkdocs-table-reader-plugin` will search for input files.
+The base path where `mkdocs-table-reader-plugin` will search for input files.
+The value is a string, one of `docs_dir` or `config_dir`. The default is `config_dir`. 
 
 - `config_dir`: the directory where your project's `mkdocs.yml` file is located.
 - `docs_dir`: the directory where your projects' `docs/` folder is located.
