@@ -8,7 +8,7 @@
 
 # mkdocs-table-reader-plugin
 
-[MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page.
+[MkDocs](https://www.mkdocs.org/) plugin that adds a `{{ read_csv('table.csv') }}` markdown tag to directly insert CSV files as a table into a page. Other supported table file formats are excel (`.xls`, `.xlsx`), fixed-width (`.fwf`), and yaml (`.yaml`).
 
 > For a workflow with other plugins see the blogpost [building reproducible reports with MkDocs](https://timvink.nl/reproducible-reports-with-mkdocs/)
 
