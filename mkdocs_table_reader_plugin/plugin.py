@@ -61,6 +61,16 @@ def read_fwf(*args, **kwargs):
     
     return df.to_markdown(**markdown_kwargs)
 
+def read_json(*args, **kwargs):
+    read_kwargs = kwargs_in_func(kwargs, pd.read_json)
+    df = pd.read_json(*args, **read_kwargs)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_json)
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+    
+    return df.to_markdown(**markdown_kwargs)
+
 
 def read_excel(*args, **kwargs):
     read_kwargs = kwargs_in_func(kwargs, pd.read_excel)
@@ -96,6 +106,7 @@ READERS = {
     "read_fwf": read_fwf,
     "read_excel": read_excel,
     "read_yaml": read_yaml,
+    "read_json": read_json,
 }
 
 

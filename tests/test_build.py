@@ -128,6 +128,11 @@ def test_table_output(tmp_path):
     assert re.search(r"531456", contents)
     assert re.search(r"table1", contents)
 
+    # Make sure with markdown tag has the output
+    page_with_tag = tmp_proj / "site/page_read_json.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"1234json", contents)
+
     # Make sure multiple tags are supported
     page_with_tag = tmp_proj / "site/page_read_two_csv.html"
     contents = page_with_tag.read_text()

@@ -58,6 +58,18 @@ The following table reader functions are available:
 
     {{ read_table('tables/basic_table.csv', sep = ',') }}
 
+## read_json
+
+`{{ read_json() }}` passed to [pandas.read_json()](https://pandas.pydata.org/docs/reference/api/pandas.read_json.html). Example:
+
+=== "Input"
+
+    <code>\{\{ read_json('tables/data.json') \}\}</code>
+
+=== "Output"
+
+    {{ read_json('tables/data.json') }}
+
 
 ## read_excel
 
