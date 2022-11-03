@@ -64,11 +64,11 @@ The following table reader functions are available:
 
 === "Input"
 
-    <code>\{\{ read_json('tables/data.json') \}\}</code>
+    <code>\{\{ read_json('tables/data.json', orient='split') \}\}</code>
 
 === "Output"
 
-    {{ read_json('tables/data.json') }}
+    {{ read_json('tables/data.json', orient='split') }}
 
 
 ## read_excel
