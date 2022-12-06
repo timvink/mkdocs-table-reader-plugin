@@ -109,6 +109,12 @@ READERS = {
     "read_json": read_json,
 }
 
+IMPORT_TABLES = {
+    "csv": read_csv
+}
+
+IMPORT_IMAGES = ["bmp", "jpg", "jpeg", "svg"]
+
 
 class cd:
     """
@@ -179,6 +185,8 @@ class TableReaderPlugin(BasePlugin):
         if self.config.get("base_path") == "docs_dir":
             mkdocs_dir = os.path.abspath(config["docs_dir"])
         
+        # READERS
+
         for reader, function in READERS.items():
             
             # Regex pattern for tags like {{ read_csv(..) }}
@@ -231,5 +239,94 @@ class TableReaderPlugin(BasePlugin):
                 # By replacing first occurance of the regex pattern
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
+        # IMPORT tables
+
+        for reader, function in IMPORT_TABLES.items():
+
+            # Regex pattern for tags like @import ".."
+            # match group 0: to extract any leading whitespace
+            # match group 1: to extract the arguments (positional and keywords)
+            tag_pattern = re.compile(
+                r'( *)@import\s+"(.*\.%s)"' % reader, flags=re.IGNORECASE
+            )
+
+            matches = re.findall(tag_pattern, markdown)
+
+            for result in matches:
+
+                # Safely parse the arguments
+                pd_args, pd_kwargs = parse_argkwarg("'%s'" % result[1])
+
+                # Make sure the path is relative to "data_path"
+                if len(pd_args) > 0:
+                    pd_args[0] = os.path.join(self.config.get("data_path"), pd_args[0])
+                    file_path = pd_args[0]
+
+                if pd_kwargs.get("filepath_or_buffer"):
+                    file_path = pd_kwargs["filepath_or_buffer"]
+                    file_path = os.path.join(self.config.get("data_path"), file_path)
+                    pd_kwargs["filepath_or_buffer"] = file_path
+
+                # Load the table
+                src_dir = os.path.dirname(page.file.abs_src_path)
+                with cd(src_dir):
+                    if not os.path.exists(file_path):
+                        raise FileNotFoundError(
+                            "[table-reader-plugin]: File does not exist: %s" % file_path
+                        )
+
+                    markdown_table = function(*pd_args, **pd_kwargs)
+
+                # Deal with indentation
+                # f.e. relevant when used inside content tabs
+                leading_spaces = result[0]
+                # make sure it's in multiples of 4 spaces
+                leading_spaces = int(len(leading_spaces) / 4) * "    "
+                # indent entire table
+                fixed_lines = []
+                for line in markdown_table.split('\n'):
+                    fixed_lines.append(textwrap.indent(line, leading_spaces))
+
+                markdown_table = "\n".join(fixed_lines)
+
+                # Insert markdown table
+                # By replacing first occurance of the regex pattern
+                markdown = tag_pattern.sub(markdown_table, markdown, count=1)
+
+        # IMPORT images
+
+        for image_ext in IMPORT_IMAGES:
+
+            # Regex pattern for tags like @import ".."
+            # match group 0: to extract any leading whitespace
+            # match group 1: to extract the arguments (positional and keywords)
+            tag_pattern = re.compile(
+                r'( *)@import\s+"(.*\.%s)"' % image_ext, flags=re.IGNORECASE
+            )
+
+            matches = re.findall(tag_pattern, markdown)
+
+            for result in matches:
+
+                # # Safely parse the arguments
+                # pd_args, pd_kwargs = parse_argkwarg("'%s'" % result[1])
+
+                # # Make sure the path is relative to "data_path"
+                # if len(pd_args) > 0:
+                #     pd_args[0] = os.path.join(self.config.get("data_path"), pd_args[0])
+                #     file_path = pd_args[0]
+
+                # if pd_kwargs.get("filepath_or_buffer"):
+                #     file_path = pd_kwargs["filepath_or_buffer"]
+                #     file_path = os.path.join(self.config.get("data_path"), file_path)
+                #     pd_kwargs["filepath_or_buffer"] = file_path
+
+                # # convert from "@import" to markdown description
+                # # markdown_image = "![]({})".format(page.file.abs_src_path)
+                markdown_image = "![]({})".format(result[1])
+
+                # Insert markdown image
+                # By replacing first occurance of the regex pattern
+                markdown = tag_pattern.sub(markdown_image, markdown, count=1)
 
         return markdown
