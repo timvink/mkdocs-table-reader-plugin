@@ -196,19 +196,25 @@ class TableReaderPlugin(BasePlugin):
                 # Safely parse the arguments
                 pd_args, pd_kwargs = parse_argkwarg(result[1])
 
-                # Make sure the path is relative to "data_path"
-                if len(pd_args) > 0:
-                    pd_args[0] = os.path.join(self.config.get("data_path"), pd_args[0])
-                    file_path = pd_args[0]
-
-                if pd_kwargs.get("filepath_or_buffer"):
-                    file_path = pd_kwargs["filepath_or_buffer"]
-                    file_path = os.path.join(self.config.get("data_path"), file_path)
-                    pd_kwargs["filepath_or_buffer"] = file_path
-
                 # Load the table
                 with cd(mkdocs_dir):
-                    if not os.path.exists(file_path):
+                    pagedir = os.path.dirname(page.file.abs_src_path)
+                    datadir = self.config.get("data_path")
+                    for data_path in [datadir, pagedir]:
+                        # Make sure the path is relative to "data_path"
+                        if len(pd_args) > 0:
+                            pd_args[0] = os.path.join(data_path, pd_args[0])
+                            file_path = pd_args[0]
+
+                        if pd_kwargs.get("filepath_or_buffer"):
+                            file_path = pd_kwargs["filepath_or_buffer"]
+                            file_path = os.path.join(data_path, file_path)
+                            pd_kwargs["filepath_or_buffer"] = file_path
+                        print("try", file_path)
+                        if os.path.exists(file_path):
+                            print("found", file_path)
+                            break
+                    else:
                         raise FileNotFoundError(
                             "[table-reader-plugin]: File does not exist: %s" % file_path
                         )
