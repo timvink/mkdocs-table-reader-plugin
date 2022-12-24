@@ -37,3 +37,30 @@ The value is a string, one of `docs_dir` or `config_dir`. The default is `config
 - `config_dir`: the directory where your project's `mkdocs.yml` file is located.
 - `docs_dir`: the directory where your projects' `docs/` folder is located.
 
+
+#### `search_page_directory`
+
+Default: `True`. When enabled, if a path is not found in `data_path`/
+`base_path`, also search relative to the current page's directory. Note that
+even when True, the data path is searched first (i.e. relative to `data_path`),
+and if a file is not found there, then the page's directory is searched.
+
+This enables e.g.:
+
+```
+$ tree
+.
+├── docs
+│   └── b
+│       ├── basic_table.csv
+│       └── index.md
+└── mkdocs.yml
+$ cat docs/b/index.md
+# test
+
+<!-- note that basic_table.csv is relative to docs/b/ -->
+{{ read_tsv("basic_table.csv") }}
+
+<!-- If search_page_directory is False, one needs to use -->
+{{ read_tsv("docs/b/basic_table.csv") }}
+```
