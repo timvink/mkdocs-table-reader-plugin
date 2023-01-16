@@ -14,10 +14,10 @@
 
 ## Installation
 
-Install the plugin using `pip3`:
+Install the plugin using `pip`:
 
 ```bash
-pip3 install mkdocs-table-reader-plugin
+pip install mkdocs-table-reader-plugin
 ```
 
 Next, add the following lines to your `mkdocs.yml`:
