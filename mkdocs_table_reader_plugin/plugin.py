@@ -132,6 +132,7 @@ class TableReaderPlugin(BasePlugin):
     config_scheme = (
         ("data_path", config_options.Type(str, default=".")),
         ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
+        ("search_page_directory", config_options.Type(bool, default=True)),
     )
 
     def on_config(self, config):
@@ -196,21 +197,31 @@ class TableReaderPlugin(BasePlugin):
                 # Safely parse the arguments
                 pd_args, pd_kwargs = parse_argkwarg(result[1])
 
-                # Make sure the path is relative to "data_path"
-                if len(pd_args) > 0:
-                    pd_args[0] = os.path.join(self.config.get("data_path"), pd_args[0])
-                    file_path = pd_args[0]
-
-                if pd_kwargs.get("filepath_or_buffer"):
-                    file_path = pd_kwargs["filepath_or_buffer"]
-                    file_path = os.path.join(self.config.get("data_path"), file_path)
-                    pd_kwargs["filepath_or_buffer"] = file_path
-
                 # Load the table
                 with cd(mkdocs_dir):
-                    if not os.path.exists(file_path):
+                    pagedir = os.path.dirname(page.file.abs_src_path)
+                    datadir = self.config.get("data_path")
+                    dirs = [datadir,]
+                    if self.config.get("search_page_directory", True):
+                        dirs.append(pagedir)
+                    for data_path in dirs:
+                        # Make sure the path is relative to "data_path"
+                        if len(pd_args) > 0:
+                            pd_args[0] = os.path.join(data_path, pd_args[0])
+                            file_path = pd_args[0]
+
+                        if pd_kwargs.get("filepath_or_buffer"):
+                            file_path = pd_kwargs["filepath_or_buffer"]
+                            file_path = os.path.join(data_path, file_path)
+                            pd_kwargs["filepath_or_buffer"] = file_path
+
+                        if os.path.exists(file_path):
+                            # Found file
+                            break
+                    else:
+                        # Could not find file in allowed dirs
                         raise FileNotFoundError(
-                            "[table-reader-plugin]: File does not exist: %s" % file_path
+                            "[table-reader-plugin]: File does not exist: %s. Perhaps enable search_page_directory?" % file_path
                         )
 
                     markdown_table = function(*pd_args, **pd_kwargs)
