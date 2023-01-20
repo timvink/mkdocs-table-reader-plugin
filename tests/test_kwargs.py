@@ -1,6 +1,6 @@
 
 import pandas as pd 
-from mkdocs_table_reader_plugin.plugin import get_keywords, kwargs_in_func, kwargs_not_in_func
+from mkdocs_table_reader_plugin.utils import get_keywords, kwargs_in_func, kwargs_not_in_func
 
 
 def test_kwargs():
