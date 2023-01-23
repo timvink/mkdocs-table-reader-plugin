@@ -34,6 +34,20 @@ def read_csv(*args, **kwargs):
     
     return df.to_markdown(**markdown_kwargs)
 
+def read_multiple_csv(*args, **kwargs):
+    df_list = []
+    for arg in args:
+        df_list.append(pd.read_csv(arg))
+    df = pd.concat(df_list)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_csv)
+    if "index" not in markdown_kwargs:
+        markdown_kwargs["index"] = False
+    if "tablefmt" not in markdown_kwargs:
+        markdown_kwargs["tablefmt"] = "pipe"
+
+    return df.to_markdown(**markdown_kwargs)
+
 
 def read_table(*args, **kwargs):
 
@@ -102,6 +116,7 @@ def read_yaml(*args, **kwargs):
 
 READERS = {
     "read_csv": read_csv,
+    "read_multiple_csv": read_multiple_csv,
     "read_table": read_table,
     "read_fwf": read_fwf,
     "read_excel": read_excel,
