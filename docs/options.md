@@ -22,7 +22,7 @@ The base path where `mkdocs-table-reader-plugin` will search for input files. Th
 - `config_dir` (default): the directory where your project's `mkdocs.yml` file is located.
 - `docs_dir`: the directory where your projects' `docs/` folder is located.
 
-Note that by default the plugin will _also_ search the page's directory but only when a table is not found. 
+Note that by default the plugin will _also_ search the page's directory but only when a table is not found.
 
 #### `data_path`
 
@@ -50,15 +50,25 @@ For example, consider the following project structure:
 ├── docs/
 │   ├── tables/
 │   |   └── basic_table.csv
-│   └── index.md
+│   └── folder/
+│       └── another_table.csv
+│       └── page.md
 └── mkdocs.yml
 ```
 
-In `index.md`, you can use:
+In `page.md`, to read `basic_table.csv`, you can use:
 
 - <code>\{\{ read_csv("docs/tables/basic_table.csv") \}\}</code> when `base_path` is set to `config_dir` (default)
 - <code>\{\{ read_csv("tables/basic_table.csv") \}\}</code> when `base_path` is set to `docs_dir`
 - <code>\{\{ read_csv("basic_table.csv") \}\}</code> when:
-  - `search_page_directory` is enabled (default), OR
   - `bash_path` is set to `config_dir` and `data_path` is set to `docs/tables`, OR
   - `bash_path` is set to `docs_dir` and `data_path` is set to `tables`
+
+In `page.md`, to read `another_table.csv`, you can use:
+
+- <code>\{\{ read_csv("docs/folder/another_table.csv") \}\}</code> when `base_path` is set to `config_dir` (default)
+- <code>\{\{ read_csv("folder/another_table.csv") \}\}</code> when `base_path` is set to `docs_dir`
+- <code>\{\{ read_csv("another_table.csv") \}\}</code> when:
+  - `search_page_directory` is enabled (default), OR
+  - `bash_path` is set to `config_dir` and `data_path` is set to `docs/folder`, OR
+  - `bash_path` is set to `docs_dir` and `data_path` is set to `folder`

@@ -205,6 +205,21 @@ def test_compatibility_markdownextradata(tmp_path):
     assert result.exit_code == 0, "'mkdocs build' command should have succeeded"
 
 
+def test_search_page_directory(tmp_path):
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/search_page_directory/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the basic_table.csv is inserted
+    page_with_tag = tmp_proj / "site/folder/page2.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
+
 def test_datapath_1(tmp_path):
 
     tmp_proj = setup_clean_mkdocs_folder(
@@ -297,5 +312,5 @@ def test_wrong_path(tmp_path):
 
     result = build_docs_setup(tmp_proj)
     assert result.exit_code == 1, "'mkdocs build' command failed"
-    assert "[table-reader-plugin]: File does not exist" in result.output
+    assert "[table-reader-plugin]: Cannot find table file" in result.output
     assert "non_existing_table.csv" in result.output

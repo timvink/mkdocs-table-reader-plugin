@@ -19,17 +19,16 @@ class TableReaderPlugin(BasePlugin):
         ("search_page_directory", config_options.Type(bool, default=True)),
     )
 
-    def on_config(self, config):
+    def on_config(self, config, **kwargs):
         """
+        See https://www.mkdocs.org/user-guide/plugins/#on_config.
 
-        See https://www.mkdocs.org/user-guide/plugins/#on_config
         Args:
             config
 
         Returns:
             Config
         """
-
         plugins = [p for p in config.get("plugins")]
 
         for post_load_plugin in ["macros", "markdownextradata"]:
@@ -58,12 +57,19 @@ class TableReaderPlugin(BasePlugin):
         Returns:
             str: Markdown source text of page as string
         """
-
+        # Determine the mkdocs directory
+        # We do this during the on_page_markdown() event because other plugins
+        # might have changed the directory.
         if self.config.get("base_path") == "config_dir":
             mkdocs_dir = os.path.dirname(os.path.abspath(config["config_file_path"]))
         if self.config.get("base_path") == "docs_dir":
             mkdocs_dir = os.path.abspath(config["docs_dir"])
         
+        # Define directories to search for tables
+        search_directories = [self.config.get("data_path")]
+        if self.config.get("search_page_directory"):
+            search_directories.append(os.path.dirname(page.file.abs_src_path))
+
         for reader, function in READERS.items():
             
             # Regex pattern for tags like {{ read_csv(..) }}
@@ -72,9 +78,7 @@ class TableReaderPlugin(BasePlugin):
             tag_pattern = re.compile(
                 "( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
             )
-
             matches = re.findall(tag_pattern, markdown)
-            
             
             for result in matches:
 
@@ -83,29 +87,26 @@ class TableReaderPlugin(BasePlugin):
 
                 # Load the table
                 with cd(mkdocs_dir):
-                    pagedir = os.path.dirname(page.file.abs_src_path)
-                    datadir = self.config.get("data_path")
-                    dirs = [datadir,]
-                    if self.config.get("search_page_directory", True):
-                        dirs.append(pagedir)
-                    for data_path in dirs:
+
+                    for data_path in search_directories:
                         # Make sure the path is relative to "data_path"
                         if len(pd_args) > 0:
-                            pd_args[0] = os.path.join(data_path, pd_args[0])
-                            file_path = pd_args[0]
+                            input_file_path = pd_args[0]
+                            output_file_path = os.path.join(data_path, input_file_path)
+                            pd_args[0] = output_file_path
 
                         if pd_kwargs.get("filepath_or_buffer"):
-                            file_path = pd_kwargs["filepath_or_buffer"]
-                            file_path = os.path.join(data_path, file_path)
-                            pd_kwargs["filepath_or_buffer"] = file_path
+                            input_file_path = pd_kwargs["filepath_or_buffer"]
+                            output_file_path = os.path.join(data_path, input_file_path)
+                            pd_kwargs["filepath_or_buffer"] = output_file_path
 
-                        if os.path.exists(file_path):
+                        if os.path.exists(os.path.join(mkdocs_dir, output_file_path)):
                             # Found file
                             break
                     else:
                         # Could not find file in allowed dirs
                         raise FileNotFoundError(
-                            "[table-reader-plugin]: File does not exist: %s. Perhaps enable search_page_directory?" % file_path
+                            f"[table-reader-plugin]: Cannot find table file '{input_file_path}'. The following directories were searched: {*search_directories,}"
                         )
 
                     markdown_table = function(*pd_args, **pd_kwargs)
