@@ -1,9 +1,6 @@
 import os
 import re
-import pandas as pd
-import yaml
 import textwrap
-from inspect import signature 
 
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
@@ -17,8 +14,8 @@ from mkdocs_table_reader_plugin.utils import cd
 class TableReaderPlugin(BasePlugin):
 
     config_scheme = (
-        ("data_path", config_options.Type(str, default=".")),
         ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
+        ("data_path", config_options.Type(str, default=".")),
         ("search_page_directory", config_options.Type(bool, default=True)),
     )
 
