@@ -1,6 +1,7 @@
 import os
 import re
 import textwrap
+import logging
 
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
@@ -10,6 +11,7 @@ from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
 from mkdocs_table_reader_plugin.readers import READERS
 from mkdocs_table_reader_plugin.utils import cd
 
+logger = logging.getLogger("mkdocs.plugins")
 
 class TableReaderPlugin(BasePlugin):
 
@@ -17,6 +19,7 @@ class TableReaderPlugin(BasePlugin):
         ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
         ("data_path", config_options.Type(str, default=".")),
         ("search_page_directory", config_options.Type(bool, default=True)),
+        ("allow_missing_files", config_options.Type(bool, default=False)),
     )
 
     def on_config(self, config, **kwargs):
@@ -66,7 +69,7 @@ class TableReaderPlugin(BasePlugin):
             mkdocs_dir = os.path.abspath(config["docs_dir"])
         
         # Define directories to search for tables
-        search_directories = [self.config.get("data_path")]
+        search_directories = [os.path.join(mkdocs_dir, self.config.get("data_path"))]
         if self.config.get("search_page_directory"):
             search_directories.append(os.path.dirname(page.file.abs_src_path))
 
@@ -82,50 +85,72 @@ class TableReaderPlugin(BasePlugin):
             
             for result in matches:
 
+                # Deal with indentation
+                # So we can fix inserting tables.
+                # f.e. relevant when used inside content tabs
+                leading_spaces = result[0]
+
                 # Safely parse the arguments
                 pd_args, pd_kwargs = parse_argkwarg(result[1])
 
-                # Load the table
-                with cd(mkdocs_dir):
+                # Extract the filepath,
+                # which is the first positional argument
+                # or a named argument when there are no positional arguments
+                if len(pd_args) > 0:
+                    input_file_path = pd_args.pop(0)
+                else:
+                    input_file_path = pd_kwargs.pop("filepath_or_buffer")
 
-                    for data_path in search_directories:
-                        # Make sure the path is relative to "data_path"
-                        if len(pd_args) > 0:
-                            input_file_path = pd_args[0]
-                            output_file_path = os.path.join(data_path, input_file_path)
-                            pd_args[0] = output_file_path
+                # Validate if file exists
+                search_file_paths = [os.path.join(search_dir, input_file_path) for search_dir in search_directories]
+                valid_file_paths = [p for p in search_file_paths if os.path.exists(p)]
+                if len(valid_file_paths) == 0:
+                    msg = f"[table-reader-plugin]: Cannot find table file '{input_file_path}'. The following directories were searched: {*search_directories,}"
+                    if self.config.get("allow_missing_files"):
+                        logger.warning(msg)
 
-                        if pd_kwargs.get("filepath_or_buffer"):
-                            input_file_path = pd_kwargs["filepath_or_buffer"]
-                            output_file_path = os.path.join(data_path, input_file_path)
-                            pd_kwargs["filepath_or_buffer"] = output_file_path
+                        # Add message in markdown
+                        updated_tag = fix_indentation(leading_spaces, f"{{{{ Cannot find '{input_file_path}' }}}}")
 
-                        if os.path.exists(os.path.join(mkdocs_dir, output_file_path)):
-                            # Found file
-                            break
+                        markdown = tag_pattern.sub(updated_tag, markdown, count=1)
+
+                        continue
                     else:
-                        # Could not find file in allowed dirs
-                        raise FileNotFoundError(
-                            f"[table-reader-plugin]: Cannot find table file '{input_file_path}'. The following directories were searched: {*search_directories,}"
-                        )
-
-                    markdown_table = function(*pd_args, **pd_kwargs)
-
-                # Deal with indentation
-                # f.e. relevant when used inside content tabs
-                leading_spaces = result[0]
-                # make sure it's in multiples of 4 spaces
-                leading_spaces = int(len(leading_spaces) / 4) * "    "
-                # indent entire table
-                fixed_lines = []
-                for line in markdown_table.split('\n'):
-                    fixed_lines.append(textwrap.indent(line, leading_spaces))
+                        raise FileNotFoundError(msg)
                 
-                markdown_table = "\n".join(fixed_lines)
+                # Load the table
+                # note we use the first valid file paths,
+                # where we first search the 'data_path' and then the page's directory.
+                markdown_table = function(valid_file_paths[0], *pd_args, **pd_kwargs)
+
+                fix_indentation(leading_spaces, markdown_table)
 
                 # Insert markdown table
-                # By replacing first occurance of the regex pattern
+                # By replacing only the first occurance of the regex pattern
+                # You might insert multiple CSVs with a single reader like read_csv
+                # Because of the replacement, the next occurance will be the first match for .sub() again.
+                # This is always why when allow_missing_files=True we replaced the input tag.
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
-
         return markdown
+
+
+def fix_indentation(leading_spaces: str, text: str) -> str:
+    """
+    Adds indentation to a text.
+
+    Args:
+        leading_spaces (str): Indentation to add
+        text (str): input text
+
+    Returns:
+        str: fixed text
+    """
+    # make sure it's in multiples of 4 spaces
+    leading_spaces = int(len(leading_spaces) / 4) * "    "
+
+    fixed_lines = []
+    for line in text.split('\n'):
+        fixed_lines.append(textwrap.indent(line, leading_spaces))
+    text = "\n".join(fixed_lines)
+    return text

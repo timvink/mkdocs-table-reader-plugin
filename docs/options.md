@@ -13,6 +13,7 @@ plugins:
       base_path: "config_dir"
       data_path: "."
       search_page_directory: True
+      allow_missing_files: False
 ```
 
 #### `base_path`
@@ -40,6 +41,10 @@ Default: `True`. When enabled, if a filepath is not found, the plugin will also 
 
 Note that even when True, the data path is searched first (i.e. relative to `data_path`),
 and if a file is not found there, then the page's directory is searched. For example:
+
+#### `allow_missing_files`
+
+Default: `False`. When enabled, if a filepath is not found, the plugin will raise a warning instead of an error. 
 
 # Example
 
