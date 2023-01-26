@@ -2,6 +2,7 @@ import pandas as pd
 import yaml
 
 from mkdocs_table_reader_plugin.utils import kwargs_in_func, kwargs_not_in_func 
+from mkdocs_table_reader_plugin.markdown import convert_to_md_table
 
 def read_csv(*args, **kwargs):
     
@@ -9,12 +10,7 @@ def read_csv(*args, **kwargs):
     df = pd.read_csv(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_csv)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
+    return convert_to_md_table(df, markdown_kwargs)
 
 
 def read_table(*args, **kwargs):
@@ -23,12 +19,7 @@ def read_table(*args, **kwargs):
     df = pd.read_table(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_table)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
+    return convert_to_md_table(df, markdown_kwargs)
 
 
 def read_fwf(*args, **kwargs):
@@ -36,22 +27,14 @@ def read_fwf(*args, **kwargs):
     df = pd.read_fwf(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_fwf)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
+    return convert_to_md_table(df, markdown_kwargs)
 
 def read_json(*args, **kwargs):
     read_kwargs = kwargs_in_func(kwargs, pd.read_json)
     df = pd.read_json(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_json)
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
+    return convert_to_md_table(df, markdown_kwargs)
 
 
 def read_excel(*args, **kwargs):
@@ -59,12 +42,7 @@ def read_excel(*args, **kwargs):
     df = pd.read_excel(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_excel)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-        
-    return df.to_markdown(**markdown_kwargs)
+    return convert_to_md_table(df, markdown_kwargs)
 
 
 def read_yaml(*args, **kwargs):
@@ -74,12 +52,7 @@ def read_yaml(*args, **kwargs):
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
+    return convert_to_md_table(df, markdown_kwargs)
 
 
 READERS = {
