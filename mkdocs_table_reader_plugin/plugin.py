@@ -9,7 +9,6 @@ from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
 from mkdocs_table_reader_plugin.readers import READERS
-from mkdocs_table_reader_plugin.utils import cd
 
 logger = logging.getLogger("mkdocs.plugins")
 

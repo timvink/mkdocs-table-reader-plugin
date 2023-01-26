@@ -1,16 +1,7 @@
-import os
-import re
 import pandas as pd
 import yaml
-import textwrap
-from inspect import signature 
 
-from mkdocs.plugins import BasePlugin
-from mkdocs.config import config_options
-from mkdocs.exceptions import ConfigurationError
-
-from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
-from mkdocs_table_reader_plugin.utils import get_keywords, kwargs_in_func, kwargs_not_in_func 
+from mkdocs_table_reader_plugin.utils import kwargs_in_func, kwargs_not_in_func 
 
 def read_csv(*args, **kwargs):
     

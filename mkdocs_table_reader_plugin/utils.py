@@ -1,16 +1,5 @@
 import os
-import re
-import pandas as pd
-import yaml
-import textwrap
 from inspect import signature 
-
-from mkdocs.plugins import BasePlugin
-from mkdocs.config import config_options
-from mkdocs.exceptions import ConfigurationError
-
-from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
-
 
 def get_keywords(func):
     return [p.name for p in signature(func).parameters.values() if p.kind == p.POSITIONAL_OR_KEYWORD or p.kind == p.KEYWORD_ONLY]
