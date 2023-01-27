@@ -78,11 +78,11 @@ The following table reader functions are available:
 
 === "Input"
 
-    <code>\{\{ read_excel('tables/excel_table.xlsx') \}\}</code>
+    <code>\{\{ read_excel('tables/excel_table.xlsx', engine='openpyxl') \}\}</code>
 
 === "Output"
 
-    {{ read_excel('tables/excel_table.xlsx') }}
+    {{ read_excel('tables/excel_table.xlsx', engine='openpyxl') }}
 
 
 !!! info "Reading xlsx files"
