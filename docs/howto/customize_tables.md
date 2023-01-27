@@ -1,9 +1,4 @@
----
-hide:
-  - navigation
----
-
-# Customization
+# Customize markdown tables
 
 You can customize the resulting markdown tables! 
 

@@ -7,14 +7,17 @@ edit_uri: ""
 nav:
     - index.md
     - readers.md
-    - customization.md
+    - How to:
+        - howto/customize_tables.md
+        - howto/preprocess_tables.md
+        - howto/project_structure.md
     - options.md
 
 theme:
     name: material
     custom_dir: docs/overrides
     icon:
-        logo: material/file-table-box-outline
+        logo: material/table-multiple
         repo: fontawesome/brands/github
     features:
         - content.tabs.link
