@@ -1,6 +1,5 @@
 import os
 import re
-import textwrap
 import logging
 
 from mkdocs.plugins import BasePlugin
@@ -9,6 +8,7 @@ from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
 from mkdocs_table_reader_plugin.readers import READERS
+from mkdocs_table_reader_plugin.markdown import fix_indentation
 
 logger = logging.getLogger("mkdocs.plugins")
 
@@ -122,7 +122,7 @@ class TableReaderPlugin(BasePlugin):
                 # where we first search the 'data_path' and then the page's directory.
                 markdown_table = function(valid_file_paths[0], *pd_args, **pd_kwargs)
 
-                fix_indentation(leading_spaces, markdown_table)
+                markdown_table = fix_indentation(leading_spaces, markdown_table)
 
                 # Insert markdown table
                 # By replacing only the first occurance of the regex pattern
@@ -134,22 +134,3 @@ class TableReaderPlugin(BasePlugin):
         return markdown
 
 
-def fix_indentation(leading_spaces: str, text: str) -> str:
-    """
-    Adds indentation to a text.
-
-    Args:
-        leading_spaces (str): Indentation to add
-        text (str): input text
-
-    Returns:
-        str: fixed text
-    """
-    # make sure it's in multiples of 4 spaces
-    leading_spaces = int(len(leading_spaces) / 4) * "    "
-
-    fixed_lines = []
-    for line in text.split('\n'):
-        fixed_lines.append(textwrap.indent(line, leading_spaces))
-    text = "\n".join(fixed_lines)
-    return text
