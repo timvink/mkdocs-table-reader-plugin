@@ -78,7 +78,7 @@ class TableReaderPlugin(BasePlugin):
             # match group 0: to extract any leading whitespace 
             # match group 1: to extract the arguments (positional and keywords)
             tag_pattern = re.compile(
-                "( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
+                r"( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
             )
             matches = re.findall(tag_pattern, markdown)
             
