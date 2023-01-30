@@ -91,3 +91,18 @@ The following table reader functions are available:
 
     <code>\{\{ read_excel('tables/excel_table.xlsx', engine='openpyxl') \}\}</code>
 
+## read_raw
+
+`{{ read_raw() }}` inserts contents from a file directly. This is great if you have a file with a table already in markdown format. 
+It could also replace a workflow where you use the [snippets extension to embed external files](https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#embedding-external-files).
+
+Example:
+
+=== "Input"
+
+    <code>\{\{ read_raw('tables/markdown_table.md') \}\}</code>
+
+=== "Output"
+
+    {{ read_raw('tables/markdown_table.md') }}
+
