@@ -2,10 +2,6 @@
 
 This is a table that we load from the docs folder, because we set `data_path` to `docs`:
 
-## Missing table
-
-{{ read_csv("non_existing_table.csv") }}
-
-## Existing table
+## inserted with keyword argument
 
 {{ read_csv("basic_table.csv") }}

@@ -78,11 +78,11 @@ The following table reader functions are available:
 
 === "Input"
 
-    <code>\{\{ read_excel('tables/excel_table.xlsx') \}\}</code>
+    <code>\{\{ read_excel('tables/excel_table.xlsx', engine='openpyxl') \}\}</code>
 
 === "Output"
 
-    {{ read_excel('tables/excel_table.xlsx') }}
+    {{ read_excel('tables/excel_table.xlsx', engine='openpyxl') }}
 
 
 !!! info "Reading xlsx files"
@@ -90,4 +90,19 @@ The following table reader functions are available:
     You might get a `XLRDError('Excel xlsx file; not supported',)` error when trying to read modern excel files. That's because `xlrd` does not support `.xlsx` files ([stackoverflow post](https://stackoverflow.com/questions/65254535/xlrd-biffh-xlrderror-excel-xlsx-file-not-supported)). Instead, install [openpyxl](https://openpyxl.readthedocs.io/en/stable/) and use:
 
     <code>\{\{ read_excel('tables/excel_table.xlsx', engine='openpyxl') \}\}</code>
+
+## read_raw
+
+`{{ read_raw() }}` inserts contents from a file directly. This is great if you have a file with a table already in markdown format. 
+It could also replace a workflow where you use the [snippets extension to embed external files](https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#embedding-external-files).
+
+Example:
+
+=== "Input"
+
+    <code>\{\{ read_raw('tables/markdown_table.md') \}\}</code>
+
+=== "Output"
+
+    {{ read_raw('tables/markdown_table.md') }}
 

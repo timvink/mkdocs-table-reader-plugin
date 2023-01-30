@@ -10,57 +10,55 @@ You can customize the plugin by setting options in `mkdocs.yml`. For example:
 ```yml
 plugins:
   - table-reader:
-      data_path: "docs"
       base_path: "config_dir"
+      data_path: "."
+      search_page_directory: True
+      allow_missing_files: False
 ```
 
-#### `data_path`
+## Options
 
-Default is `.`, which means you can specify the path to your table files relative to the `base_path`, which defaults to the directory where your project's `mkdocs.yml` file is located. If you use a folder for all your table files you can shorten the path specification by setting `data_path`.
+## `base_path`
 
-For example, if you set `data_path` to `docs/tables/` in the project below, you will be able to use <code>\{\{ read_csv("basic_table.csv") \}\}</code> instead of <code>\{\{ read_csv("docs/tables/basic_table.csv") \}\}</code> inside `index.md`.
+The base path where `mkdocs-table-reader-plugin` will search for input files. The path to your table files should be relative to the `base_path`. Allowed values:
 
-```nohighlight
-.
-├── docs
-│   ├── tables/
-│   |   └── basic_table.csv
-│   └── index.md
-└── mkdocs.yml
-```
-
-#### `base_path`
-
-The base path where `mkdocs-table-reader-plugin` will search for input files.
-The value is a string, one of `docs_dir` or `config_dir`. The default is `config_dir`. 
-
-- `config_dir`: the directory where your project's `mkdocs.yml` file is located.
+- `config_dir` (default): the directory where your project's `mkdocs.yml` file is located.
 - `docs_dir`: the directory where your projects' `docs/` folder is located.
 
+If you store your table in `docs/assets/table.csv`, you can insert it in any markdown page using <code>\{\{ read_csv("docs/assets/table.csv") \}\}</code>, or when `base_path` is `docs_dir`, with <code>\{\{ read_csv("assets/table.csv") \}\}</code>.
 
-#### `search_page_directory`
+!!! info
 
-Default: `True`. When enabled, if a path is not found in `data_path`/
-`base_path`, also search relative to the current page's directory. Note that
-even when True, the data path is searched first (i.e. relative to `data_path`),
-and if a file is not found there, then the page's directory is searched.
+    Note that by default the plugin will _also_ search the page's directory but only when a table is not found.
 
-This enables e.g.:
+    For more examples see the how to guide on [project structure](howto/project_structure.md).
 
-```
-$ tree
-.
-├── docs
-│   └── b
-│       ├── basic_table.csv
-│       └── index.md
-└── mkdocs.yml
-$ cat docs/b/index.md
-# test
+## `data_path`
 
-<!-- note that basic_table.csv is relative to docs/b/ -->
-{{ read_tsv("basic_table.csv") }}
+The path to your table files should be relative to the `base_path`. If you use a folder for all your table files you can shorten the path specification by setting the `data_path`.
 
-<!-- If search_page_directory is False, one needs to use -->
-{{ read_tsv("docs/b/basic_table.csv") }}
-```
+For example, if your table is located in `docs/tables/basic_table.csv`, you can set `data_path` to `docs/tables/` and leave `base_path` to the default `config_dir`. Then you will be able to use <code>\{\{ read_csv("basic_table.csv") \}\}</code> instead of <code>\{\{ read_csv("docs/tables/basic_table.csv") \}\}</code> inside any markdown page.
+
+Default is `.`, which means you need to specify the path to your table files relative to the `base_path`.
+
+!!! info
+
+    Note that by default the plugin will _also_ search the page's directory but only when a table is not found.
+
+    For more examples see the how to guide on [project structure](howto/project_structure.md).
+
+## `search_page_directory`
+
+Default: `True`. When enabled, if a filepath is not found, the plugin will also attempt to find the file relative to the current page's directory.
+
+!!! info
+
+    Note that even when `True`, the path relative to `data_path` is searched first,
+    and if a file is not found there, then the page's directory is searched.
+
+    For more examples see the how to guide on [project structure](howto/project_structure.md).
+
+## `allow_missing_files`
+
+Default: `False`. When enabled, if a filepath is not found, the plugin will raise a warning instead of an error.
+

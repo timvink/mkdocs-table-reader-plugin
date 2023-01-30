@@ -1,9 +1,4 @@
----
-hide:
-  - navigation
----
-
-# Customization
+# Customize markdown tables
 
 You can customize the resulting markdown tables! 
 
@@ -17,7 +12,7 @@ df = pd.read_csv('path_to_table.csv')
 df.to_markdown(index=False, tablefmt='pipe')
 ```
 
-Any keyword arguments you give to <code>\{\{ read_csv('path_to_your_table.csv') \}\}</code> will be matched and passed the corresponding [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) or 
+Any keyword arguments you give to <code>\{\{ read_csv('path_to_your_table.csv') \}\}</code> will be matched and passed the corresponding [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) and/or 
 [.to_markdown()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html) functions. 
 
 Pandas's `.to_markdown()` uses the [tabulate](https://pypi.org/project/tabulate/) package and any keyword arguments that are passed to it. Tabulate in turn offers many customization options, see [library usage](https://github.com/astanin/python-tabulate#library-usage). 
@@ -47,7 +42,6 @@ Text columns will be aligned to the left [by default](https://github.com/astanin
 ## Sortable tables
 
 If you use [mkdocs-material](https://squidfunk.github.io/mkdocs-material), you can configure [sortable tables](https://squidfunk.github.io/mkdocs-material/reference/data-tables/?h=tables#sortable-tables).
-
 
 ## Number formatting
 

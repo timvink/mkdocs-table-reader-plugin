@@ -1,151 +1,36 @@
 import os
 import re
-import pandas as pd
-import yaml
-import textwrap
-from inspect import signature 
+import logging
 
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
+from mkdocs_table_reader_plugin.readers import READERS
+from mkdocs_table_reader_plugin.markdown import fix_indentation
 
-def get_keywords(func):
-    return [p.name for p in signature(func).parameters.values() if p.kind == p.POSITIONAL_OR_KEYWORD or p.kind == p.KEYWORD_ONLY]
-
-def kwargs_in_func(keywordargs, func):
-    return dict({(k,v) for k, v in keywordargs.items() if k in get_keywords(func)})
-
-def kwargs_not_in_func(keywordargs, func):
-    return dict({(k,v) for k, v in keywordargs.items() if k not in get_keywords(func)})
-
-
-def read_csv(*args, **kwargs):
-    
-    read_kwargs = kwargs_in_func(kwargs, pd.read_csv)
-    df = pd.read_csv(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_csv)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
-
-
-def read_table(*args, **kwargs):
-
-    read_kwargs = kwargs_in_func(kwargs, pd.read_table)
-    df = pd.read_table(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_table)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
-
-
-def read_fwf(*args, **kwargs):
-    read_kwargs = kwargs_in_func(kwargs, pd.read_fwf)
-    df = pd.read_fwf(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_fwf)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
-
-def read_json(*args, **kwargs):
-    read_kwargs = kwargs_in_func(kwargs, pd.read_json)
-    df = pd.read_json(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_json)
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
-
-
-def read_excel(*args, **kwargs):
-    read_kwargs = kwargs_in_func(kwargs, pd.read_excel)
-    df = pd.read_excel(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_excel)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-        
-    return df.to_markdown(**markdown_kwargs)
-
-
-def read_yaml(*args, **kwargs):
-
-    json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0], "r") as f:
-        df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
-    if "index" not in markdown_kwargs:
-        markdown_kwargs["index"] = False
-    if "tablefmt" not in markdown_kwargs:
-        markdown_kwargs["tablefmt"] = "pipe"
-    
-    return df.to_markdown(**markdown_kwargs)
-
-
-READERS = {
-    "read_csv": read_csv,
-    "read_table": read_table,
-    "read_fwf": read_fwf,
-    "read_excel": read_excel,
-    "read_yaml": read_yaml,
-    "read_json": read_json,
-}
-
-
-class cd:
-    """
-    Context manager for changing the current working directory
-    Credits: https://stackoverflow.com/a/13197763/5525118
-    """
-
-    def __init__(self, newPath):
-        self.newPath = os.path.expanduser(newPath)
-
-    def __enter__(self):
-        self.savedPath = os.getcwd()
-        os.chdir(self.newPath)
-
-    def __exit__(self, etype, value, traceback):
-        os.chdir(self.savedPath)
-
+logger = logging.getLogger("mkdocs.plugins")
 
 class TableReaderPlugin(BasePlugin):
 
     config_scheme = (
-        ("data_path", config_options.Type(str, default=".")),
         ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
+        ("data_path", config_options.Type(str, default=".")),
         ("search_page_directory", config_options.Type(bool, default=True)),
+        ("allow_missing_files", config_options.Type(bool, default=False)),
     )
 
-    def on_config(self, config):
+    def on_config(self, config, **kwargs):
         """
+        See https://www.mkdocs.org/user-guide/plugins/#on_config.
 
-        See https://www.mkdocs.org/user-guide/plugins/#on_config
         Args:
             config
 
         Returns:
             Config
         """
-
         plugins = [p for p in config.get("plugins")]
 
         for post_load_plugin in ["macros", "markdownextradata"]:
@@ -174,73 +59,78 @@ class TableReaderPlugin(BasePlugin):
         Returns:
             str: Markdown source text of page as string
         """
-
+        # Determine the mkdocs directory
+        # We do this during the on_page_markdown() event because other plugins
+        # might have changed the directory.
         if self.config.get("base_path") == "config_dir":
             mkdocs_dir = os.path.dirname(os.path.abspath(config["config_file_path"]))
         if self.config.get("base_path") == "docs_dir":
             mkdocs_dir = os.path.abspath(config["docs_dir"])
         
+        # Define directories to search for tables
+        search_directories = [os.path.join(mkdocs_dir, self.config.get("data_path"))]
+        if self.config.get("search_page_directory"):
+            search_directories.append(os.path.dirname(page.file.abs_src_path))
+
         for reader, function in READERS.items():
             
             # Regex pattern for tags like {{ read_csv(..) }}
             # match group 0: to extract any leading whitespace 
             # match group 1: to extract the arguments (positional and keywords)
             tag_pattern = re.compile(
-                "( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
+                r"( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
             )
-
             matches = re.findall(tag_pattern, markdown)
             
-            
             for result in matches:
+
+                # Deal with indentation
+                # So we can fix inserting tables.
+                # f.e. relevant when used inside content tabs
+                leading_spaces = result[0]
 
                 # Safely parse the arguments
                 pd_args, pd_kwargs = parse_argkwarg(result[1])
 
-                # Load the table
-                with cd(mkdocs_dir):
-                    pagedir = os.path.dirname(page.file.abs_src_path)
-                    datadir = self.config.get("data_path")
-                    dirs = [datadir,]
-                    if self.config.get("search_page_directory", True):
-                        dirs.append(pagedir)
-                    for data_path in dirs:
-                        # Make sure the path is relative to "data_path"
-                        if len(pd_args) > 0:
-                            pd_args[0] = os.path.join(data_path, pd_args[0])
-                            file_path = pd_args[0]
+                # Extract the filepath,
+                # which is the first positional argument
+                # or a named argument when there are no positional arguments
+                if len(pd_args) > 0:
+                    input_file_path = pd_args.pop(0)
+                else:
+                    input_file_path = pd_kwargs.pop("filepath_or_buffer")
 
-                        if pd_kwargs.get("filepath_or_buffer"):
-                            file_path = pd_kwargs["filepath_or_buffer"]
-                            file_path = os.path.join(data_path, file_path)
-                            pd_kwargs["filepath_or_buffer"] = file_path
+                # Validate if file exists
+                search_file_paths = [os.path.join(search_dir, input_file_path) for search_dir in search_directories]
+                valid_file_paths = [p for p in search_file_paths if os.path.exists(p)]
+                if len(valid_file_paths) == 0:
+                    msg = f"[table-reader-plugin]: Cannot find table file '{input_file_path}'. The following directories were searched: {*search_directories,}"
+                    if self.config.get("allow_missing_files"):
+                        logger.warning(msg)
 
-                        if os.path.exists(file_path):
-                            # Found file
-                            break
+                        # Add message in markdown
+                        updated_tag = fix_indentation(leading_spaces, f"{{{{ Cannot find '{input_file_path}' }}}}")
+
+                        markdown = tag_pattern.sub(updated_tag, markdown, count=1)
+
+                        continue
                     else:
-                        # Could not find file in allowed dirs
-                        raise FileNotFoundError(
-                            "[table-reader-plugin]: File does not exist: %s. Perhaps enable search_page_directory?" % file_path
-                        )
-
-                    markdown_table = function(*pd_args, **pd_kwargs)
-
-                # Deal with indentation
-                # f.e. relevant when used inside content tabs
-                leading_spaces = result[0]
-                # make sure it's in multiples of 4 spaces
-                leading_spaces = int(len(leading_spaces) / 4) * "    "
-                # indent entire table
-                fixed_lines = []
-                for line in markdown_table.split('\n'):
-                    fixed_lines.append(textwrap.indent(line, leading_spaces))
+                        raise FileNotFoundError(msg)
                 
-                markdown_table = "\n".join(fixed_lines)
+                # Load the table
+                # note we use the first valid file paths,
+                # where we first search the 'data_path' and then the page's directory.
+                markdown_table = function(valid_file_paths[0], *pd_args, **pd_kwargs)
+
+                markdown_table = fix_indentation(leading_spaces, markdown_table)
 
                 # Insert markdown table
-                # By replacing first occurance of the regex pattern
+                # By replacing only the first occurance of the regex pattern
+                # You might insert multiple CSVs with a single reader like read_csv
+                # Because of the replacement, the next occurance will be the first match for .sub() again.
+                # This is always why when allow_missing_files=True we replaced the input tag.
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
-
         return markdown
+
+
