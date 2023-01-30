@@ -219,6 +219,23 @@ def test_search_page_directory(tmp_path):
     contents = page_with_tag.read_text()
     assert re.search(r"531456", contents)
 
+def test_relative_path(tmp_path):
+    """
+    A project where we specify a path relative to the markdown.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/relative_path/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the basic_table.csv is inserted
+    page_with_tag = tmp_proj / "site/folder/page2.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+
 
 def test_datapath_1(tmp_path):
 
