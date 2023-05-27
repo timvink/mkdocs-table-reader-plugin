@@ -41,8 +41,7 @@ In your markdown documents you can now use:
 Where the path is relative to the location of your project's `mkdocs.yml` file (although you can [change that](https://timvink.github.io/mkdocs-table-reader-plugin/options) to be relative to your `docs/` directory).
 
 - There are [readers](https://timvink.github.io/mkdocs-table-reader-plugin/readers/) for `.csv`, `.fwf`, `.json`, `.xlsx`, `.yaml` and `.tsv`. There is also the `read_raw()` reader that will allow you to insert tables (or other content) already in markdown format.
-- See the [how to guides](https://timvink.github.io/mkdocs-table-reader-plugin/howto/customize-tables/) for example of various workflows
 
-## Documentation
+## Documentation and how-to guides
 
 See [timvink.github.io/mkdocs-table-reader-plugin/](https://timvink.github.io/mkdocs-table-reader-plugin/)
