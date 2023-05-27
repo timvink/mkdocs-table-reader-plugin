@@ -11,17 +11,17 @@
       
       
       
-        <link rel="prev" href="../../readers/">
+        <link rel="prev" href="../project_structure/">
       
       
-        <link rel="next" href="../preprocess_tables/">
+        <link rel="next" href="../../options/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
     
     
       
-        <title>Customize markdown tables - mkdocs-table-reader-plugin</title>
+        <title>Use with docker - mkdocs-table-reader-plugin</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#customize-markdown-tables" class="md-skip">
+        <a href="#use-with-docker" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Customize markdown tables
+              Use with docker
             
           </span>
         </div>
@@ -234,7 +234,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="./" class="md-tabs__link md-tabs__link--active">
+      <a href="../customize_tables/" class="md-tabs__link md-tabs__link--active">
         How to
       </a>
     </li>
@@ -368,73 +368,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Customize markdown tables
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../customize_tables/" class="md-nav__link">
         Customize markdown tables
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#theory" class="md-nav__link">
-    Theory
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aligning-columns" class="md-nav__link">
-    Aligning columns
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sortable-tables" class="md-nav__link">
-    Sortable tables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#number-formatting" class="md-nav__link">
-    Number formatting
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -472,11 +410,21 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../docker/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Use with docker
       </a>
+      
     </li>
   
 
@@ -523,42 +471,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#theory" class="md-nav__link">
-    Theory
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aligning-columns" class="md-nav__link">
-    Aligning columns
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sortable-tables" class="md-nav__link">
-    Sortable tables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#number-formatting" class="md-nav__link">
-    Number formatting
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -573,212 +485,106 @@
                   
 
 
-<h1 id="customize-markdown-tables">Customize markdown tables</h1>
-<p>You can customize the resulting markdown tables! </p>
-<h2 id="theory">Theory</h2>
-<p>Under the hood <code>mkdocs-table-reader-plugin</code> is basically doing:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;path_to_table.csv&#39;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s1">&#39;pipe&#39;</span><span class="p">)</span>
+<h1 id="use-with-docker">Use with docker</h1>
+<p>If you follow the <code>mkdocs-material</code> <a href="https://squidfunk.github.io/mkdocs-material/getting-started/#with-docker">tutorial on installation with <code>docker</code></a>, you will run into an error if you try to add this plugin saying:</p>
+<blockquote>
+<p>× Building wheel for numpy (pyproject.toml) did not run successfully.</p>
+</blockquote>
+<p>The reason is that the <code>mkdocs-material</code> docker image uses the <code>alpine</code> image. <code>mkdocs-table-reader-plugin</code> depends on <a href="https://pandas.pydata.org/"><code>pandas</code></a>, which depends on <a href="https://numpy.org/"><code>numpy</code></a>, which in turn requires C++ to install, which is not part of the <code>alpine</code> image.</p>
+<p>If you need a very small image, you can <a href="https://stackoverflow.com/questions/33421965/installing-numpy-on-docker-alpine">adapt the alpine image to support numpy</a>, but you are better off using a more complete docker image like <code>python-slim</code>. So you need to build a different docker image.</p>
+<p>As an example, below is a <code>Dockerfile</code> that is adapted from the <a href="https://github.com/squidfunk/mkdocs-material/blob/master/Dockerfile">mkdocs-material dockerfile</a>. You can use it to create a new Docker image that supports <code>mkdocs-table-reader-plugin</code>:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/squidfunk/mkdocs-material.git<span class="w"> </span>material-git/
+<span class="nb">cd</span><span class="w"> </span>material-git
+<span class="c1"># Manually replace `Dockerfile` with the example below</span>
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>YOUR-CONTAINER-NAME<span class="w"> </span>.
+<span class="c1"># Now, inside your own project, you can use:</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/docs<span class="w"> </span>YOUR-CONTAINER-NAME
 </code></pre></div>
-<p>Any keyword arguments you give to <code>{{ read_csv('path_to_your_table.csv') }}</code> will be matched and passed the corresponding <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">pandas.read_csv()</a> and/or 
-<a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html">.to_markdown()</a> functions. </p>
-<p>Pandas's <code>.to_markdown()</code> uses the <a href="https://pypi.org/project/tabulate/">tabulate</a> package and any keyword arguments that are passed to it. Tabulate in turn offers many customization options, see <a href="https://github.com/astanin/python-tabulate#library-usage">library usage</a>. </p>
-<h2 id="aligning-columns">Aligning columns</h2>
-<p>Text columns will be aligned to the left <a href="https://github.com/astanin/python-tabulate#column-alignment">by default</a>, whilst columns which contain only numbers will be aligned to the right. You can override this behaviour using <a href="https://pypi.org/project/tabulate/">tabulate</a>'s <a href="https://github.com/astanin/python-tabulate#custom-column-alignment">custom column alignment</a>. Example:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><img alt="⬅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/2b05.svg" title=":arrow_left:" /> left</label><label for="__tabbed_1_2"><img alt="↔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/2194.svg" title=":left_right_arrow:" /> center</label><label for="__tabbed_1_3"><img alt="➡" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/27a1.svg" title=":arrow_right:" /> right</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p><code>{{ read_csv('tables/basic_table.csv', colalign=("left",)) }}</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">a</th>
-<th align="left">b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">40</td>
-<td align="left">73</td>
-</tr>
-<tr>
-<td align="left">50</td>
-<td align="left">52</td>
-</tr>
-<tr>
-<td align="left">531456.123</td>
-<td align="left">80</td>
-</tr>
-<tr>
-<td align="left">name</td>
-<td align="left">table1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="tabbed-block">
-<p><code>{{ read_csv('tables/basic_table.csv', colalign=("center",)) }}</code></p>
-<table>
-<thead>
-<tr>
-<th align="center">a</th>
-<th align="left">b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">40</td>
-<td align="left">73</td>
-</tr>
-<tr>
-<td align="center">50</td>
-<td align="left">52</td>
-</tr>
-<tr>
-<td align="center">531456.123</td>
-<td align="left">80</td>
-</tr>
-<tr>
-<td align="center">name</td>
-<td align="left">table1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="tabbed-block">
-<p><code>{{ read_csv('tables/basic_table.csv', colalign=("right",)) }}</code></p>
-<table>
-<thead>
-<tr>
-<th align="right">a</th>
-<th align="left">b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="right">40</td>
-<td align="left">73</td>
-</tr>
-<tr>
-<td align="right">50</td>
-<td align="left">52</td>
-</tr>
-<tr>
-<td align="right">531456.123</td>
-<td align="left">80</td>
-</tr>
-<tr>
-<td align="right">name</td>
-<td align="left">table1</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<h2 id="sortable-tables">Sortable tables</h2>
-<p>If you use <a href="https://squidfunk.github.io/mkdocs-material">mkdocs-material</a>, you can configure <a href="https://squidfunk.github.io/mkdocs-material/reference/data-tables/?h=tables#sortable-tables">sortable tables</a>.</p>
-<h2 id="number-formatting">Number formatting</h2>
-<p>You can use <a href="https://pypi.org/project/tabulate/">tabulate</a>'s <a href="https://github.com/astanin/python-tabulate#number-formatting">number formatting</a>. Example:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><img alt="0⃣" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/30-20e3.svg" title=":zero:" /></label><label for="__tabbed_2_2"><img alt="1⃣" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/31-20e3.svg" title=":one:" /></label><label for="__tabbed_2_3"><img alt="2⃣" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/32-20e3.svg" title=":two:" /></label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p><code>{{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".0f") }}</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">Brand</th>
-<th align="right">Price</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">Honda Civic</td>
-<td align="right">22001</td>
-</tr>
-<tr>
-<td align="left">Toyota Corolla</td>
-<td align="right">25000</td>
-</tr>
-<tr>
-<td align="left">Ford Focus</td>
-<td align="right">27000</td>
-</tr>
-<tr>
-<td align="left">Audi A4</td>
-<td align="right">35000</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="tabbed-block">
-<p><code>{{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".1f") }}</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">Brand</th>
-<th align="right">Price</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">Honda Civic</td>
-<td align="right">22001.0</td>
-</tr>
-<tr>
-<td align="left">Toyota Corolla</td>
-<td align="right">25000.0</td>
-</tr>
-<tr>
-<td align="left">Ford Focus</td>
-<td align="right">27000.0</td>
-</tr>
-<tr>
-<td align="left">Audi A4</td>
-<td align="right">35000.0</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="tabbed-block">
-<p><code>{{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".2f") }}</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">Brand</th>
-<th align="right">Price</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">Honda Civic</td>
-<td align="right">22001.00</td>
-</tr>
-<tr>
-<td align="left">Toyota Corolla</td>
-<td align="right">25000.00</td>
-</tr>
-<tr>
-<td align="left">Ford Focus</td>
-<td align="right">27000.00</td>
-</tr>
-<tr>
-<td align="left">Audi A4</td>
-<td align="right">35000.00</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
+<details class="info"><summary>Dockerfile</summary><p><div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3-slim</span>
+
+<span class="c"># Build-time flags</span>
+<span class="k">ARG</span><span class="w"> </span><span class="nv">WITH_PLUGINS</span><span class="o">=</span><span class="nb">true</span>
+
+<span class="c"># Environment variables</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PACKAGES</span><span class="o">=</span>/usr/local/lib/python3.11/site-packages
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PYTHONDONTWRITEBYTECODE</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c"># Set build directory</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/tmp</span>
+
+<span class="c"># Copy files necessary for build</span>
+<span class="k">COPY</span><span class="w"> </span>material-git/material<span class="w"> </span>material
+<span class="k">COPY</span><span class="w"> </span>material-git/package.json<span class="w"> </span>package.json
+<span class="k">COPY</span><span class="w"> </span>material-git/README.md<span class="w"> </span>README.md
+<span class="k">COPY</span><span class="w"> </span>material-git/requirements.txt<span class="w"> </span>requirements.txt
+<span class="k">COPY</span><span class="w"> </span>material-git/pyproject.toml<span class="w"> </span>pyproject.toml
+
+<span class="c"># Perform build and cleanup artifacts and caches</span>
+<span class="k">RUN</span><span class="w"> </span><span class="se">\</span>
+apt<span class="w"> </span>update<span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libcairo2-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libfreetype6-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>git<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libturbojpeg-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>openssh-server<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>zlib1g-dev<span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>gcc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libffi-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>musl-dev<span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>.<span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">WITH_PLUGINS</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;mkdocs-minify-plugin&gt;=0.3&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;mkdocs-redirects&gt;=1.0&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;pillow&gt;=9.0&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;cairosvg&gt;=2.5&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;mkdocs-table-reader-plugin&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="k">fi</span><span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="k">for</span><span class="w"> </span>theme<span class="w"> </span><span class="k">in</span><span class="w"> </span>mkdocs<span class="w"> </span>readthedocs<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="si">${</span><span class="nv">PACKAGES</span><span class="si">}</span>/mkdocs/themes/<span class="nv">$theme</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ln<span class="w"> </span>-s<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="si">${</span><span class="nv">PACKAGES</span><span class="si">}</span>/material<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="si">${</span><span class="nv">PACKAGES</span><span class="si">}</span>/mkdocs/themes/<span class="nv">$theme</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="k">done</span><span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>/tmp/*<span class="w"> </span>/root/.cache<span class="w"> </span><span class="se">\</span>
+<span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+find<span class="w"> </span><span class="si">${</span><span class="nv">PACKAGES</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-type<span class="w"> </span>f<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-path<span class="w"> </span><span class="s2">&quot;*/__pycache__/*&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-exec<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span>
+
+<span class="c"># Trust directory, required for git &gt;= 2.35.2</span>
+<span class="k">RUN</span><span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>--add<span class="w"> </span>safe.directory<span class="w"> </span>/docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="se">\</span>
+<span class="w">    </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>--add<span class="w"> </span>safe.directory<span class="w"> </span>/site
+
+<span class="c"># Set working directory</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/docs</span>
+
+<span class="c"># Expose MkDocs development server port</span>
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+
+<span class="c"># Start development server by default</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;mkdocs&quot;</span><span class="p">]</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;serve&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--dev-addr=0.0.0.0:8000&quot;</span><span class="p">]</span>
+</code></pre></div>
+    "mkdocs-table-rea</p>
+</details>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2023-01-30T13:27:38+01:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-01-30</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2023-05-27T11:02:52+02:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-05-27</span>
       
     
   </small>
@@ -793,7 +599,7 @@
   
     <div class="md-source-date">
       <small>
-          Authors: <span class='git-page-authors git-authors'><a href='mailto:holvoetsander@gmail.com'>Sander Holvoet</a>, <a href='mailto:tim.vink@allianzdirect.nl'>Tim Vink</a>, <a href='mailto:vinktim@gmail.com'>Tim Vink</a></span>
+          Authors: <span class='git-page-authors git-authors'><a href='mailto:vinktim@gmail.com'>Tim Vink</a></span>
       </small>
     </div>
   
