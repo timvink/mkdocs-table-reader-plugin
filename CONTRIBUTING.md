@@ -32,3 +32,10 @@ Make sure your code *roughly* follows [PEP-8](https://www.python.org/dev/peps/pe
 
 We use google-style docstrings.
 
+## Documentation
+
+Every release the docs are re-built by github actions. To deploy manually:
+
+```bash
+mkdocs gh-deploy
+```
