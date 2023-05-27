@@ -1,0 +1,8 @@
+- name: google
+  link: https://www.google.com
+- name: bing
+  link: https://www.bing.com  
+- name: another
+  link: "[bing](https://www.bing.com)"
+- name: and
+  link: "<https://www.bing.com>"
