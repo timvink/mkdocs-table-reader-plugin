@@ -34,8 +34,8 @@ We use google-style docstrings.
 
 ## Documentation
 
-Every release the docs are re-built by github actions. To deploy manually:
+They need to be deployed manually:
 
 ```bash
-mkdocs gh-deploy
+mkdocs gh-deploy --force
 ```
