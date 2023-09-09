@@ -25,7 +25,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
     ],
-    install_requires=["mkdocs>=1.0", "pandas>=1.1", "tabulate>=0.8.7", "PyYAML>=5.4.1"],
+    install_requires=["mkdocs>=1.0", "pandas>=1.1", "tabulate>=0.8.7", "PyYAML>=5.4.1", "pymdown-extensions>=9.2"],
     packages=find_packages(),
     entry_points={
         "mkdocs.plugins": [
