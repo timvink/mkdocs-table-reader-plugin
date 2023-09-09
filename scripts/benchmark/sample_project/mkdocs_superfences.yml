@@ -1,0 +1,13 @@
+site_name: test git_table_reader site
+use_directory_urls: false
+
+plugins:
+    - search
+
+nav:
+    - index.md
+    - bigpage.md
+
+
+markdown_extensions:
+    - pymdownx.superfences
