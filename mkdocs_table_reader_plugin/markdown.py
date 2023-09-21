@@ -25,7 +25,7 @@ def convert_to_md_table(df: pd.DataFrame, markdown_kwargs: Dict) -> str:
     # Escape any pipe characters, | to \|
     # See https://github.com/astanin/python-tabulate/issues/241
     df.columns = [replace_unescaped_pipes(c) for c in df.columns]
-    df = df.applymap(lambda s: replace_unescaped_pipes(s) if isinstance(s, str) else s)
+    df = df.map(lambda s: replace_unescaped_pipes(s) if isinstance(s, str) else s)
 
     if "index" not in markdown_kwargs:
         markdown_kwargs["index"] = False
