@@ -28,7 +28,7 @@ def convert_to_md_table(df: pd.DataFrame, markdown_kwargs: Dict) -> str:
 
     # Avoid deprecated applymap warning on pandas>=2.0
     # See https://github.com/timvink/mkdocs-table-reader-plugin/issues/55
-    if pd.__version__.startswith("2"):
+    if pd.__version__ >= "2.1.0":
         df = df.map(lambda s: replace_unescaped_pipes(s) if isinstance(s, str) else s)
     else:
         df = df.applymap(lambda s: replace_unescaped_pipes(s) if isinstance(s, str) else s)
