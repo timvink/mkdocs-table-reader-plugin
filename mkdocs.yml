@@ -12,6 +12,7 @@ nav:
         - howto/preprocess_tables.md
         - howto/project_structure.md
         - howto/docker.md
+        - howto/alternatives.md
     - options.md
 
 theme:

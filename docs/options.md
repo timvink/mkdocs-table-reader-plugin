@@ -16,8 +16,6 @@ plugins:
       allow_missing_files: False
 ```
 
-## Options
-
 ## `base_path`
 
 The base path where `mkdocs-table-reader-plugin` will search for input files. The path to your table files should be relative to the `base_path`. Allowed values:
