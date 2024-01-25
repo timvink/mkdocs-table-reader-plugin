@@ -16,6 +16,7 @@ class TableReaderPlugin(BasePlugin):
 
     config_scheme = (
         ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
+        ("select_readers", config_options.ListOfItems(config_options.Choice(READERS), default = READERS)),
         ("data_path", config_options.Type(str, default=".")),
         ("search_page_directory", config_options.Type(bool, default=True)),
         ("allow_missing_files", config_options.Type(bool, default=False)),
@@ -72,7 +73,7 @@ class TableReaderPlugin(BasePlugin):
         if self.config.get("search_page_directory"):
             search_directories.append(os.path.dirname(page.file.abs_src_path))
 
-        for reader, function in READERS.items():
+        for reader, function in self.config.get('select_readers').items():
             
             # Regex pattern for tags like {{ read_csv(..) }}
             # match group 0: to extract any leading whitespace 
