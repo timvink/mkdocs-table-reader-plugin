@@ -30,3 +30,5 @@ build_mkdocs "$mkdocs_config_file"
 mkdocs_config_file="scripts/benchmark/sample_project/mkdocs_superfences.yml"
 build_mkdocs "$mkdocs_config_file"
 
+mkdocs_config_file="scripts/benchmark/sample_project/mkdocs_selected_readers.yml"
+build_mkdocs "$mkdocs_config_file"
