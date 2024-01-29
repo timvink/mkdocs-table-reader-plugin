@@ -78,6 +78,7 @@ READERS = {
     "read_excel": read_excel,
     "read_yaml": read_yaml,
     "read_json": read_json,
+    "read_feather": read_feather,
     "read_raw": read_raw,
 }
 
