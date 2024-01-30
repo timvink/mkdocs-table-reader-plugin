@@ -4,6 +4,7 @@ codecov
 click
 xlrd>=1.0.0
 openpyxl
+pyarrow
 # linting
 pyflakes
 # documentation
