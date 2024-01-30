@@ -70,6 +70,18 @@ The following table reader functions are available:
 
     {{ read_json('tables/data.json', orient='split') }}
 
+## read_feather
+
+`{{ read_feather() }}` passed to [pandas.read_feather()](https://pandas.pydata.org/docs/reference/api/pandas.read_feather.html). Example:
+
+=== "Input"
+
+    <code>\{\{ read_json('tables/data.feather') \}\}</code>
+
+=== "Output"
+
+    {{ read_feather('tables/data.feather') }}
+
 
 ## read_excel
 

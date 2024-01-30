@@ -54,6 +54,13 @@ def read_yaml(*args, **kwargs):
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
     return convert_to_md_table(df, markdown_kwargs)
 
+def read_feather(*args, **kwargs):
+    read_kwargs = kwargs_in_func(kwargs, pd.read_feather)
+    df = pd.read_feather(*args, **read_kwargs)
+
+    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_feather)
+    return convert_to_md_table(df, markdown_kwargs)
+
 def read_raw(*args, **kwargs):
     """Read a file as-is.
 
@@ -71,6 +78,7 @@ READERS = {
     "read_excel": read_excel,
     "read_yaml": read_yaml,
     "read_json": read_json,
+    "read_feather": read_feather,
     "read_raw": read_raw,
 }
 

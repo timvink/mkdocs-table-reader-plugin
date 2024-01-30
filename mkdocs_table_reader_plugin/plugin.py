@@ -19,6 +19,7 @@ class TableReaderPlugin(BasePlugin):
         ("data_path", config_options.Type(str, default=".")),
         ("search_page_directory", config_options.Type(bool, default=True)),
         ("allow_missing_files", config_options.Type(bool, default=False)),
+        ("select_readers", config_options.ListOfItems(config_options.Choice(list(READERS.keys())), default = list(READERS.keys()))),
     )
 
     def on_config(self, config, **kwargs):
@@ -72,8 +73,8 @@ class TableReaderPlugin(BasePlugin):
         if self.config.get("search_page_directory"):
             search_directories.append(os.path.dirname(page.file.abs_src_path))
 
-        for reader, function in READERS.items():
-            
+        for reader in self.config.get('select_readers'):
+            function = READERS[reader]
             # Regex pattern for tags like {{ read_csv(..) }}
             # match group 0: to extract any leading whitespace 
             # match group 1: to extract the arguments (positional and keywords)
