@@ -39,3 +39,14 @@ They need to be deployed manually:
 ```bash
 mkdocs gh-deploy --force
 ```
+
+## Release
+
+Update `setup.py`.
+
+```bash
+git tag <version>
+git push origin <version>
+```
+
+Then manually create a github release to trigger publishing to pypi.

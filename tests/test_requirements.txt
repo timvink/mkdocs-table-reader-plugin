@@ -4,6 +4,8 @@ codecov
 click
 xlrd>=1.0.0
 openpyxl
+# linting
+pyflakes
 # documentation
 mkdocs-material
 mkdocs-markdownextradata-plugin
