@@ -64,4 +64,5 @@ Default: `True`. When enabled, if a filepath is not found, the plugin will also 
 Default: `False`. When enabled, if a filepath is not found, the plugin will raise a warning instead of an error.
 
 ## `select_readers`
-Default: Select all available readers. To increase performance, only the used readers can be specified. 
+
+Default: Selects all available readers. Specify a list of reader to improve documentation build times for large sites.
