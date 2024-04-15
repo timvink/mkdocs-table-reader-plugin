@@ -126,9 +126,9 @@ class TableReaderPlugin(BasePlugin):
                 markdown_table = fix_indentation(leading_spaces, markdown_table)
 
                 # Insert markdown table
-                # By replacing only the first occurance of the regex pattern
+                # By replacing only the first occurrence of the regex pattern
                 # You might insert multiple CSVs with a single reader like read_csv
-                # Because of the replacement, the next occurance will be the first match for .sub() again.
+                # Because of the replacement, the next occurrence will be the first match for .sub() again.
                 # This is always why when allow_missing_files=True we replaced the input tag.
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
