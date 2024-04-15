@@ -30,7 +30,7 @@ This works because the [option](../options.md) `search_page_directory` defaults 
 
 ## Re-using tables across markdown files
 
-If you want to re-use tables in multiple markdown files, you'll want to store them in a central directory, like `docs/assets/tables`. 
+If you want to reuse tables in multiple markdown files, you'll want to store them in a central directory, like `docs/assets/tables`. 
 That way, if you restructure your navigation, the links to the tables won't break either.
 It's also great if you generate tables because the output directory will be the same.
 
@@ -57,7 +57,7 @@ In `page.md`, to read `basic_table.csv`, you can choose to use:
 
 ## A central table directory combined with same-directory tables
 
-If you have some central tables that you want to re-use, and some tables that are specific to a page, you could use the following project structure:
+If you have some central tables that you want to reuse, and some tables that are specific to a page, you could use the following project structure:
 
 ```nohighlight
 .
