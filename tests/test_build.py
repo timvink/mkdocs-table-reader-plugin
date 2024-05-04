@@ -346,6 +346,19 @@ def test_wrong_path(tmp_path):
     )
 
     result = build_docs_setup(tmp_proj)
-    assert result.exit_code == 1, "'mkdocs build' command failed"
+    assert result.exit_code == 1, "'mkdocs build' command succeeded but should have failed"
     assert "[table-reader-plugin]: Cannot find table file" in result.output
     assert "non_existing_table.csv" in result.output
+
+
+def test_mixed_quotation_marks(tmp_path):
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/mixed_quotation_marks/mkdocs.yml", tmp_path
+    )
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the file.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"56", contents)

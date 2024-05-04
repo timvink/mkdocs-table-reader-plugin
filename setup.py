@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mkdocs-table-reader-plugin",
-    version="2.1.0",
+    version="2.2.0",
     description="MkDocs plugin to directly insert tables from files into markdown.",
     long_description=long_description,
     long_description_content_type="text/markdown",
