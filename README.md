@@ -32,7 +32,7 @@ plugins:
 
 ## Usage
 
-In your markdown documents you can now use:
+In your markdown files you can now use:
 
 ```html
 {{ read_csv('path_to_table.csv') }}
@@ -40,7 +40,7 @@ In your markdown documents you can now use:
 
 Where the path is relative to the location of your project's `mkdocs.yml` file (although you can [change that](https://timvink.github.io/mkdocs-table-reader-plugin/options) to be relative to your `docs/` directory).
 
-- There are [readers](https://timvink.github.io/mkdocs-table-reader-plugin/readers/) for `.csv`, `.fwf`, `.json`, `.xlsx`, `.yaml` and `.tsv`. There is also the `read_raw()` reader that will allow you to insert tables (or other content) already in markdown format.
+- There are [readers](https://timvink.github.io/mkdocs-table-reader-plugin/readers/) for `.csv`, `.fwf`, `.json`, `.xlsx`, `.yaml` and `.tsv` files. There is also the `read_raw()` reader that will allow you to insert tables (or other content) already in markdown format.
 
 ## Documentation and how-to guides
 
