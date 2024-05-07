@@ -74,6 +74,7 @@ def parse_argkwarg(input_str: str):
     in_quotes = False
     quote_char = ''
     bracket_count = 0
+    tuple_count = 0
     
     for char in input_str:
         if char in "\"'" and not in_quotes:
@@ -86,7 +87,11 @@ def parse_argkwarg(input_str: str):
             bracket_count += 1
         elif char == ']':
             bracket_count -= 1
-        elif char == ',' and not in_quotes and bracket_count == 0:
+        elif char == '(':
+            tuple_count += 1
+        elif char == ')':
+            tuple_count -= 1
+        elif char == ',' and not in_quotes and bracket_count == 0 and tuple_count == 0:
             segments.append(current_segment.strip())
             current_segment = ''
             continue

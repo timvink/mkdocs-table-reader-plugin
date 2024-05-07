@@ -20,3 +20,4 @@ def test_parse_argkwarg():
     assert parse_argkwarg('"file.csv", usecols=["A", "B"]') == (['file.csv'], {'usecols': ['A', 'B']})
     assert parse_argkwarg('"file.csv", usecols=[\'A\',\'B\']') == (['file.csv'], {'usecols': ['A', 'B']})
     assert parse_argkwarg("'assets/tables/table_with_carriage_return.csv', sep = ','") == (['assets/tables/table_with_carriage_return.csv'], {'sep': ','})
+    assert parse_argkwarg("'includes/statistics.csv', keep_default_na=False, colalign=('center','center','center','center','center','center','center')") == (['includes/statistics.csv'], {'keep_default_na': False, 'colalign': ('center','center','center','center','center','center','center')})
