@@ -122,7 +122,6 @@ class TableReaderPlugin(BasePlugin):
                 # note we use the first valid file paths,
                 # where we first search the 'data_path' and then the page's directory.
                 markdown_table = function(valid_file_paths[0], *pd_args, **pd_kwargs)
-
                 markdown_table = fix_indentation(leading_spaces, markdown_table)
 
                 # Insert markdown table

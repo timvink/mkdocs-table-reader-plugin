@@ -362,3 +362,15 @@ def test_mixed_quotation_marks(tmp_path):
     page_with_tag = tmp_proj / "site/index.html"
     contents = page_with_tag.read_text()
     assert re.search(r"56", contents)
+
+def test_csv_with_no_string_headers(tmp_path):
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/nonstringheaders/mkdocs.yml", tmp_path
+    )
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the file.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"4242", contents)

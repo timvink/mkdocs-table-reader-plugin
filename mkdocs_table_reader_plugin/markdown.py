@@ -24,7 +24,7 @@ def convert_to_md_table(df: pd.DataFrame, markdown_kwargs: Dict) -> str:
     """
     # Escape any pipe characters, | to \|
     # See https://github.com/astanin/python-tabulate/issues/241
-    df.columns = [replace_unescaped_pipes(c) for c in df.columns]
+    df.columns = [replace_unescaped_pipes(c) if isinstance(c, str) else c for c in df.columns]
 
     # Avoid deprecated applymap warning on pandas>=2.0
     # See https://github.com/timvink/mkdocs-table-reader-plugin/issues/55
