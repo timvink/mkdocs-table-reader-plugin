@@ -4,4 +4,4 @@ use_directory_urls: false
 plugins:
     - search
     - table-reader:
-        enabled: False
+        enabled: True
