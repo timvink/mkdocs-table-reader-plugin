@@ -17,6 +17,7 @@ plugins:
       select_readers:
         - read_csv
         - read_json
+      enabled: True
 ```
 
 ## `base_path`
@@ -66,3 +67,22 @@ Default: `False`. When enabled, if a filepath is not found, the plugin will rais
 ## `select_readers`
 
 Default: Selects all available readers. Specify a list of reader to improve documentation build times for large sites.
+
+## `enabled`
+
+Default is `True`. Enables you to deactivate this plugin. This option is supported by all plugins since mkdocs 1.6 ([see docs](https://www.mkdocs.org/user-guide/configuration/#enabled-option)). A possible use case is local development where you might want faster build times and/or do not have the tables ready. It's recommended to use this option with an environment variable together with a default fallback (introduced in mkdocs v1.2.1, see docs). Example:
+
+=== ":octicons-file-code-16: mkdocs.yml"
+
+  ```yaml
+  plugins:
+    - table-reader:
+        enabled: !ENV [ENABLED_TABLE_READER, True]
+  ```
+
+Which enables you to disable the plugin locally using:
+
+```bash
+export ENABLED_TABLE_READER=false
+mkdocs serve
+```
