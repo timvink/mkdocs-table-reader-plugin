@@ -38,7 +38,7 @@ In your markdown files you can now use:
 {{ read_csv('path_to_table.csv') }}
 ```
 
-Where the path is relative to the location of your project's `mkdocs.yml` file (although you can [change that](https://timvink.github.io/mkdocs-table-reader-plugin/options) to be relative to your `docs/` directory).
+Where the path is relative to the location of your project's `mkdocs.yml` file, _or_ your project's `docs/` directory, _or_ the location of your markdown source file (all 3 possible locations will be searched, in that order).
 
 - There are [readers](https://timvink.github.io/mkdocs-table-reader-plugin/readers/) for `.csv`, `.fwf`, `.json`, `.xlsx`, `.yaml` and `.tsv` files. There is also the `read_raw()` reader that will allow you to insert tables (or other content) already in markdown format.
 

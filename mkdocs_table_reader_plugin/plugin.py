@@ -2,7 +2,7 @@ import os
 import re
 import logging
 
-from mkdocs.plugins import BasePlugin
+from mkdocs.plugins import BasePlugin, get_plugin_logger 
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 
@@ -10,14 +10,13 @@ from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
 from mkdocs_table_reader_plugin.readers import READERS
 from mkdocs_table_reader_plugin.markdown import fix_indentation
 
-logger = logging.getLogger("mkdocs.plugins")
+logger = get_plugin_logger("table-reader")
+
 
 class TableReaderPlugin(BasePlugin):
 
     config_scheme = (
-        ("base_path", config_options.Choice(['docs_dir','config_dir'], default="config_dir")),
         ("data_path", config_options.Type(str, default=".")),
-        ("search_page_directory", config_options.Type(bool, default=True)),
         ("allow_missing_files", config_options.Type(bool, default=False)),
         ("select_readers", config_options.ListOfItems(config_options.Choice(list(READERS.keys())), default = list(READERS.keys()))),
     )
@@ -32,6 +31,11 @@ class TableReaderPlugin(BasePlugin):
         Returns:
             Config
         """
+        if "search_page_directory" in self.config:
+            logger.warning(f"[table-reader]: The 'search_page_directory' configuration option is deprecated, it will always be searched. Please remove it from your mkdocs.yml.")
+        if "base_path" in self.config:
+            logger.warning(f"[table-reader]: The 'base_path' configuration option is deprecated. Both the config_dir and docs_dir will be searched. Please remove it from your mkdocs.yml.")
+        
         self.readers = {reader: READERS[reader].set_config_context(mkdocs_config=config, plugin_config=self.config) for reader in self.config.get('select_readers') if reader in self.config.get('select_readers',[])}
 
         plugins = [p for p in config.get("plugins")]
@@ -118,16 +122,14 @@ class TableReaderPlugin(BasePlugin):
                 pd_args, pd_kwargs = parse_argkwarg(result[1])
                 
                 # Load the table
-                # note we use the first valid file paths,
-                # where we first search the 'data_path' and then the page's directory.
                 markdown_table = function(*pd_args, **pd_kwargs)
-                markdown_table = fix_indentation(leading_spaces, markdown_table)
-
+                
                 # Insert markdown table
                 # By replacing only the first occurrence of the regex pattern
                 # You might insert multiple CSVs with a single reader like read_csv
                 # Because of the replacement, the next occurrence will be the first match for .sub() again.
                 # This is always why when allow_missing_files=True we replaced the input tag.
+                markdown_table = fix_indentation(leading_spaces, markdown_table)
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
         return markdown

@@ -13,24 +13,11 @@
           "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/",
           "type": "object",
           "properties": {
-            "base_path": {
-              "title": "The base path where mkdocs-table-reader-plugin will search for input files. The path to your table files should be relative to the base_path.",
-              "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#base_path",
-              "type": "string",
-              "enum": ["config_dir", "docs_dir"],
-              "default": "config_dir"
-            },
             "data_path": {
               "title": "The path to your table files should be relative to the base_path. If you use a folder for all your table files you can shorten the path specification by setting the data_path.",
               "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#data_path",
               "type": "string",
               "default": "."
-            },
-            "search_page_directory": {
-              "title": "When enabled, if a filepath is not found, the plugin will also attempt to find the file relative to the current page's directory.",
-              "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#search_page_directory",
-              "type": "boolean",
-              "default": true
             },
             "allow_missing_files": {
               "title": "When enabled, if a filepath is not found, the plugin will raise a warning instead of an error.",

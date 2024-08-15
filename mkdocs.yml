@@ -10,6 +10,7 @@ nav:
     - How to:
         - howto/customize_tables.md
         - howto/preprocess_tables.md
+        - howto/use_jinja2.md
         - howto/project_structure.md
         - howto/docker.md
         - howto/alternatives.md
