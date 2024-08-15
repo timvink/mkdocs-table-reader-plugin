@@ -6,7 +6,7 @@ import logging
 
 import functools
 
-from mkdocs_table_reader_plugin.utils import kwargs_in_func, kwargs_not_in_func 
+from mkdocs_table_reader_plugin.utils import kwargs_in_func, kwargs_not_in_func
 from mkdocs_table_reader_plugin.markdown import convert_to_md_table
 
 logger = logging.getLogger("mkdocs.plugins")
@@ -18,7 +18,7 @@ class ParseArgs:
         self.func = func
         self.mkdocs_config = None
         self.plugin_config = None
-        
+
     def set_config_context(self, mkdocs_config, plugin_config):
         self.mkdocs_config = mkdocs_config
         self.plugin_config = plugin_config
@@ -38,9 +38,15 @@ class ParseArgs:
             input_file_name = kwargs.pop("filepath_or_buffer")
 
         possible_file_paths = [
-            Path(os.path.dirname(os.path.abspath(self.mkdocs_config["config_file_path"]))) / Path(self.plugin_config.get("data_path")) / input_file_name,
-            Path(os.path.abspath(self.mkdocs_config["docs_dir"])) / Path(self.plugin_config.get("data_path")) / input_file_name,
-            Path(self.plugin_config._current_page).parent / input_file_name
+            Path(
+                os.path.dirname(os.path.abspath(self.mkdocs_config["config_file_path"]))
+            )
+            / Path(self.plugin_config.get("data_path"))
+            / input_file_name,
+            Path(os.path.abspath(self.mkdocs_config["docs_dir"]))
+            / Path(self.plugin_config.get("data_path"))
+            / input_file_name,
+            Path(self.plugin_config._current_page).parent / input_file_name,
         ]
         valid_file_paths = [path for path in possible_file_paths if path.exists()]
         if len(valid_file_paths) == 0:
@@ -50,9 +56,8 @@ class ParseArgs:
                 return f"{{{{ Cannot find '{input_file_name}' }}}}"
             else:
                 raise FileNotFoundError(msg)
-        
-        return self.func(valid_file_paths[0], *args, **kwargs)
 
+        return self.func(valid_file_paths[0], *args, **kwargs)
 
 
 @ParseArgs
@@ -66,7 +71,6 @@ def read_csv(*args, **kwargs) -> str:
 
 @ParseArgs
 def read_table(*args, **kwargs) -> str:
-
     read_kwargs = kwargs_in_func(kwargs, pd.read_table)
     df = pd.read_table(*args, **read_kwargs)
 
@@ -103,7 +107,6 @@ def read_excel(*args, **kwargs) -> str:
 
 @ParseArgs
 def read_yaml(*args, **kwargs) -> str:
-
     json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
     with open(args[0], "r") as f:
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
@@ -142,4 +145,3 @@ READERS = {
     "read_feather": read_feather,
     "read_raw": read_raw,
 }
-

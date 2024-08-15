@@ -1,6 +1,6 @@
 import re
 
-from mkdocs.plugins import BasePlugin, get_plugin_logger 
+from mkdocs.plugins import BasePlugin, get_plugin_logger
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 
@@ -12,11 +12,16 @@ logger = get_plugin_logger("table-reader")
 
 
 class TableReaderPlugin(BasePlugin):
-
     config_scheme = (
         ("data_path", config_options.Type(str, default=".")),
         ("allow_missing_files", config_options.Type(bool, default=False)),
-        ("select_readers", config_options.ListOfItems(config_options.Choice(list(READERS.keys())), default = list(READERS.keys()))),
+        (
+            "select_readers",
+            config_options.ListOfItems(
+                config_options.Choice(list(READERS.keys())),
+                default=list(READERS.keys()),
+            ),
+        ),
     )
 
     def on_config(self, config, **kwargs):
@@ -30,11 +35,21 @@ class TableReaderPlugin(BasePlugin):
             Config
         """
         if "search_page_directory" in self.config:
-            logger.warning("[table-reader]: The 'search_page_directory' configuration option is deprecated, it will always be searched. Please remove it from your mkdocs.yml.")
+            logger.warning(
+                "[table-reader]: The 'search_page_directory' configuration option is deprecated, it will always be searched. Please remove it from your mkdocs.yml."
+            )
         if "base_path" in self.config:
-            logger.warning("[table-reader]: The 'base_path' configuration option is deprecated. Both the config_dir and docs_dir will be searched. Please remove it from your mkdocs.yml.")
-        
-        self.readers = {reader: READERS[reader].set_config_context(mkdocs_config=config, plugin_config=self.config) for reader in self.config.get('select_readers') if reader in self.config.get('select_readers',[])}
+            logger.warning(
+                "[table-reader]: The 'base_path' configuration option is deprecated. Both the config_dir and docs_dir will be searched. Please remove it from your mkdocs.yml."
+            )
+
+        self.readers = {
+            reader: READERS[reader].set_config_context(
+                mkdocs_config=config, plugin_config=self.config
+            )
+            for reader in self.config.get("select_readers")
+            if reader in self.config.get("select_readers", [])
+        }
 
         plugins = [p for p in config.get("plugins")]
 
@@ -42,22 +57,25 @@ class TableReaderPlugin(BasePlugin):
         for post_load_plugin in ["markdownextradata"]:
             if post_load_plugin in plugins:
                 if plugins.index("table-reader") > plugins.index(post_load_plugin):
-                    raise ConfigurationError(f"[table-reader]: Incompatible plugin order: Define 'table-reader' before '{post_load_plugin}' in your mkdocs.yml.")
-        
+                    raise ConfigurationError(
+                        f"[table-reader]: Incompatible plugin order: Define 'table-reader' before '{post_load_plugin}' in your mkdocs.yml."
+                    )
+
         # Plugins required after table-reader
         for post_load_plugin in ["macros"]:
             if post_load_plugin in plugins:
                 if plugins.index("table-reader") < plugins.index(post_load_plugin):
-                    raise ConfigurationError(f"[table-reader]: Incompatible plugin order: Define 'table-reader' after '{post_load_plugin}' in your mkdocs.yml.")
+                    raise ConfigurationError(
+                        f"[table-reader]: Incompatible plugin order: Define 'table-reader' after '{post_load_plugin}' in your mkdocs.yml."
+                    )
 
         if "macros" in config.plugins:
-            config.plugins['macros'].macros.update(self.readers)
-            config.plugins['macros'].variables['macros'].update(self.readers)
-            config.plugins['macros'].env.globals.update(self.readers)
+            config.plugins["macros"].macros.update(self.readers)
+            config.plugins["macros"].variables["macros"].update(self.readers)
+            config.plugins["macros"].env.globals.update(self.readers)
             self.external_jinja_engine = True
         else:
             self.external_jinja_engine = False
-        
 
     def on_pre_page(self, page, config, **kwargs):
         """
@@ -102,15 +120,14 @@ class TableReaderPlugin(BasePlugin):
         for reader in self.readers:
             function = self.readers[reader]
             # Regex pattern for tags like {{ read_csv(..) }}
-            # match group 0: to extract any leading whitespace 
+            # match group 0: to extract any leading whitespace
             # match group 1: to extract the arguments (positional and keywords)
             tag_pattern = re.compile(
                 r"( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
             )
             matches = re.findall(tag_pattern, markdown)
-            
-            for result in matches:
 
+            for result in matches:
                 # Deal with indentation
                 # So we can fix inserting tables.
                 # f.e. relevant when used inside content tabs
@@ -118,10 +135,10 @@ class TableReaderPlugin(BasePlugin):
 
                 # Safely parse the arguments
                 pd_args, pd_kwargs = parse_argkwarg(result[1])
-                
+
                 # Load the table
                 markdown_table = function(*pd_args, **pd_kwargs)
-                
+
                 # Insert markdown table
                 # By replacing only the first occurrence of the regex pattern
                 # You might insert multiple CSVs with a single reader like read_csv
@@ -131,5 +148,3 @@ class TableReaderPlugin(BasePlugin):
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
         return markdown
-
-
