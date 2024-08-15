@@ -6,7 +6,7 @@ from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
 from mkdocs_table_reader_plugin.readers import READERS
-from mkdocs_table_reader_plugin.markdown import fix_indentation
+from mkdocs_table_reader_plugin.markdown import fix_indentation, add_indentation
 
 logger = get_plugin_logger("table-reader")
 
@@ -73,6 +73,11 @@ class TableReaderPlugin(BasePlugin):
             config.plugins["macros"].macros.update(self.readers)
             config.plugins["macros"].variables["macros"].update(self.readers)
             config.plugins["macros"].env.globals.update(self.readers)
+
+            config.plugins["macros"].filters.update({"add_indentation": add_indentation})
+            config.plugins["macros"].variables["filters"].update({"add_indentation": add_indentation})
+            config.plugins["macros"].env.filters.update({"add_indentation": add_indentation})
+
             self.external_jinja_engine = True
         else:
             self.external_jinja_engine = False
@@ -144,7 +149,7 @@ class TableReaderPlugin(BasePlugin):
                 # You might insert multiple CSVs with a single reader like read_csv
                 # Because of the replacement, the next occurrence will be the first match for .sub() again.
                 # This is always why when allow_missing_files=True we replaced the input tag.
-                markdown_table = fix_indentation(leading_spaces, markdown_table)
+                markdown_table = fix_indentation(leading_spaces=leading_spaces, text=markdown_table)
                 markdown = tag_pattern.sub(markdown_table, markdown, count=1)
 
         return markdown

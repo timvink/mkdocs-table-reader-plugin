@@ -46,12 +46,41 @@ def convert_to_md_table(df: pd.DataFrame, markdown_kwargs: Dict) -> str:
     return df.to_markdown(**markdown_kwargs)
 
 
-def fix_indentation(leading_spaces: str, text: str) -> str:
+def add_indentation(text: str, *, spaces: int = 0, tabs: int = 0) -> str:
     """
     Adds indentation to a text.
 
     Args:
-        leading_spaces (str): Indentation to add
+        spaces (int): Indentation to add in spaces
+        tabs (int): Indentation to add in tabs
+        text (str): input text
+
+    Returns:
+        str: fixed text
+    """
+    if spaces and tabs:
+        raise ValueError("You can only specify either spaces or tabs, not both.")
+    if spaces:
+        indentation = " " * spaces
+    elif tabs:
+        indentation = "\t" * tabs
+    else:
+        indentation = ""
+
+    fixed_lines = []
+    for line in text.split("\n"):
+        fixed_lines.append(textwrap.indent(line, indentation))
+    text = "\n" + "\n".join(fixed_lines) + "\n"
+    
+    return text
+
+
+def fix_indentation(text: str, *, leading_spaces: str) -> str:
+    """
+    Adds indentation to a text.
+
+    Args:
+        leading_spaces (str): Indentation to add in actual spaces, e.g. "    " for 4 spaces
         text (str): input text
 
     Returns:
