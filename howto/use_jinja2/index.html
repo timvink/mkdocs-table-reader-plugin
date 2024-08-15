@@ -11,21 +11,25 @@
       
       
       
+        <link rel="prev" href="../preprocess_tables/">
       
       
-      <link rel="icon" href="/assets/images/favicon.png">
+        <link rel="next" href="../project_structure/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.31">
     
     
       
-        <title>mkdocs-table-reader-plugin</title>
+        <title>Using jinja2 - mkdocs-table-reader-plugin</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.3cba04c6.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3cba04c6.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="/css/timeago.css">
+      <link rel="stylesheet" href="../../css/timeago.css">
     
-    <script>__md_scope=new URL("/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -71,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#using-jinja2" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -83,7 +92,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/." title="mkdocs-table-reader-plugin" class="md-header__button md-logo" aria-label="mkdocs-table-reader-plugin" data-md-component="logo">
+    <a href="../.." title="mkdocs-table-reader-plugin" class="md-header__button md-logo" aria-label="mkdocs-table-reader-plugin" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2h14a2 2 0 0 1 2 2v12c0 1.11-.89 2-2 2H7a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2m0 4v4h6V6H7m8 0v4h6V6h-6m-8 6v4h6v-4H7m8 0v4h6v-4h-6M3 20V6H1v14c0 1.11.89 2 2 2h16v-2H3Z"/></svg>
@@ -103,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Using jinja2
             
           </span>
         </div>
@@ -204,7 +213,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
     
@@ -221,7 +230,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/readers/" class="md-tabs__link">
+      <a href="../../readers/" class="md-tabs__link">
         
   
     
@@ -236,11 +245,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="/howto/customize_tables/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../customize_tables/" class="md-tabs__link">
           
   
   How to
@@ -256,7 +267,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/options/" class="md-tabs__link">
+      <a href="../../options/" class="md-tabs__link">
         
   
     
@@ -296,7 +307,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/." title="mkdocs-table-reader-plugin" class="md-nav__button md-logo" aria-label="mkdocs-table-reader-plugin" data-md-component="logo">
+    <a href="../.." title="mkdocs-table-reader-plugin" class="md-nav__button md-logo" aria-label="mkdocs-table-reader-plugin" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2h14a2 2 0 0 1 2 2v12c0 1.11-.89 2-2 2H7a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2m0 4v4h6V6H7m8 0v4h6V6h-6m-8 6v4h6v-4H7m8 0v4h6v-4h-6M3 20V6H1v14c0 1.11.89 2 2 2h16v-2H3Z"/></svg>
@@ -326,7 +337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -346,7 +357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/readers/" class="md-nav__link">
+      <a href="../../readers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -363,27 +374,30 @@
       
   
   
+    
   
   
+  
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -394,7 +408,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             How to
@@ -408,7 +422,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/howto/customize_tables/" class="md-nav__link">
+      <a href="../customize_tables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -429,7 +443,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/howto/preprocess_tables/" class="md-nav__link">
+      <a href="../preprocess_tables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -447,10 +461,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/howto/use_jinja2/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -459,6 +482,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -471,7 +495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/howto/project_structure/" class="md-nav__link">
+      <a href="../project_structure/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -492,7 +516,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/howto/docker/" class="md-nav__link">
+      <a href="../docker/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -513,7 +537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/howto/alternatives/" class="md-nav__link">
+      <a href="../alternatives/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -541,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/options/" class="md-nav__link">
+      <a href="../../options/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -571,6 +595,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -582,7 +608,84 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+  
+                  
+
+
+<h1 id="using-jinja2">Using jinja2</h1>
+<p><code>table-reader</code> supports <a href="https://mkdocs-macros-plugin.readthedocs.io/en/latest/"><code>mkdocs-macros-plugin</code></a>, which enables you to use jinja2 syntax inside markdown files (among other things).</p>
+<p>To enable <code>macros</code>, specify the plugin <em>before</em> <code>table-reader</code> in your <code>mkdocs.yml</code> file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">plugins</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">macros</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">table-reader</span>
+</code></pre></div>
+<p>Now you can do cool things like dynamically load a list of tables:</p>
+<div class="highlight"><pre><span></span><code><span class="gh"># index.md</span>
+
+{% set table_names = [&quot;basic_table.csv&quot;,&quot;basic_table2.csv&quot;] %}
+{% for table_name in table_names %}
+
+{ { read_csv(table_name) }}
+
+{% endfor %}
+</code></pre></div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2024-08-15T13:55:15+02:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-08-15</span>
+  </span>
+
+    
+    
+    
+      
+  
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Contributors">
+      
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>
+      
+    </span>
+    <nav>
+      
+        <a href="mailto:vinktim@gmail.com">Tim Vink</a>
+    </nav>
+  </span>
+
+    
+    
+  </aside>
+
+
+
+
+
+                
+
+  
+    <div class="md-source-date">
+      <small>
+          Authors: <span class='git-page-authors git-authors'><a href='mailto:vinktim@gmail.com'>Tim Vink</a></span>
+      </small>
+    </div>
+  
 
               </article>
             </div>
@@ -619,14 +722,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "/", "features": ["content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand"], "search": "/assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
       
-        <script src="/js/timeago.min.js"></script>
+        <script src="../../js/timeago.min.js"></script>
       
-        <script src="/js/timeago_mkdocs_material.js"></script>
+        <script src="../../js/timeago_mkdocs_material.js"></script>
       
     
   </body>
