@@ -13,3 +13,17 @@ This is a table that we load from the docs folder, because we set `data_path` to
 {{ read_csv(table_name) }}
 
 {% endfor %}
+
+
+## Now with tabs
+
+
+{% for table_name in table_names %}
+
+=== "{{ table_name }}"
+
+    {{ read_csv(table_name) | add_indentation(spaces=4) }}
+
+
+{% endfor %}
+
