@@ -10,6 +10,7 @@ nav:
     - How to:
         - howto/customize_tables.md
         - howto/preprocess_tables.md
+        - howto/use_jinja2.md
         - howto/project_structure.md
         - howto/docker.md
         - howto/alternatives.md
@@ -50,8 +51,8 @@ plugins:
     - table-reader:
         data_path: "docs/assets"
     - git-authors:
-            exclude:
-                - index.md
+        exclude:
+            - index.md
     - git-revision-date-localized:
         type: timeago
         timezone: Europe/Amsterdam
@@ -64,6 +65,7 @@ markdown_extensions:
     - meta
     - admonition
     - pymdownx.keys
+    - pymdownx.escapeall
     - pymdownx.highlight
     - pymdownx.inlinehilite
     - pymdownx.snippets

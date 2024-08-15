@@ -8,6 +8,7 @@ pyarrow
 # linting
 pyflakes
 # documentation
+mkdocs-macros-plugin
 mkdocs-material
 mkdocs-markdownextradata-plugin
 mkdocs-macros-plugin
