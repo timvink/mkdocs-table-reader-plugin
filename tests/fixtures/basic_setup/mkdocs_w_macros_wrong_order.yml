@@ -3,5 +3,5 @@ use_directory_urls: true
 
 plugins:
     - search
-    - macros
     - table-reader
+    - macros
