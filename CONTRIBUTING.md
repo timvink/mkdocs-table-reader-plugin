@@ -50,17 +50,3 @@ git push origin <version>
 ```
 
 Then manually create a github release to trigger publishing to pypi.
-
-
-TODO:
-
-Changes:
-
-- `macros` should now be defined _before_ `table-reader` (previously after)
-- table-reader will now always search docs_dir _and_ config_dir to find a table file. (deprecated option..)
-
-
-Upgrading guide
-
-- Remove `base_path` and `search_page_directory` options from the config
-

@@ -374,3 +374,16 @@ def test_csv_with_no_string_headers(tmp_path):
     page_with_tag = tmp_proj / "site/index.html"
     contents = page_with_tag.read_text()
     assert re.search(r"4242", contents)
+
+def test_macros_jinja2_syntax(tmp_path):
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/jinja/mkdocs.yml", tmp_path
+    )
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    # Make sure the file.csv is inserted
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text()
+    assert re.search(r"531456", contents)
+

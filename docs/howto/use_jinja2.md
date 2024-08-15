@@ -19,7 +19,7 @@ Now you can do cool things like dynamically load a list of tables:
 {% set table_names = ["basic_table.csv","basic_table2.csv"] %}
 {% for table_name in table_names %}
 
-{{  read_csv(table_name) }}
+{ { read_csv(table_name) }}
 
 {% endfor %}
 

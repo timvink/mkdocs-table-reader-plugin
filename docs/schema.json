@@ -14,7 +14,7 @@
           "type": "object",
           "properties": {
             "data_path": {
-              "title": "The path to your table files should be relative to the base_path. If you use a folder for all your table files you can shorten the path specification by setting the data_path.",
+              "title": "Additional path to search",
               "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#data_path",
               "type": "string",
               "default": "."

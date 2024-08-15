@@ -1,6 +1,4 @@
-import os
 import re
-import logging
 
 from mkdocs.plugins import BasePlugin, get_plugin_logger 
 from mkdocs.config import config_options
@@ -32,9 +30,9 @@ class TableReaderPlugin(BasePlugin):
             Config
         """
         if "search_page_directory" in self.config:
-            logger.warning(f"[table-reader]: The 'search_page_directory' configuration option is deprecated, it will always be searched. Please remove it from your mkdocs.yml.")
+            logger.warning("[table-reader]: The 'search_page_directory' configuration option is deprecated, it will always be searched. Please remove it from your mkdocs.yml.")
         if "base_path" in self.config:
-            logger.warning(f"[table-reader]: The 'base_path' configuration option is deprecated. Both the config_dir and docs_dir will be searched. Please remove it from your mkdocs.yml.")
+            logger.warning("[table-reader]: The 'base_path' configuration option is deprecated. Both the config_dir and docs_dir will be searched. Please remove it from your mkdocs.yml.")
         
         self.readers = {reader: READERS[reader].set_config_context(mkdocs_config=config, plugin_config=self.config) for reader in self.config.get('select_readers') if reader in self.config.get('select_readers',[])}
 
