@@ -54,6 +54,10 @@ Here are some example of workflows that use hooks and the `table-reader` plugin:
     └── mkdocs.yml
     ```
 
+!!! note "Alternative: use jinja"
+
+    You can also use jinja2 to display a list of tables. See how to [use jinja2 for automation](use_jinja2.md).
+
 ## Download a table from an API
 
 === "hooks.py"
