@@ -14,6 +14,6 @@ def test_convert_to_md_table():
     assert df_good.shape[0] > 0
 
     # Because we escape pipes, the 'bad' df
-    md_bad = convert_to_md_table(df_bad, markdown_kwargs={})
-    md_good = convert_to_md_table(df_good, markdown_kwargs={})
+    md_bad = convert_to_md_table(df_bad, **{})
+    md_good = convert_to_md_table(df_good, **{})
     assert md_bad == md_good

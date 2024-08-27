@@ -38,7 +38,7 @@ Default: `False`. When enabled, if a filepath is not found, the plugin will rais
 
 ## `select_readers`
 
-Default: Selects all available readers. Specify a list of readers to improve documentation build times for very large sites.
+Default: Selects all available readers. Specify a list of readers to improve documentation build times for very large sites. This option is ignored when you use this plugin with `mkdocs-macros-plugin` ([read more](howto/use_jinja2.md))
 
 ## `enabled`
 

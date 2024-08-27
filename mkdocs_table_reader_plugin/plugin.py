@@ -5,8 +5,8 @@ from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
-from mkdocs_table_reader_plugin.readers import READERS
-from mkdocs_table_reader_plugin.markdown import fix_indentation, add_indentation
+from mkdocs_table_reader_plugin.readers import READERS, MACROS
+from mkdocs_table_reader_plugin.markdown import fix_indentation, add_indentation, convert_to_md_table
 
 logger = get_plugin_logger("table-reader")
 
@@ -70,13 +70,23 @@ class TableReaderPlugin(BasePlugin):
                     )
 
         if "macros" in config.plugins:
-            config.plugins["macros"].macros.update(self.readers)
-            config.plugins["macros"].variables["macros"].update(self.readers)
-            config.plugins["macros"].env.globals.update(self.readers)
+            self.macros = {
+                macro: MACROS[macro].set_config_context(
+                    mkdocs_config=config, plugin_config=self.config
+                )
+                for macro in MACROS
+            }
+            self.filters = {
+                "add_indentation": add_indentation,
+                "convert_to_md_table": convert_to_md_table,
+            }
+            config.plugins["macros"].macros.update(self.macros)
+            config.plugins["macros"].variables["macros"].update(self.macros)
+            config.plugins["macros"].env.globals.update(self.macros)
 
-            config.plugins["macros"].filters.update({"add_indentation": add_indentation})
-            config.plugins["macros"].variables["filters"].update({"add_indentation": add_indentation})
-            config.plugins["macros"].env.filters.update({"add_indentation": add_indentation})
+            config.plugins["macros"].filters.update(self.filters)
+            config.plugins["macros"].variables["filters"].update(self.filters)
+            config.plugins["macros"].env.filters.update(self.filters)
 
             self.external_jinja_engine = True
         else:

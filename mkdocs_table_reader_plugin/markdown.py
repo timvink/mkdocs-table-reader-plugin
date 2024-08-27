@@ -19,7 +19,7 @@ def replace_unescaped_pipes(text: str) -> str:
     return re.sub(r"(?<!\\)\|", "\\|", text)
 
 
-def convert_to_md_table(df: pd.DataFrame, markdown_kwargs: Dict) -> str:
+def convert_to_md_table(df: pd.DataFrame, **markdown_kwargs: Dict) -> str:
     """
     Convert dataframe to markdown table using tabulate.
     """
