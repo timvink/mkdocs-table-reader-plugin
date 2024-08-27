@@ -15,7 +15,7 @@ The following table reader functions are available:
 
     {% raw %}
     ```markdown
-    {{ read_csv('assets/tables/basic_table.csv') }}`
+    {{ read_csv('assets/tables/basic_table.csv') }}
     ```
     {% endraw %}
 
