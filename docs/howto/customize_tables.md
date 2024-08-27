@@ -12,8 +12,10 @@ df = pd.read_csv('path_to_table.csv')
 df.to_markdown(index=False, tablefmt='pipe')
 ```
 
-Any keyword arguments you give to <code>\{\{ read_csv('path_to_your_table.csv') \}\}</code> will be matched and passed the corresponding [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) and/or 
+{% raw %}
+Any keyword arguments you give to `{{ read_csv('path_to_your_table.csv') }}` will be matched and passed the corresponding [pandas.read_csv()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) and/or 
 [.to_markdown()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html) functions. 
+{% endraw %}
 
 Pandas's `.to_markdown()` uses the [tabulate](https://pypi.org/project/tabulate/) package and any keyword arguments that are passed to it. Tabulate in turn offers many customization options, see [library usage](https://github.com/astanin/python-tabulate#library-usage). 
 
@@ -23,21 +25,33 @@ Text columns will be aligned to the left [by default](https://github.com/astanin
 
 === ":arrow_left: left"
 
-    <code>\{\{ read_csv('tables/basic_table.csv', colalign=("left",)) \}\}</code>
-
+    {% raw %}
+    ```
     {{ read_csv('tables/basic_table.csv', colalign=("left",)) }}
+    ```
+    {% endraw %}
+
+    {{ read_csv('tables/basic_table.csv', colalign=("left",)) | add_indentation(spaces=4) }}
 
 === ":left_right_arrow: center"
 
-    <code>\{\{ read_csv('tables/basic_table.csv', colalign=("center",)) \}\}</code>
-
+    {% raw %}
+    ```
     {{ read_csv('tables/basic_table.csv', colalign=("center",)) }}
+    ```
+    {% endraw %}
+
+    {{ read_csv('tables/basic_table.csv', colalign=("center",)) | add_indentation(spaces=4) }}
 
 === ":arrow_right: right"
 
-    <code>\{\{ read_csv('tables/basic_table.csv', colalign=("right",)) \}\}</code>
-
+    {% raw %}
+    ```
     {{ read_csv('tables/basic_table.csv', colalign=("right",)) }}
+    ```
+    {% endraw %}
+
+    {{ read_csv('tables/basic_table.csv', colalign=("right",)) | add_indentation(spaces=4) }}
 
 ## Sortable tables
 
@@ -47,21 +61,33 @@ If you use [mkdocs-material](https://squidfunk.github.io/mkdocs-material), you c
 
 You can use [tabulate](https://pypi.org/project/tabulate/)'s [number formatting](https://github.com/astanin/python-tabulate#number-formatting). Example:
 
-=== ":zero:"
+=== "zero points"
 
-    <code>\{\{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".0f") \}\}</code>
-
+    {% raw %}
+    ```
     {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".0f") }}
+    ```
+    {% endraw %}
 
-=== ":one:"
+    {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".0f") | add_indentation(spaces=4) }}
 
-    <code>\{\{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".1f") \}\}</code>
+=== "one points"
 
+    {% raw %}
+    ```
     {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".1f") }}
+    ```
+    {% endraw %}
 
-=== ":two:"
+    {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".1f") | add_indentation(spaces=4) }}
 
-    <code>\{\{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".2f") \}\}</code>
+=== "two points"
 
+    {% raw %}
+    ```
     {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".2f") }}
+    ```
+    {% endraw %}
+
+    {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".2f") | add_indentation(spaces=4) }}
 

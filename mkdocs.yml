@@ -48,6 +48,7 @@ theme:
 
 plugins:
     - search
+    - macros
     - table-reader:
         data_path: "docs/assets"
     - git-authors:

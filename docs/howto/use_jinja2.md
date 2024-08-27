@@ -1,4 +1,5 @@
 # Use jinja2 for automation
+{% raw %}
 
 `table-reader` supports [`mkdocs-macros-plugin`](https://mkdocs-macros-plugin.readthedocs.io/en/latest/), which enables you to use jinja2 syntax inside markdown files (among other things).
 
@@ -14,16 +15,18 @@ Now you can do cool things like:
 
 ## Dynamically load a list of tables
 
+
 ```markdown
 # index.md
 
 {% set table_names = ["basic_table.csv","basic_table2.csv"] %}
 {% for table_name in table_names %}
 
-{ { read_csv(table_name) }}
+{{ read_csv(table_name) }}
 
 {% endfor %}
 ```
+
 
 ## Insert tables into content tabs
 
@@ -39,7 +42,7 @@ To fix that, you can use the custom _filter_ `add_indendation` (a filter add to 
 
     === "{{ table_name }}"
 
-        { { read_csv(table_name) | add_indentation(spaces=4) }}
+        {{ read_csv(table_name) | add_indentation(spaces=4) }}
 
     {% endfor %}
     ```
@@ -64,10 +67,6 @@ To fix that, you can use the custom _filter_ `add_indendation` (a filter add to 
             alternate_style: true
     ``` 
 
-!!! note "Note the space in { {"
-
-    To avoid the tables being inserted into the code example, we replaced `{{` with `{ {`.
-    If you copy this example, make sure to fix.
 
 
 ## Recursively insert an entire directory of tables
@@ -100,12 +99,9 @@ Now you could do something like:
 
 {% for table_name in listdir('docs/assets/my_tables") %}
 
-{ { read_csv(table_name) }}
+{{ read_csv(table_name) }}
 
 {% endfor %}
 ```
 
-!!! note "Note the space in { {"
-
-    To avoid the tables being inserted into the code example, we replaced `{{` with `{ {`.
-    If you copy this example, make sure to fix.
+{% endraw %}

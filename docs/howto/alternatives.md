@@ -39,7 +39,7 @@ Downsides:
 
 ## Execute python during build
 
-You could also choose to insert the markdown for tables dynamically, using packages like [markdown-exec]() or [mkdocs-macros-plugin](https://mkdocs-macros-plugin.readthedocs.io/).
+You could also choose to insert the markdown for tables dynamically, using packages like [markdown-exec](https://pypi.org/project/markdown-exec/).
 
 For example:
 
