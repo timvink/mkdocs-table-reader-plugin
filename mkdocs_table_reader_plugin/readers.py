@@ -61,13 +61,23 @@ class ParseArgs:
 
 
 @ParseArgs
+def pd_read_csv(*args, **kwargs) -> str:
+    read_kwargs = kwargs_in_func(kwargs, pd.read_csv)
+    return pd.read_csv(*args, **read_kwargs)
+
+@ParseArgs
 def read_csv(*args, **kwargs) -> str:
     read_kwargs = kwargs_in_func(kwargs, pd.read_csv)
     df = pd.read_csv(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_csv)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
 
+
+@ParseArgs
+def pd_read_table(*args, **kwargs) -> str:
+    read_kwargs = kwargs_in_func(kwargs, pd.read_table)
+    return pd.read_table(*args, **read_kwargs)
 
 @ParseArgs
 def read_table(*args, **kwargs) -> str:
@@ -75,7 +85,13 @@ def read_table(*args, **kwargs) -> str:
     df = pd.read_table(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_table)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
+
+
+@ParseArgs
+def pd_read_fwf(*args, **kwargs) -> str:
+    read_kwargs = kwargs_in_func(kwargs, pd.read_fwf)
+    return pd.read_fwf(*args, **read_kwargs)
 
 
 @ParseArgs
@@ -84,7 +100,12 @@ def read_fwf(*args, **kwargs) -> str:
     df = pd.read_fwf(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_fwf)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
+
+@ParseArgs
+def pd_read_json(*args, **kwargs) -> str:
+    read_kwargs = kwargs_in_func(kwargs, pd.read_json)
+    return pd.read_json(*args, **read_kwargs)
 
 
 @ParseArgs
@@ -93,7 +114,12 @@ def read_json(*args, **kwargs) -> str:
     df = pd.read_json(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_json)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
+
+@ParseArgs
+def pd_read_excel(*args, **kwargs) -> str:
+    read_kwargs = kwargs_in_func(kwargs, pd.read_excel)
+    return pd.read_excel(*args, **read_kwargs)
 
 
 @ParseArgs
@@ -102,8 +128,15 @@ def read_excel(*args, **kwargs) -> str:
     df = pd.read_excel(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_excel)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
 
+
+@ParseArgs
+def pd_read_yaml(*args, **kwargs) -> str:
+    json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
+    with open(args[0], "r") as f:
+        df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
+    return df
 
 @ParseArgs
 def read_yaml(*args, **kwargs) -> str:
@@ -112,7 +145,13 @@ def read_yaml(*args, **kwargs) -> str:
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
+
+
+@ParseArgs
+def pd_read_feather(*args, **kwargs) -> str:
+    read_kwargs = kwargs_in_func(kwargs, pd.read_feather)
+    return pd.read_feather(*args, **read_kwargs)
 
 
 @ParseArgs
@@ -121,7 +160,7 @@ def read_feather(*args, **kwargs) -> str:
     df = pd.read_feather(*args, **read_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_feather)
-    return convert_to_md_table(df, markdown_kwargs)
+    return convert_to_md_table(df, **markdown_kwargs)
 
 
 @ParseArgs
@@ -145,3 +184,14 @@ READERS = {
     "read_feather": read_feather,
     "read_raw": read_raw,
 }
+
+MACRO_ONLY = {
+    "pd_read_csv": pd_read_csv,
+    "pd_read_table": pd_read_table,
+    "pd_read_fwf": pd_read_fwf,
+    "pd_read_excel": pd_read_excel,
+    "pd_read_yaml": pd_read_yaml,
+    "pd_read_json": pd_read_json,
+    "pd_read_feather": pd_read_feather,
+}
+MACROS = {**READERS, **MACRO_ONLY}

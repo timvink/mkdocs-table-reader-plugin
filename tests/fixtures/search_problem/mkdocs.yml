@@ -1,0 +1,10 @@
+site_name: test search
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+
+plugins: 
+  - search
+  - table-reader

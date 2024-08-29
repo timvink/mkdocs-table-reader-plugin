@@ -1,5 +1,7 @@
 # Preprocess input tables
 
+{% raw %}
+
 `mkdocs>=1.4` supports [hooks](https://www.mkdocs.org/user-guide/configuration/#hooks), which enable you to run python scripts on `mkdocs serve` or `mkdocs build`.
 
 Here are some example of workflows that use hooks and the `table-reader` plugin:
@@ -26,7 +28,7 @@ Here are some example of workflows that use hooks and the `table-reader` plugin:
 
     <code>
     My table:
-    \{\{ read_csv("docs/assets/output_table.csv") \}\}
+    {{ read_csv("docs/assets/output_table.csv") }}
     </code>
 
 === "mkdocs.yml"
@@ -74,7 +76,7 @@ Here are some example of workflows that use hooks and the `table-reader` plugin:
 
     <code>
     My table:
-    \{\{ read_csv("docs/assets/nyc_data.csv") \}\}
+    {{ read_csv("docs/assets/nyc_data.csv") }}
     </code>
 
 === "mkdocs.yml"
@@ -101,3 +103,5 @@ Here are some example of workflows that use hooks and the `table-reader` plugin:
     ```
 
 Note that during development when you use `mkdocs serve` and autoreload, you might not want to run this hook every time you make a change. You could use an environment variable inside your hook, for example something like `if os.environ['disable_hook'] == 1: return None`.
+
+{% endraw %}

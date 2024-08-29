@@ -4,6 +4,7 @@ hide:
 ---
 
 # Options
+{% raw %}
 
 You can customize the plugin by setting options in `mkdocs.yml`. For example:
 
@@ -24,7 +25,7 @@ Default is `.`. Set a default path to the searched directories in order to short
 
 Given a file path, `table-reader` will search for that file relative to your your project's `mkdocs.yml` and relative to your `docs/` folder. If you use a folder for all your table files you can shorten the path specification by setting the `data_path`.
 
-For example, if your table is located in `docs/assets/tables/basic_table.csv`, you can set `data_path` to `docs/assets/tables/`. Then you will be able to use <code>\{\{ read_csv("basic_table.csv") \}\}</code> instead of <code>\{\{ read_csv("docs/assets/tables/basic_table.csv") \}\}</code> inside any markdown page.
+For example, if your table is located in `docs/assets/tables/basic_table.csv`, you can set `data_path` to `docs/assets/tables/`. Then you will be able to use `{{ read_csv("basic_table.csv") }}` instead of `{{ read_csv("docs/assets/tables/basic_table.csv") }}` inside any markdown page.
 
 !!! info
 
@@ -38,7 +39,7 @@ Default: `False`. When enabled, if a filepath is not found, the plugin will rais
 
 ## `select_readers`
 
-Default: Selects all available readers. Specify a list of readers to improve documentation build times for very large sites.
+Default: Selects all available readers. Specify a list of readers to improve documentation build times for very large sites. This option is ignored when you use this plugin with `mkdocs-macros-plugin` ([read more](howto/use_jinja2.md))
 
 ## `enabled`
 
@@ -58,3 +59,5 @@ Which enables you to disable the plugin locally using:
 export ENABLED_TABLE_READER=false
 mkdocs serve
 ```
+
+{% endraw %}

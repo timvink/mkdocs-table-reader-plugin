@@ -10,7 +10,7 @@ nav:
     - How to:
         - howto/customize_tables.md
         - howto/preprocess_tables.md
-        - howto/use_jinja2.md
+        - Macros plugin compatibility: howto/use_jinja2.md
         - howto/project_structure.md
         - howto/docker.md
         - howto/alternatives.md
@@ -48,6 +48,7 @@ theme:
 
 plugins:
     - search
+    - macros
     - table-reader:
         data_path: "docs/assets"
     - git-authors:

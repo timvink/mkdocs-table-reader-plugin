@@ -1,4 +1,5 @@
 # Choose a project structure
+{% raw %}
 
 You have different possible strategies to store and load your tables. This guide gives some examples.
 
@@ -23,14 +24,14 @@ If you only want to include an occasional table in a specific markdown file, jus
     ```md
     Here is the table:
 
-    \{\{ read_csv("another_table.csv") \}\}
+    {{ read_csv("another_table.csv") }}
     ```
 
 In `page.md`, to read `another_table.csv`, you can choose to use:
 
-- <code>\{\{ read_csv("docs/folder/another_table.csv") \}\}</code> (Path relative to mkdocs.yml)
-- <code>\{\{ read_csv("folder/another_table.csv") \}\}</code> (Path relative to docs/ directory)
-- <code>\{\{ read_csv("another_table.csv") \}\}</code> (Path relative to page source file)
+- `{{ read_csv("docs/folder/another_table.csv") }}` (Path relative to mkdocs.yml)
+- `{{ read_csv("folder/another_table.csv") }}` (Path relative to docs/ directory)
+- `{{ read_csv("another_table.csv") }}` (Path relative to page source file)
 
 ## Re-using tables across markdown files
 
@@ -54,7 +55,8 @@ Given the following project structure:
 
 In `page.md`, to read `another_table.csv`, you can choose to use:
 
-- <code>\{\{ read_csv("docs/assets/tables/another_table.csv") \}\}</code> (Path relative to mkdocs.yml)
-- <code>\{\{ read_csv("assets/tables/another_table.csv") \}\}</code> (Path relative to docs/ directory)
-- <code>\{\{ read_csv("../assets/tables/another_table.csv") \}\}</code> (Path relative to page source file _(note that `..` stands for "one directory up")_)
+- `{{ read_csv("docs/assets/tables/another_table.csv") }}` (Path relative to mkdocs.yml)
+- `{{ read_csv("assets/tables/another_table.csv") }}` (Path relative to docs/ directory)
+- `{{ read_csv("../assets/tables/another_table.csv") }}` (Path relative to page source file _(note that `..` stands for "one directory up")_)
 
+{% endraw %}
