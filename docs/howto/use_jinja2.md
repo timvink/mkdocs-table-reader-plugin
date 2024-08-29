@@ -1,4 +1,5 @@
-# Use jinja2 for automation
+# Compatibility with mkdocs-macros-plugin to enable further automation
+
 {% raw %}
 
 `table-reader` supports [`mkdocs-macros-plugin`](https://mkdocs-macros-plugin.readthedocs.io/en/latest/), which enables you to use jinja2 syntax inside markdown files (among other things).
@@ -11,28 +12,19 @@ plugins:
     - table-reader
 ```
 
-Now you can do cool things like:
+Everything will work as before, _except_ indentation will not be retrained. This means components that rely on indentation (like [Admonitions](https://squidfunk.github.io/mkdocs-material/reference/admonitions/) and [Content tabs](https://squidfunk.github.io/mkdocs-material/reference/content-tabs/#usage)) will break.
 
-## Dynamically load a list of tables
+The solution is to use the custom _filter_ `add_indendation` (a filter added to `macros` by `table-reader` plugin, see the [readers](../readers.md)). For example:
 
+```jinja
+!!! note "This is a note"
 
-```markdown
-# index.md
-
-{% set table_names = ["basic_table.csv","basic_table2.csv"] %}
-{% for table_name in table_names %}
-
-{{ read_csv(table_name) }}
-
-{% endfor %}
+    {{ read_csv("basic_table.csv") | add_indentation(spaces=4) }}
 ```
 
+The upside is you now have much more control. A couple of example use cases:
 
-## Insert tables into content tabs
-
-If you inserted content has multiple lines, then indentation will be not be retained beyond the first line. This means things like [content tabs](https://squidfunk.github.io/mkdocs-material/reference/content-tabs/#usage) will not work as expected.
-
-To fix that, you can use the custom _filter_ `add_indendation` (a filter add to `macros` by `table-reader` plugin). For example:
+## Dynamically load a specified list of tables into tabs
 
 === "index.md"
 
@@ -68,7 +60,6 @@ To fix that, you can use the custom _filter_ `add_indendation` (a filter add to 
     ``` 
 
 
-
 ## Recursively insert an entire directory of tables
 
 [`mkdocs-macros-plugin`](https://mkdocs-macros-plugin.readthedocs.io/en/latest/) enables you to define additional functions (called _macros_) that you will be able to use within your markdown files.
@@ -102,6 +93,16 @@ Now you could do something like:
 {{ read_csv(table_name) }}
 
 {% endfor %}
+```
+
+## Filter a table before inserting it
+
+When you enable the `macros` plugin in your `mkdocs.yml`, `table-reader` will add additional _macros_ and _filters_ (see the [readers overview](../readers.md)).
+
+You can use the `pd_<reader>` variants to read a file to a pandas dataframe. Then you can use the pandas methods like [`.query()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html). For example:
+
+```
+{{ pd_read_csv("numeric_table.csv").query("column_name >= 3") | convert_to_md_table }}
 ```
 
 {% endraw %}
