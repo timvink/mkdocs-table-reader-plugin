@@ -544,7 +544,7 @@
         
   
   <span class="md-ellipsis">
-    Use jinja2 for automation
+    Macros plugin compatibility
   </span>
   
 
@@ -738,7 +738,8 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><img alt="⬅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2b05.svg" title=":arrow_left:" /> left</label><label for="__tabbed_1_2"><img alt="↔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2194.svg" title=":left_right_arrow:" /> center</label><label for="__tabbed_1_3"><img alt="➡" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/27a1.svg" title=":arrow_right:" /> right</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><code>{{ read_csv('tables/basic_table.csv', colalign=("left",)) }}</code></p>
+<div class="highlight"><pre><span></span><code>{{ read_csv(&#39;tables/basic_table.csv&#39;, colalign=(&quot;left&quot;,)) }}
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -767,7 +768,8 @@
 </table>
 </div>
 <div class="tabbed-block">
-<p><code>{{ read_csv('tables/basic_table.csv', colalign=("center",)) }}</code></p>
+<div class="highlight"><pre><span></span><code>{{ read_csv(&#39;tables/basic_table.csv&#39;, colalign=(&quot;center&quot;,)) }}
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -796,7 +798,8 @@
 </table>
 </div>
 <div class="tabbed-block">
-<p><code>{{ read_csv('tables/basic_table.csv', colalign=("right",)) }}</code></p>
+<div class="highlight"><pre><span></span><code>{{ read_csv(&#39;tables/basic_table.csv&#39;, colalign=(&quot;right&quot;,)) }}
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -830,10 +833,11 @@
 <p>If you use <a href="https://squidfunk.github.io/mkdocs-material">mkdocs-material</a>, you can configure <a href="https://squidfunk.github.io/mkdocs-material/reference/data-tables/?h=tables#sortable-tables">sortable tables</a>.</p>
 <h2 id="number-formatting">Number formatting</h2>
 <p>You can use <a href="https://pypi.org/project/tabulate/">tabulate</a>'s <a href="https://github.com/astanin/python-tabulate#number-formatting">number formatting</a>. Example:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><img alt="0⃣" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/30-20e3.svg" title=":zero:" /></label><label for="__tabbed_2_2"><img alt="1⃣" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/31-20e3.svg" title=":one:" /></label><label for="__tabbed_2_3"><img alt="2⃣" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/32-20e3.svg" title=":two:" /></label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">zero points</label><label for="__tabbed_2_2">one points</label><label for="__tabbed_2_3">two points</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><code>{{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".0f") }}</code></p>
+<div class="highlight"><pre><span></span><code>{{ read_fwf(&#39;tables/fixedwidth_table.txt&#39;, floatfmt=&quot;.0f&quot;) }}
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -862,7 +866,8 @@
 </table>
 </div>
 <div class="tabbed-block">
-<p><code>{{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".1f") }}</code></p>
+<div class="highlight"><pre><span></span><code>{{ read_fwf(&#39;tables/fixedwidth_table.txt&#39;, floatfmt=&quot;.1f&quot;) }}
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -891,7 +896,8 @@
 </table>
 </div>
 <div class="tabbed-block">
-<p><code>{{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".2f") }}</code></p>
+<div class="highlight"><pre><span></span><code>{{ read_fwf(&#39;tables/fixedwidth_table.txt&#39;, floatfmt=&quot;.2f&quot;) }}
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -941,7 +947,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2023-01-30T13:27:38+01:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-01-30</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2024-08-27T18:25:17+02:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-08-27</span>
   </span>
 
     

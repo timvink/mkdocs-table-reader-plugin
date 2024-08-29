@@ -532,7 +532,7 @@
         
   
   <span class="md-ellipsis">
-    Use jinja2 for automation
+    Macros plugin compatibility
   </span>
   
 
@@ -733,8 +733,8 @@
 </code></pre></div>
 <p>Where the path is relative to the location of your project's <code>mkdocs.yml</code> file, <em>or</em> your project's <code>docs/</code> directory, <em>or</em> the location of your markdown source file (all 3 possible locations will be searched, in that order).</p>
 <ul>
-<li>There are <a href="https://timvink.github.io/mkdocs-table-reader-plugin/readers/">readers</a> for <code>.csv</code>, <code>.fwf</code>, <code>.json</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.yaml</code>, <code>.feather</code> and <code>.tsv</code> files. There is also the <code>read_raw()</code> reader that will allow you to insert tables (or other content) already in markdown format.</li>
-<li><code>table-reader</code> is compatible with <a href="https://mkdocs-macros-plugin.readthedocs.io/en/latest/"><code>mkdocs-macros-plugin</code></a>, which means you can <a href="https://timvink.github.io/mkdocs-table-reader-plugin/howto/use_jinja2/">dynamically insert tables using jinja2 syntax</a>.</li>
+<li>There are <a href="https://timvink.github.io/mkdocs-table-reader-plugin/readers/">readers</a> available for many common table formats, like <code>.csv</code>, <code>.fwf</code>, <code>.json</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.yaml</code>, <code>.feather</code> and <code>.tsv</code>. There is also the <code>read_raw()</code> reader that will allow you to insert tables (or other content) already in markdown format.</li>
+<li><code>table-reader</code> is compatible with <a href="https://mkdocs-macros-plugin.readthedocs.io/en/latest/"><code>mkdocs-macros-plugin</code></a>. This enables further automation like filtering tables or inserting directories of tables. See the documentation on <a href="howto/use_jinja2/">compatibility with macros plugin</a> for more examples.</li>
 </ul>
 <h2 id="documentation-and-how-to-guides">Documentation and how-to guides</h2>
 <p>See <a href="https://timvink.github.io/mkdocs-table-reader-plugin/">timvink.github.io/mkdocs-table-reader-plugin/</a></p>
