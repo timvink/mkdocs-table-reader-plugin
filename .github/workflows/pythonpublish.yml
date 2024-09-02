@@ -27,8 +27,7 @@ jobs:
     
     - name: Make sure unit tests succeed
       run: |
-        pip install -r tests/test_requirements.txt
-        pip install .
+        pip install ".[dev]"
         pytest
     
     - name: Build

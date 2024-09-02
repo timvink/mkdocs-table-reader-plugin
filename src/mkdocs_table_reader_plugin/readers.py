@@ -1,13 +1,13 @@
-import pandas as pd
-import yaml
+import functools
+import logging
 import os
 from pathlib import Path
-import logging
 
-import functools
+import pandas as pd
+import yaml
 
-from mkdocs_table_reader_plugin.utils import kwargs_in_func, kwargs_not_in_func
 from mkdocs_table_reader_plugin.markdown import convert_to_md_table
+from mkdocs_table_reader_plugin.utils import kwargs_in_func, kwargs_not_in_func
 
 logger = logging.getLogger("mkdocs.plugins")
 
@@ -134,14 +134,14 @@ def read_excel(*args, **kwargs) -> str:
 @ParseArgs
 def pd_read_yaml(*args, **kwargs) -> str:
     json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0], "r") as f:
+    with open(args[0]) as f:
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
     return df
 
 @ParseArgs
 def read_yaml(*args, **kwargs) -> str:
     json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0], "r") as f:
+    with open(args[0]) as f:
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
@@ -170,7 +170,7 @@ def read_raw(*args, **kwargs) -> str:
     Returns:
         str: file contents
     """
-    with open(args[0], "r") as f:
+    with open(args[0]) as f:
         return f.read()
 
 
