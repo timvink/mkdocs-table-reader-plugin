@@ -108,6 +108,9 @@ extend-exclude = [
  #supported for python 3.10
 target-version = "py310" 
 
+# Always autofix
+fix = true
+
 [tool.uv]
 dev-dependencies = [
     "ruff",

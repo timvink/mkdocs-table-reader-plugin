@@ -111,8 +111,7 @@ def parse_argkwarg(input_str: str):
         else:
             if len(kwargs) != 0:
                 raise AssertionError(
-                    "[table-reader-plugin] Make sure the python in your reader tag is correct: Positional arguments follow keyword arguments in '%s'"
-                    % input_str
+                    f"[table-reader-plugin] Make sure the python in your reader tag is correct: Positional arguments follow keyword arguments in '{input_str}'"
                 )
             args.append(literal_eval(i))
 

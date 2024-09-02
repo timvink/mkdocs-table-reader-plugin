@@ -1,12 +1,12 @@
 import re
 
-from mkdocs.plugins import BasePlugin, get_plugin_logger
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
+from mkdocs.plugins import BasePlugin, get_plugin_logger
 
+from mkdocs_table_reader_plugin.markdown import add_indentation, convert_to_md_table, fix_indentation
+from mkdocs_table_reader_plugin.readers import MACROS, READERS
 from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg
-from mkdocs_table_reader_plugin.readers import READERS, MACROS
-from mkdocs_table_reader_plugin.markdown import fix_indentation, add_indentation, convert_to_md_table
 
 logger = get_plugin_logger("table-reader")
 
@@ -138,7 +138,7 @@ class TableReaderPlugin(BasePlugin):
             # match group 0: to extract any leading whitespace
             # match group 1: to extract the arguments (positional and keywords)
             tag_pattern = re.compile(
-                r"( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE
+                r"( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE # noqa: UP031
             )
             matches = re.findall(tag_pattern, markdown)
 
