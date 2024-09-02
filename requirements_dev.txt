@@ -6,7 +6,7 @@ xlrd>=1.0.0
 openpyxl
 pyarrow
 # linting
-pyflakes
+ruff
 # documentation
 mkdocs-macros-plugin
 mkdocs-material
