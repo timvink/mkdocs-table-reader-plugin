@@ -61,15 +61,12 @@ class TableReaderPlugin(BasePlugin):
                         f"[table-reader]: Incompatible plugin order: Define 'table-reader' before '{post_load_plugin}' in your mkdocs.yml."
                     )
 
-        # Plugins required after table-reader
-        for post_load_plugin in ["macros"]:
-            if post_load_plugin in plugins:
-                if plugins.index("table-reader") < plugins.index(post_load_plugin):
-                    raise ConfigurationError(
-                        f"[table-reader]: Incompatible plugin order: Define 'table-reader' after '{post_load_plugin}' in your mkdocs.yml."
-                    )
-
+        # Compatibility with mkdocs-macros-plugin
+        self.external_jinja_engine = False
         if "macros" in config.plugins:
+            self.external_jinja_engine = True
+
+            # Define extra macros and filters
             self.macros = {
                 macro: MACROS[macro].set_config_context(
                     mkdocs_config=config, plugin_config=self.config
@@ -80,17 +77,28 @@ class TableReaderPlugin(BasePlugin):
                 "add_indentation": add_indentation,
                 "convert_to_md_table": convert_to_md_table,
             }
-            config.plugins["macros"].macros.update(self.macros)
-            config.plugins["macros"].variables["macros"].update(self.macros)
-            config.plugins["macros"].env.globals.update(self.macros)
 
-            config.plugins["macros"].filters.update(self.filters)
-            config.plugins["macros"].variables["filters"].update(self.filters)
-            config.plugins["macros"].env.filters.update(self.filters)
+            # Use the new registration system
+            if "register_macros" in dir(config.plugins["macros"]):
+                config.plugins["macros"].register_macros(items=self.macros)
+                config.plugins["macros"].register_filters(items=self.filters)
 
-            self.external_jinja_engine = True
-        else:
-            self.external_jinja_engine = False
+            # Use the old registration 'system'
+            else:
+                # Ensure macros is defined _after_ table-reader plugin
+                for post_load_plugin in ["macros"]:
+                    if post_load_plugin in plugins:
+                        if plugins.index("table-reader") < plugins.index(post_load_plugin):
+                            raise ConfigurationError(
+                                f"[table-reader]: Incompatible plugin order: Define 'table-reader' after '{post_load_plugin}' in your mkdocs.yml."
+                            )
+                config.plugins["macros"].macros.update(self.macros)
+                config.plugins["macros"].variables["macros"].update(self.macros)
+                config.plugins["macros"].env.globals.update(self.macros)
+                config.plugins["macros"].filters.update(self.filters)
+                config.plugins["macros"].variables["filters"].update(self.filters)
+                config.plugins["macros"].env.filters.update(self.filters)
+
 
     def on_pre_page(self, page, config, **kwargs):
         """
