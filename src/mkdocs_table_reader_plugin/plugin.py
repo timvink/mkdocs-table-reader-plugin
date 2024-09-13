@@ -99,7 +99,6 @@ class TableReaderPlugin(BasePlugin):
                 config.plugins["macros"].variables["filters"].update(self.filters)
                 config.plugins["macros"].env.filters.update(self.filters)
 
-            
 
     def on_pre_page(self, page, config, **kwargs):
         """
