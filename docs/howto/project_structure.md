@@ -33,7 +33,7 @@ In `page.md`, to read `another_table.csv`, you can choose to use:
 - `{{ read_csv("folder/another_table.csv") }}` (Path relative to docs/ directory)
 - `{{ read_csv("another_table.csv") }}` (Path relative to page source file)
 
-## Re-using tables across markdown files
+## Reusing tables across markdown files
 
 If you want to reuse tables in multiple markdown files, or have many tables, you'll want to store them in a central directory, like `docs/assets/tables`. 
 That way, if you restructure your navigation, the links to the tables won't break either.
