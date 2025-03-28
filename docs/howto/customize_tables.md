@@ -96,7 +96,7 @@ You can use [tabulate](https://pypi.org/project/tabulate/)'s [number formatting]
 
 If you use enable [`mkdocs-macros-plugin`](https://mkdocs-macros-plugin.readthedocs.io/en/latest/) (see [ Compatibility with mkdocs-macros-plugin to enable further automation](use_jinja2.md)), you can do much more.
 
-For example:
+For example, you could insert images from base64 encodings in a table like so:
 
 {% raw %}
 ```jinja
@@ -108,7 +108,7 @@ For example:
 ```
 {% endraw %}
 
-Should render 3 red dots:
+Should render 3 smileys:
 
 {% for base64_image in pd_read_csv('tables/html_table.csv', sep=";")['a'] %}
 
