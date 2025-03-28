@@ -91,3 +91,28 @@ You can use [tabulate](https://pypi.org/project/tabulate/)'s [number formatting]
 
     {{ read_fwf('tables/fixedwidth_table.txt', floatfmt=".2f") | add_indentation(spaces=4) }}
 
+
+## Further customization
+
+If you use enable [`mkdocs-macros-plugin`](https://mkdocs-macros-plugin.readthedocs.io/en/latest/) (see [ Compatibility with mkdocs-macros-plugin to enable further automation](use_jinja2.md)), you can do much more.
+
+For example:
+
+{% raw %}
+```jinja
+{% for base64_image in pd_read_csv('tables/html_table.csv', sep=";")['a'] %}
+
+<img src="data:image/png;base64,{{ base64_image }}" alt="Small Red Dot">
+
+{% endfor %}
+```
+{% endraw %}
+
+Should render 3 red dots:
+
+{% for base64_image in pd_read_csv('tables/html_table.csv', sep=";")['a'] %}
+
+<img src="data:image/png;base64,{{ base64_image }}" alt="Small Red Dot">
+
+{% endfor %}
+

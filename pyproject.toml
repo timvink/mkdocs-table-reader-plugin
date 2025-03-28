@@ -29,19 +29,19 @@ classifiers=[
     "License :: OSI Approved :: MIT License",
 ]
 
-dynamic = ["version","dependencies","optional-dependencies"]
+dynamic = ["version"]
+dependencies = [
+    "mkdocs>=1.0",
+    "pandas>=1.1",
+    "pyyaml>=5.4.1",
+    "tabulate>=0.8.7",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/timvink/mkdocs-table-reader-plugin"
 
 [tool.setuptools.dynamic]
 version = {attr = "mkdocs_table_reader_plugin.__version__"}
-
-dependencies={file = ["requirements.txt"]}
-
-optional-dependencies.dev={file = ["requirements_dev.txt"]}
-optional-dependencies.base={file = ["requirements.txt"]}
-optional-dependencies.all={file = ["requirements.txt", "requirements_dev.txt"]}
 
 [tool.pytest.ini_options]
 markers = [
@@ -113,5 +113,17 @@ fix = true
 
 [tool.uv]
 dev-dependencies = [
+    "click>=8.1.8",
+    "codecov>=2.1.13",
+    "mkdocs-git-authors-plugin>=0.9.4",
+    "mkdocs-git-revision-date-localized-plugin>=1.4.5",
+    "mkdocs-macros-plugin>=1.3.7",
+    "mkdocs-markdownextradata-plugin>=0.2.6",
+    "mkdocs-material>=9.6.9",
+    "openpyxl>=3.1.5",
+    "pyarrow>=17.0.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=5.0.0",
     "ruff",
+    "xlrd>=1.0.0",
 ]
