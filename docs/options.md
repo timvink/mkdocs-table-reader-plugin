@@ -23,7 +23,7 @@ plugins:
 
 Default is `.`. Set a default path to the searched directories in order to shorten table filename specifications.
 
-Given a file path, `table-reader` will search for that file relative to your your project's `mkdocs.yml` and relative to your `docs/` folder. If you use a folder for all your table files you can shorten the path specification by setting the `data_path`.
+Given a file path, `table-reader` will search for that file relative to your project's `mkdocs.yml` and relative to your `docs/` folder. If you use a folder for all your table files you can shorten the path specification by setting the `data_path`.
 
 For example, if your table is located in `docs/assets/tables/basic_table.csv`, you can set `data_path` to `docs/assets/tables/`. Then you will be able to use `{{ read_csv("basic_table.csv") }}` instead of `{{ read_csv("docs/assets/tables/basic_table.csv") }}` inside any markdown page.
 
