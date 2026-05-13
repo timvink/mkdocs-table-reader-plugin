@@ -31,7 +31,7 @@ classifiers=[
 
 dynamic = ["version"]
 dependencies = [
-    "mkdocs>=1.0",
+    "mkdocs-ng",
     "pandas>=1.1",
     "pyyaml>=5.4.1",
     "tabulate>=0.8.7",
