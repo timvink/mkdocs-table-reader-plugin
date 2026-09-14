@@ -11,3 +11,7 @@ The latest numbers using `read_table()`:
 ## table 2
 
 {{ read_table('assets/tables/basic_table2.csv', sep = ',') }}
+
+## Both on one line
+
+Two tags on the same line are two tables: {{ read_csv('assets/tables/basic_table.csv') }} and {{ read_csv('assets/tables/basic_table2.csv') }} and that is that.

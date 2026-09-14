@@ -142,6 +142,10 @@ def test_table_output(tmp_path):
     contents = page_with_tag.read_text()
     assert re.search(r"table1", contents)
     assert re.search(r"table2", contents)
+    # Two tags on the same line are two tables, and the text between them survives
+    assert re.search(r"and that is that", contents)
+    assert len(re.findall(r"table1", contents)) == 2
+    assert len(re.findall(r"table2", contents)) == 2
 
 
 def test_compatibility_macros_plugin(tmp_path):
