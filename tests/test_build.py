@@ -544,3 +544,21 @@ def test_read_hdf(tmp_path):
     contents = (tmp_proj / "site/index.html").read_text()
     assert re.search(r"hdf_table", contents)
     assert re.search(r"531456", contents)
+
+
+def test_backslashes_in_tables(tmp_path):
+    """
+    A project with table values that look like a regex replacement.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/backslashes/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    # values are inserted as they are, and not expanded as a regex replacement
+    assert r"C:\1 path" in contents
+    assert r"hi\nthere" in contents

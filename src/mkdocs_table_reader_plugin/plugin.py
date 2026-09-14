@@ -51,6 +51,17 @@ class TableReaderPlugin(BasePlugin):
             if reader in self.config.get("select_readers", [])
         }
 
+        # Regex pattern for tags like {{ read_csv(..) }}, for all selected readers at once,
+        # so that every page is scanned only once, no matter how many readers are selected.
+        # match group 1: to extract any leading whitespace
+        # match group 2: to extract the reader
+        # match group 3: to extract the arguments (positional and keywords)
+        # Note that a reader never matches when none are selected
+        self.tag_pattern = re.compile(
+            r"( *)\{\{\s+(%s)\((.+)\)\s+\}\}" % "|".join(self.readers or ["(?!)"]), # noqa: UP031
+            flags=re.IGNORECASE,
+        )
+
         plugins = [p for p in config.get("plugins")]
 
         # Plugins required before table-reader
@@ -132,34 +143,19 @@ class TableReaderPlugin(BasePlugin):
         if self.external_jinja_engine:
             return markdown
 
-        for reader in self.readers:
-            function = self.readers[reader]
-            # Regex pattern for tags like {{ read_csv(..) }}
-            # match group 0: to extract any leading whitespace
-            # match group 1: to extract the arguments (positional and keywords)
-            tag_pattern = re.compile(
-                r"( *)\{\{\s+%s\((.+)\)\s+\}\}" % reader, flags=re.IGNORECASE # noqa: UP031
-            )
-            matches = re.findall(tag_pattern, markdown)
+        def insert_table(tag) -> str:
+            leading_spaces, reader, arguments = tag.groups()
 
-            for result in matches:
-                # Deal with indentation
-                # So we can fix inserting tables.
-                # f.e. relevant when used inside content tabs
-                leading_spaces = result[0]
+            # Safely parse the arguments
+            pd_args, pd_kwargs = parse_argkwarg(arguments)
 
-                # Safely parse the arguments
-                pd_args, pd_kwargs = parse_argkwarg(result[1])
+            # Load the table
+            markdown_table = self.readers[reader.lower()](*pd_args, **pd_kwargs)
 
-                # Load the table
-                markdown_table = function(*pd_args, **pd_kwargs)
+            # Deal with indentation, so we can insert tables
+            # f.e. inside content tabs
+            return fix_indentation(leading_spaces=leading_spaces, text=markdown_table)
 
-                # Insert markdown table
-                # By replacing only the first occurrence of the regex pattern
-                # You might insert multiple CSVs with a single reader like read_csv
-                # Because of the replacement, the next occurrence will be the first match for .sub() again.
-                # This is always why when allow_missing_files=True we replaced the input tag.
-                markdown_table = fix_indentation(leading_spaces=leading_spaces, text=markdown_table)
-                markdown = tag_pattern.sub(markdown_table, markdown, count=1)
-
-        return markdown
+        # Every tag is replaced in a single pass, so inserted tables are never
+        # searched for tags themselves
+        return self.tag_pattern.sub(insert_table, markdown)
