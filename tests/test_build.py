@@ -20,6 +20,7 @@ import re
 import os
 import shutil
 import logging
+import sys
 import pandas as pd
 import pytest
 from click.testing import CliRunner
@@ -456,9 +457,30 @@ def test_pandas_readers(tmp_path):
     assert result.exit_code == 0, "'mkdocs build' command failed"
 
     contents = (tmp_proj / "site/index.html").read_text()
-    for reader in ["parquet", "orc", "stata", "sas", "xml"]:
+    for reader in ["parquet", "stata", "sas", "xml"]:
         assert re.search(f"{reader}_table", contents), f"read_{reader}() did not insert the table"
-    assert contents.count("531456") == 5
+    assert contents.count("531456") == 4
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="pd.read_orc() cannot find the IANA time zone database on windows",
+)
+def test_read_orc(tmp_path):
+    """
+    A project that uses read_orc().
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/pandas_readers_orc/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    assert re.search(r"orc_table", contents)
+    assert re.search(r"531456", contents)
 
 
 def test_read_html(tmp_path):

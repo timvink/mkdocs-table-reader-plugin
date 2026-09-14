@@ -247,7 +247,7 @@ Example:
 
     {{ read_orc('assets/tables/data.orc') | add_indentation(spaces=4) }}
 
-Requires [pyarrow](https://arrow.apache.org/docs/python/install.html) to be installed.
+Requires [pyarrow](https://arrow.apache.org/docs/python/install.html) to be installed. On windows, `pandas.read_orc()` also needs the [IANA time zone database](https://arrow.apache.org/docs/python/timestamps.html) to be available to pyarrow.
 
 ### `read_xml`
 

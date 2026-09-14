@@ -4,10 +4,6 @@
 
 {{ read_parquet('assets/tables/table.parquet') }}
 
-## read_orc
-
-{{ read_orc('assets/tables/table.orc') }}
-
 ## read_stata
 
 {{ read_stata('assets/tables/table.dta') }}
