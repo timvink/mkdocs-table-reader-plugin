@@ -1,7 +1,10 @@
 import pandas as pd
+import pytest
 
 from mkdocs_table_reader_plugin.markdown import (
+    add_indentation,
     convert_to_md_table,
+    fix_indentation,
     replace_newlines,
     replace_unescaped_pipes,
 )
@@ -57,3 +60,38 @@ def test_convert_to_md_table_multiline_other_tablefmt():
     assert "<br>" not in md
     assert "Sometimes the cell text is quoted." in md
     assert "But not always" in md
+
+
+def test_add_indentation():
+    """
+    The filter used with mkdocs-macros-plugin, which strips indentation itself.
+    """
+    table = "| a |\n|---|\n| 1 |"
+
+    # Surrounded by newlines, so the table starts on a line of its own
+    assert add_indentation(table) == f"\n{table}\n"
+    assert add_indentation(table, spaces=4) == "\n    | a |\n    |---|\n    | 1 |\n"
+    assert add_indentation(table, tabs=1) == "\n\t| a |\n\t|---|\n\t| 1 |\n"
+
+    # Empty lines are left empty, instead of becoming trailing whitespace
+    assert add_indentation("a\n\nb", spaces=2) == "\n  a\n\n  b\n"
+
+
+def test_add_indentation_spaces_and_tabs():
+    with pytest.raises(ValueError):
+        add_indentation("| a |", spaces=4, tabs=1)
+
+
+def test_fix_indentation():
+    """
+    The indentation of a tag is applied to the table that replaces it.
+    """
+    table = "| a |\n|---|\n| 1 |"
+
+    assert fix_indentation(table, leading_spaces="") == table
+    assert fix_indentation(table, leading_spaces="    ") == "    | a |\n    |---|\n    | 1 |"
+    assert fix_indentation(table, leading_spaces="\t") == table
+
+    # Rounded down to a multiple of 4 spaces, which is one markdown indentation level
+    assert fix_indentation(table, leading_spaces="  ") == table
+    assert fix_indentation(table, leading_spaces="      ") == fix_indentation(table, leading_spaces="    ")

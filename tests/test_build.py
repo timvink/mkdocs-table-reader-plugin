@@ -16,11 +16,12 @@ os.mkdir(tmp_path)
 ```
 """
 
-import re
-import os
-import shutil
 import logging
+import os
+import re
+import shutil
 import sys
+
 import pandas as pd
 import pytest
 from click.testing import CliRunner
@@ -562,3 +563,129 @@ def test_backslashes_in_tables(tmp_path):
     # values are inserted as they are, and not expanded as a regex replacement
     assert r"C:\1 path" in contents
     assert r"hi\nthere" in contents
+
+
+def test_allow_missing_files(tmp_path):
+    """
+    With 'allow_missing_files', a missing table is a warning instead of an error.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/wrongpath/mkdocs_allow_missing.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    # The tag is replaced with a note about the missing file
+    assert "{{ Cannot find 'non_existing_table.csv' }}" in contents
+    # And the tables that do exist are still inserted
+    assert re.search(r"531456", contents)
+
+
+def test_select_readers(tmp_path):
+    """
+    Only the selected readers replace their tag.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/select_readers/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    # read_csv() is selected, so its table is inserted
+    assert re.search(r"531456", contents)
+    # read_json() is not, so its tag is left alone
+    assert '{{ read_json("data.json") }}' in contents
+    assert "1234json" not in contents
+
+
+def test_select_readers_unknown(tmp_path):
+    """
+    A reader that does not exist is a configuration error.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/select_readers/mkdocs_unknown_reader.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 1, "'mkdocs build' command should have failed"
+    assert "select_readers" in result.output
+    assert "read_avro" in result.output
+
+
+def test_indentation(tmp_path):
+    """
+    A table keeps the indentation of its tag, so it can go inside components
+    that rely on indentation, like admonitions and content tabs.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/indentation/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    # Every tag was replaced
+    assert "read_csv" not in contents
+    assert len(re.findall(r"<table>", contents)) == 3
+    # The indented tables ended up inside the component, instead of after it
+    assert re.search(
+        r'<div class="admonition note">\s*<p class="admonition-title">A note</p>\s*<table>',
+        contents,
+    ), "the table was not inserted inside the admonition"
+    assert re.search(
+        r'<div class="tabbed-block">\s*<table>', contents
+    ), "the table was not inserted inside the content tab"
+
+
+def test_tags_in_inserted_content(tmp_path):
+    """
+    Inserted content is not searched for tags itself.
+
+    Every tag is replaced in a single pass, so a table or a raw file that
+    contains something that looks like a tag is inserted as-is.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/raw_content/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    # The raw file was inserted
+    assert "This file documents a reader tag" in contents
+    # ..including the tag it contains, which was not read (the file does not exist)
+    assert '{{ read_csv("no_such_table.csv") }}' in contents
+
+
+def test_malformed_tags(tmp_path):
+    """
+    A tag that is not formatted correctly is left alone, instead of failing the build.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/basic_setup/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/bad_tags.html").read_text()
+    for tag in [
+        "{{ read_csv }}",  # no call
+        "{{ read_csv() }}",  # no arguments
+        "{{read_csv('path')}}",  # no spaces inside the braces
+        "{{read_csv('path') }}",
+        "{{ read_csv('path')}}",
+    ]:
+        assert tag in contents, f"the malformed tag {tag} was not left alone"
