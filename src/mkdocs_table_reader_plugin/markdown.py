@@ -3,6 +3,10 @@ import textwrap
 
 import pandas as pd
 
+# Table formats that render each row on a single line, and therefore cannot
+# contain literal newlines. See https://github.com/timvink/mkdocs-table-reader-plugin/issues/83
+SINGLE_LINE_TABLE_FORMATS = ("pipe", "github")
+
 
 def replace_unescaped_pipes(text: str) -> str:
     """
@@ -19,29 +23,53 @@ def replace_unescaped_pipes(text: str) -> str:
     return re.sub(r"(?<!\\)\|", "\\|", text)
 
 
+def replace_newlines(text: str) -> str:
+    """
+    Replace newlines with <br>.
+
+    A markdown table row must fit on a single line, so a cell that contains a
+    newline (as multiline CSV cells do) would otherwise break up the table.
+
+    Args:
+        text (str): input string
+
+    Returns:
+        str: output string
+    """
+    return re.sub(r"\r\n|\r|\n", "<br>", text)
+
+
 def convert_to_md_table(df: pd.DataFrame, **markdown_kwargs: dict) -> str:
     """
     Convert dataframe to markdown table using tabulate.
     """
-    # Escape any pipe characters, | to \|
-    # See https://github.com/astanin/python-tabulate/issues/241
-    df.columns = [
-        replace_unescaped_pipes(c) if isinstance(c, str) else c for c in df.columns
-    ]
-
-    # Avoid deprecated applymap warning on pandas>=2.0
-    # See https://github.com/timvink/mkdocs-table-reader-plugin/issues/55
-    if pd.__version__ >= "2.1.0":
-        df = df.map(lambda s: replace_unescaped_pipes(s) if isinstance(s, str) else s)
-    else:
-        df = df.applymap(
-            lambda s: replace_unescaped_pipes(s) if isinstance(s, str) else s
-        )
-
     if "index" not in markdown_kwargs:
         markdown_kwargs["index"] = False
     if "tablefmt" not in markdown_kwargs:
         markdown_kwargs["tablefmt"] = "pipe"
+
+    # Escape any pipe characters, | to \|
+    # See https://github.com/astanin/python-tabulate/issues/241
+    # And replace newlines with <br>, but only for table formats that need it:
+    # formats like 'grid' display multiline cells just fine.
+    escape_newlines = markdown_kwargs["tablefmt"] in SINGLE_LINE_TABLE_FORMATS
+
+    def escape(value):
+        if not isinstance(value, str):
+            return value
+        value = replace_unescaped_pipes(value)
+        if escape_newlines:
+            value = replace_newlines(value)
+        return value
+
+    df.columns = [escape(c) for c in df.columns]
+
+    # Avoid deprecated applymap warning on pandas>=2.0
+    # See https://github.com/timvink/mkdocs-table-reader-plugin/issues/55
+    if pd.__version__ >= "2.1.0":
+        df = df.map(escape)
+    else:
+        df = df.applymap(escape)
 
     return df.to_markdown(**markdown_kwargs)
 
