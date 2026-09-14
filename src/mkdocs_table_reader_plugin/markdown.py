@@ -63,13 +63,7 @@ def convert_to_md_table(df: pd.DataFrame, **markdown_kwargs: dict) -> str:
         return value
 
     df.columns = [escape(c) for c in df.columns]
-
-    # Avoid deprecated applymap warning on pandas>=2.0
-    # See https://github.com/timvink/mkdocs-table-reader-plugin/issues/55
-    if pd.__version__ >= "2.1.0":
-        df = df.map(escape)
-    else:
-        df = df.applymap(escape)
+    df = df.map(escape)
 
     return df.to_markdown(**markdown_kwargs)
 
