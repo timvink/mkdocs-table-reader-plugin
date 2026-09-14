@@ -4,7 +4,9 @@
   "oneOf": [
     {
       "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/",
-      "enum": ["table-reader"]
+      "enum": [
+        "table-reader"
+      ]
     },
     {
       "type": "object",
@@ -13,6 +15,12 @@
           "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/",
           "type": "object",
           "properties": {
+            "enabled": {
+              "title": "Enables you to deactivate this plugin.",
+              "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#enabled",
+              "type": "boolean",
+              "default": true
+            },
             "data_path": {
               "title": "Additional path to search",
               "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#data_path",
@@ -37,19 +45,24 @@
                     "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_csv"
                   },
                   {
+                    "const": "read_table",
+                    "title": "{{ read_table() }} passed to pandas.read_table()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_table"
+                  },
+                  {
                     "const": "read_fwf",
                     "title": "{{ read_fwf() }} passed to pandas.read_fwf()",
                     "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_fwf"
                   },
                   {
+                    "const": "read_excel",
+                    "title": "{{ read_excel() }} passed to pandas.read_excel()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_excel"
+                  },
+                  {
                     "const": "read_yaml",
                     "title": "{{ read_yaml() }} is parsed with yaml.safe_load() and passed to pandas.json_normalize()",
                     "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_yaml"
-                  },
-                  {
-                    "const": "read_table",
-                    "title": "{{ read_table() }} passed to pandas.read_table()",
-                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_table"
                   },
                   {
                     "const": "read_json",
@@ -62,9 +75,44 @@
                     "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_feather"
                   },
                   {
-                    "const": "read_excel",
-                    "title": "{{ read_excel() }} passed to pandas.read_excel()",
-                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_excel"
+                    "const": "read_parquet",
+                    "title": "{{ read_parquet() }} passed to pandas.read_parquet()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_parquet"
+                  },
+                  {
+                    "const": "read_orc",
+                    "title": "{{ read_orc() }} passed to pandas.read_orc()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_orc"
+                  },
+                  {
+                    "const": "read_html",
+                    "title": "{{ read_html() }} passed to pandas.read_html()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_html"
+                  },
+                  {
+                    "const": "read_xml",
+                    "title": "{{ read_xml() }} passed to pandas.read_xml()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_xml"
+                  },
+                  {
+                    "const": "read_hdf",
+                    "title": "{{ read_hdf() }} passed to pandas.read_hdf()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_hdf"
+                  },
+                  {
+                    "const": "read_sas",
+                    "title": "{{ read_sas() }} passed to pandas.read_sas()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_sas"
+                  },
+                  {
+                    "const": "read_spss",
+                    "title": "{{ read_spss() }} passed to pandas.read_spss()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_spss"
+                  },
+                  {
+                    "const": "read_stata",
+                    "title": "{{ read_stata() }} passed to pandas.read_stata()",
+                    "description": "https://timvink.github.io/mkdocs-table-reader-plugin/readers/#read_stata"
                   },
                   {
                     "const": "read_raw",
@@ -75,12 +123,20 @@
               },
               "default": [
                 "read_csv",
-                "read_fwf",
-                "read_yaml",
                 "read_table",
+                "read_fwf",
+                "read_excel",
+                "read_yaml",
                 "read_json",
                 "read_feather",
-                "read_excel",
+                "read_parquet",
+                "read_orc",
+                "read_html",
+                "read_xml",
+                "read_hdf",
+                "read_sas",
+                "read_spss",
+                "read_stata",
                 "read_raw"
               ]
             }

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<data>
+  <row>
+    <product>bread</product>
+    <price>1.25</price>
+  </row>
+  <row>
+    <product>milk</product>
+    <price>0.99</price>
+  </row>
+  <row>
+    <product>cheese</product>
+    <price>4.5</price>
+  </row>
+</data>
