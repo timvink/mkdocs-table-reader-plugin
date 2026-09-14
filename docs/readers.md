@@ -32,6 +32,18 @@ Example:
 
     {{ read_csv('assets/tables/basic_table.csv') | add_indentation(spaces=4) }}
 
+!!! info "Multiline cells"
+
+    A markdown table row has to fit on a single line, so newlines inside a cell are
+    replaced with `<br>`. Note that such a cell needs to be quoted to be valid CSV:
+
+    ```csv
+    id,description
+    23456,"Some description.
+
+    With a line break."
+    ```
+
 
 ### `read_fwf`
 
