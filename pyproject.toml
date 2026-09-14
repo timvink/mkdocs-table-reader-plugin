@@ -67,10 +67,8 @@ lint.ignore = ['D104'
         ,'E722'
         ,'D104'
         ,'E402'
-        ,"UP038" # UP038 Use `X | Y` in `isinstance` call instead of `(X, Y)`
 ]
 
-# Exclude files in tests dir
 lint.exclude = [
     ".bzr",
     ".direnv",
@@ -112,10 +110,9 @@ target-version = "py310"
 # Always autofix
 fix = true
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "click>=8.1.8",
-    "codecov>=2.1.13",
     # used by pd.read_html() and pd.read_xml()
     "lxml>=5",
     "mkdocs-git-authors-plugin>=0.9.4",

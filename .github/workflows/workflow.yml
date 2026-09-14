@@ -4,11 +4,11 @@ jobs:
   run:
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: 
+      matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v4
 
     - name: Install uv and set the python version
       uses: astral-sh/setup-uv@v5
@@ -19,11 +19,12 @@ jobs:
       run: |
         uv run pytest --cov=mkdocs_table_reader_plugin --cov-report=xml
 
+    # Upload once per run, from a single matrix job
     - name: Upload coverage to Codecov
-      if: contains(env.USING_COVERAGE, matrix.python-version) && github.ref == 'refs/heads/master'
-      uses: codecov/codecov-action@v4
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.13' && github.ref == 'refs/heads/master'
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
+        files: ./coverage.xml
         flags: unittests
         fail_ci_if_error: true

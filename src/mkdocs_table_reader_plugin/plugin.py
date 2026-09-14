@@ -48,17 +48,17 @@ class TableReaderPlugin(BasePlugin):
                 mkdocs_config=config, plugin_config=self.config
             )
             for reader in self.config.get("select_readers")
-            if reader in self.config.get("select_readers", [])
         }
 
         # Regex pattern for tags like {{ read_csv(..) }}, for all selected readers at once,
         # so that every page is scanned only once, no matter how many readers are selected.
         # match group 1: to extract any leading whitespace
         # match group 2: to extract the reader
-        # match group 3: to extract the arguments (positional and keywords)
+        # match group 3: to extract the arguments (positional and keywords). Matched
+        #   lazily, so that two tags on the same line are two matches instead of one.
         # Note that a reader never matches when none are selected
         self.tag_pattern = re.compile(
-            r"( *)\{\{\s+(%s)\((.+)\)\s+\}\}" % "|".join(self.readers or ["(?!)"]), # noqa: UP031
+            r"( *)\{\{\s+(%s)\((.+?)\)\s+\}\}" % "|".join(self.readers or ["(?!)"]), # noqa: UP031
             flags=re.IGNORECASE,
         )
 

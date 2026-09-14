@@ -15,6 +15,12 @@
           "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/",
           "type": "object",
           "properties": {
+            "enabled": {
+              "title": "Enables you to deactivate this plugin.",
+              "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#enabled",
+              "type": "boolean",
+              "default": true
+            },
             "data_path": {
               "title": "Additional path to search",
               "markdownDescription": "https://timvink.github.io/mkdocs-table-reader-plugin/options/#data_path",

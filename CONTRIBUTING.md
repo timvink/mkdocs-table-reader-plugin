@@ -7,46 +7,55 @@ Thanks for considering to contribute to this project! Some guidelines:
 - This package tries to be as simple as possible for the user (hide any complexity from the user). Options are only added when there is clear value to the majority of users.
 - When issues or pull requests are not going to be resolved or merged, they should be closed as soon as possible. This is kinder than deciding this after a long period. Our issue tracker should reflect work to be done.
 
+## Development setup
+
+This project uses [uv](https://docs.astral.sh/uv/). Install the project and its development dependencies with:
+
+```bash
+uv sync
+```
+
 ## Testing
 
-Make sure to install an editable version before running tests:
+Run the unit tests and the linter with:
 
-```python
-pip install -r tests/test_requirements.txt
-pip install -e .
-pytest --cov=mkdocs_table_reader_plugin --cov-report term-missing tests
+```bash
+make test
+```
+
+Or separately:
+
+```bash
+uv run pytest --cov=mkdocs_table_reader_plugin --cov-report term-missing tests
+uv run ruff check src/ tests/
 ```
 
 If it makes sense, writing tests for your PRs is always appreciated and will help get them merged.
 
-In addition, this project uses pyflakes for static code checking:
+### Code Style
 
-```python
-pip install pyflakes
-pyflakes tests/ mkdocs_table_reader_plugin/
-```
-
-#### Code Style
-
-Make sure your code *roughly* follows [PEP-8](https://www.python.org/dev/peps/pep-0008/) and keeps things consistent with the rest of the code.
+Make sure your code *roughly* follows [PEP-8](https://www.python.org/dev/peps/pep-0008/) and keeps things consistent with the rest of the code. `ruff` is configured in `pyproject.toml` and fixes what it can automatically.
 
 We use google-style docstrings.
 
 ## Documentation
 
-They need to be deployed manually:
+Preview the documentation site locally with:
 
 ```bash
-mkdocs gh-deploy --force
+make serve_docs
 ```
+
+Every push to `master` deploys the site to GitHub Pages through the `documentation.yml` workflow. You can also deploy by hand with `make deploy_docs`.
 
 ## Release
 
-Update `setup.py`.
+1. Update `__version__` in `src/mkdocs_table_reader_plugin/__init__.py` and add an entry to `CHANGELOG.md`.
+2. Commit, then tag and push:
 
-```bash
-git tag <version>
-git push origin <version>
-```
+    ```bash
+    git tag v<version>
+    git push origin master --tags
+    ```
 
-Then manually create a github release to trigger publishing to pypi.
+3. Create a GitHub release for the tag. That triggers the `pythonpublish.yml` workflow, which runs the tests and publishes to PyPI.

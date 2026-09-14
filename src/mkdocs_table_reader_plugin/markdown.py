@@ -62,8 +62,9 @@ def convert_to_md_table(df: pd.DataFrame, **markdown_kwargs: dict) -> str:
             value = replace_newlines(value)
         return value
 
-    df.columns = [escape(c) for c in df.columns]
+    # Escape a copy, so that a DataFrame passed in by a macros user is left alone
     df = df.map(escape)
+    df.columns = [escape(c) for c in df.columns]
 
     return df.to_markdown(**markdown_kwargs)
 

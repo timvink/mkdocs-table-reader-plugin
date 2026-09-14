@@ -1,5 +1,6 @@
 import pytest
-from mkdocs_table_reader_plugin.safe_eval import safe_eval, parse_argkwarg
+
+from mkdocs_table_reader_plugin.safe_eval import parse_argkwarg, safe_eval
 
 
 def test_safe_eval0():
@@ -29,7 +30,7 @@ def test_safe_eval4():
 
 def test_safe_eval5():
     myString = "None"
-    assert safe_eval(myString) == None
+    assert safe_eval(myString) is None
 
 
 def test_parseargkwarg_1():
@@ -92,3 +93,37 @@ def test_parseargkwarg_error():
     with pytest.raises(AssertionError):
         s = "'assets/tables/table.csv', sep = '\r\t', 'another path'"
         args, kwargs = parse_argkwarg(s)
+
+
+def test_parseargkwarg_equals_sign_in_value():
+    """
+    An '=' inside a value is not the separator between a key and a value.
+    """
+    args, kwargs = parse_argkwarg("'a=b.csv'")
+    assert args == ["a=b.csv"]
+    assert kwargs == {}
+
+    args, kwargs = parse_argkwarg("'table.csv', sep='='")
+    assert args == ["table.csv"]
+    assert kwargs == {"sep": "="}
+
+    args, kwargs = parse_argkwarg("'table.csv', na_values=['a=1']")
+    assert args == ["table.csv"]
+    assert kwargs == {"na_values": ["a=1"]}
+
+
+def test_parseargkwarg_nested_values():
+    """
+    A comma inside a list, tuple or dict does not separate two arguments.
+    """
+    args, kwargs = parse_argkwarg("'table.csv', usecols=[0, 1]")
+    assert args == ["table.csv"]
+    assert kwargs == {"usecols": [0, 1]}
+
+    args, kwargs = parse_argkwarg("'table.csv', names=('a', 'b')")
+    assert args == ["table.csv"]
+    assert kwargs == {"names": ("a", "b")}
+
+    args, kwargs = parse_argkwarg("'table.csv', dtype={'a': 'str', 'b': 'int'}")
+    assert args == ["table.csv"]
+    assert kwargs == {"dtype": {"a": "str", "b": "int"}}

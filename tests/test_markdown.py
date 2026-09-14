@@ -95,3 +95,17 @@ def test_fix_indentation():
     # Rounded down to a multiple of 4 spaces, which is one markdown indentation level
     assert fix_indentation(table, leading_spaces="  ") == table
     assert fix_indentation(table, leading_spaces="      ") == fix_indentation(table, leading_spaces="    ")
+
+
+def test_convert_to_md_table_does_not_alter_input():
+    """
+    Escaping happens on a copy, because macros users can render a DataFrame twice.
+    """
+    df = pd.DataFrame({"a|b": ["x|y"]})
+
+    first = convert_to_md_table(df)
+
+    assert list(df.columns) == ["a|b"]
+    assert df.iloc[0, 0] == "x|y"
+    # So a second render escapes the same pipes once, not twice
+    assert convert_to_md_table(df) == first

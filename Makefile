@@ -1,11 +1,13 @@
 
 setup:
-	pip install -r tests/test_requirements.txt
-	pip install -e .
+	uv sync
 
 test:
-	pyflakes tests/ mkdocs_table_reader_plugin/
-	pytest --cov=mkdocs_table_reader_plugin --cov-report term-missing tests
+	uv run ruff check src/ tests/
+	uv run pytest --cov=mkdocs_table_reader_plugin --cov-report term-missing tests
+
+serve_docs:
+	uv run mkdocs serve
 
 deploy_docs:
-	mkdocs gh-deploy --force
+	uv run mkdocs gh-deploy --force
