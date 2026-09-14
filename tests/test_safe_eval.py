@@ -18,8 +18,8 @@ def test_safe_eval2():
 
 
 def test_safe_eval3():
-    myString = "'\s+'"
-    assert safe_eval(myString) == "\s+"
+    myString = r"'\s+'"
+    assert safe_eval(myString) == r"\s+"
 
 
 def test_safe_eval4():
