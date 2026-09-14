@@ -347,8 +347,12 @@ def test_wrong_path(tmp_path):
 
     result = build_docs_setup(tmp_proj)
     assert result.exit_code == 1, "'mkdocs build' command succeeded but should have failed"
-    assert "[table-reader-plugin]: Cannot find table file" in result.output
-    assert "non_existing_table.csv" in result.output
+    # Assert on the raised exception rather than on the captured log output.
+    # mkdocs logs the error and then re-raises it, and whether that log record
+    # makes it into result.output turns out to be flaky on windows.
+    assert isinstance(result.exception, FileNotFoundError)
+    assert "[table-reader-plugin]: Cannot find table file" in str(result.exception)
+    assert "non_existing_table.csv" in str(result.exception)
 
 
 def test_mixed_quotation_marks(tmp_path):
