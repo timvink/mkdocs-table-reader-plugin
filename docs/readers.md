@@ -199,6 +199,192 @@ Example:
     ```
     {% endraw %}
 
+### `read_parquet`
+
+Use {% raw %}`{{ read_parquet() }}`{% endraw %} to read a parquet file and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_parquet()](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ read_parquet('assets/tables/data.parquet') }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ read_parquet('assets/tables/data.parquet') | add_indentation(spaces=4) }}
+
+Requires [pyarrow](https://arrow.apache.org/docs/python/install.html) or [fastparquet](https://fastparquet.readthedocs.io/en/latest/install.html) to be installed.
+
+### `read_orc`
+
+Use {% raw %}`{{ read_orc() }}`{% endraw %} to read an ORC object and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_orc()](https://pandas.pydata.org/docs/reference/api/pandas.read_orc.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ read_orc('assets/tables/data.orc') }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ read_orc('assets/tables/data.orc') | add_indentation(spaces=4) }}
+
+Requires [pyarrow](https://arrow.apache.org/docs/python/install.html) to be installed.
+
+### `read_xml`
+
+Use {% raw %}`{{ read_xml() }}`{% endraw %} to read an XML document and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_xml()](https://pandas.pydata.org/docs/reference/api/pandas.read_xml.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ read_xml('assets/tables/data.xml') }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ read_xml('assets/tables/data.xml') | add_indentation(spaces=4) }}
+
+Requires [lxml](https://lxml.de/installation.html) to be installed, or use the standard library parser with {% raw %}`{{ read_xml('assets/tables/data.xml', parser='etree') }}`{% endraw %}.
+
+### `read_html`
+
+Use {% raw %}`{{ read_html() }}`{% endraw %} to read the first table in an HTML document and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_html()](https://pandas.pydata.org/docs/reference/api/pandas.read_html.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ read_html('assets/tables/data.html') }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ read_html('assets/tables/data.html') | add_indentation(spaces=4) }}
+
+`pandas.read_html()` returns every table it finds, so the first one is inserted. Use the `match` argument to select another table, for example {% raw %}`{{ read_html('assets/tables/data.html', match='price') }}`{% endraw %}. Requires [lxml](https://lxml.de/installation.html), or [beautifulsoup4](https://pypi.org/project/beautifulsoup4/) and [html5lib](https://pypi.org/project/html5lib/), to be installed.
+
+### `read_stata`
+
+Use {% raw %}`{{ read_stata() }}`{% endraw %} to read a Stata file and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_stata()](https://pandas.pydata.org/docs/reference/api/pandas.read_stata.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ read_stata('assets/tables/data.dta') }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ read_stata('assets/tables/data.dta') | add_indentation(spaces=4) }}
+
+### `read_sas`
+
+Use {% raw %}`{{ read_sas() }}`{% endraw %} to read a SAS file (XPORT or SAS7BDAT) and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_sas()](https://pandas.pydata.org/docs/reference/api/pandas.read_sas.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ read_sas('assets/tables/data.xpt', encoding='utf-8') }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ read_sas('assets/tables/data.xpt', encoding='utf-8') | add_indentation(spaces=4) }}
+
+Text columns are read as bytes unless you specify the `encoding` to decode them with.
+
+### `read_spss`
+
+Use {% raw %}`{{ read_spss() }}`{% endraw %} to read an SPSS file and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_spss()](https://pandas.pydata.org/docs/reference/api/pandas.read_spss.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+{% raw %}
+```markdown
+{{ read_spss('assets/tables/data.sav') }}
+```
+{% endraw %}
+
+Requires [pyreadstat](https://github.com/Roche/pyreadstat) to be installed.
+
+### `read_hdf`
+
+Use {% raw %}`{{ read_hdf() }}`{% endraw %} to read an object stored in a HDF5 file and output as a markdown table.
+
+1. Arguments are parsed safely and then passed to corresponding functions below
+2. File is read using [pandas.read_hdf()](https://pandas.pydata.org/docs/reference/api/pandas.read_hdf.html)
+3. The `pd.DataFrame` is then converted to a markdown table using [`.to_markdown()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_markdown.html)
+4. The markdown table is fixed to match the indentation used by the tag in the markdown document (only when _not_ used with `mkdocs-macros-plugin`. See [compatibility with macros plugin](howto/use_jinja2.md))
+
+Example:
+
+{% raw %}
+```markdown
+{{ read_hdf('assets/tables/data.h5', key='table') }}
+```
+{% endraw %}
+
+Requires [pytables](https://www.pytables.org/usersguide/installation.html) to be installed. Specify the `key` of the object to read when the file contains more than one.
+
 ### `read_raw`
 
 Use {% raw %}`{{ read_raw() }}`{% endraw %} to insert the contents from a file directly. 
@@ -377,6 +563,138 @@ Example:
     ```
     {% endraw %}
 
+
+### `pd_read_parquet`
+
+Use {% raw %}`{{ pd_read_parquet() }}`{% endraw %} to read a parquet file using [pandas.read_parquet()](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html)
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ pd_read_parquet('assets/tables/data.parquet').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ pd_read_parquet('assets/tables/data.parquet').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+### `pd_read_orc`
+
+Use {% raw %}`{{ pd_read_orc() }}`{% endraw %} to read an ORC object using [pandas.read_orc()](https://pandas.pydata.org/docs/reference/api/pandas.read_orc.html)
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ pd_read_orc('assets/tables/data.orc').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ pd_read_orc('assets/tables/data.orc').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+### `pd_read_xml`
+
+Use {% raw %}`{{ pd_read_xml() }}`{% endraw %} to read an XML document using [pandas.read_xml()](https://pandas.pydata.org/docs/reference/api/pandas.read_xml.html)
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ pd_read_xml('assets/tables/data.xml').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ pd_read_xml('assets/tables/data.xml').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+### `pd_read_html`
+
+Use {% raw %}`{{ pd_read_html() }}`{% endraw %} to read the first table in an HTML document using [pandas.read_html()](https://pandas.pydata.org/docs/reference/api/pandas.read_html.html)
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ pd_read_html('assets/tables/data.html').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ pd_read_html('assets/tables/data.html').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+### `pd_read_stata`
+
+Use {% raw %}`{{ pd_read_stata() }}`{% endraw %} to read a Stata file using [pandas.read_stata()](https://pandas.pydata.org/docs/reference/api/pandas.read_stata.html)
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ pd_read_stata('assets/tables/data.dta').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ pd_read_stata('assets/tables/data.dta').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+### `pd_read_sas`
+
+Use {% raw %}`{{ pd_read_sas() }}`{% endraw %} to read a SAS file (XPORT or SAS7BDAT) using [pandas.read_sas()](https://pandas.pydata.org/docs/reference/api/pandas.read_sas.html)
+
+Example:
+
+=== "Input"
+
+    {% raw %}
+    ```markdown
+    {{ pd_read_sas('assets/tables/data.xpt', encoding='utf-8').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+    ```
+    {% endraw %}
+
+=== "Output"
+
+    {{ pd_read_sas('assets/tables/data.xpt', encoding='utf-8').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+### `pd_read_spss`
+
+Use {% raw %}`{{ pd_read_spss() }}`{% endraw %} to read an SPSS file using [pandas.read_spss()](https://pandas.pydata.org/docs/reference/api/pandas.read_spss.html)
+
+Example:
+
+{% raw %}
+```markdown
+{{ pd_read_spss('assets/tables/data.sav').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+```
+{% endraw %}
+
+### `pd_read_hdf`
+
+Use {% raw %}`{{ pd_read_hdf() }}`{% endraw %} to read an object stored in a HDF5 file using [pandas.read_hdf()](https://pandas.pydata.org/docs/reference/api/pandas.read_hdf.html)
+
+Example:
+
+{% raw %}
+```markdown
+{{ pd_read_hdf('assets/tables/data.h5', key='table').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+```
+{% endraw %}
 
 ## Filters
 

@@ -24,3 +24,11 @@ def test_parse_argkwarg():
     assert parse_argkwarg('"file.csv", header=None') == (['file.csv'], {'header': None})
     assert parse_argkwarg("'Example.xlsx', sheet_name = 'test', header = None") == (['Example.xlsx'], {'sheet_name': 'test', 'header': None})
     assert parse_argkwarg("'test.csv', header = None, names = ['a', 'b', 'c']") == (['test.csv'], {'header': None, 'names': ['a', 'b', 'c']})
+
+
+def test_kwargs_multiple_funcs():
+
+    keywords = {'hi' : 'there', 'sep' : ";", 'max_level' : 1}
+
+    assert kwargs_in_func(keywords, pd.read_csv, pd.json_normalize) == {'sep' : ';', 'max_level' : 1}
+    assert kwargs_not_in_func(keywords, pd.read_csv, pd.json_normalize) == {'hi' : 'there'}

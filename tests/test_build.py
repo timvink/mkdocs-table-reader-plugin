@@ -20,6 +20,8 @@ import re
 import os
 import shutil
 import logging
+import pandas as pd
+import pytest
 from click.testing import CliRunner
 from mkdocs.__main__ import build_command
 
@@ -439,3 +441,84 @@ def test_csv_with_multiline_cells(tmp_path):
     table = re.search(r"<table>.*?</table>", contents, flags=re.DOTALL)
     assert table is not None, "no table was inserted"
     assert len(re.findall(r"<tr>", table.group())) == 3
+
+
+def test_pandas_readers(tmp_path):
+    """
+    A project that uses the readers for the other formats supported by pandas.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/pandas_readers/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    for reader in ["parquet", "orc", "stata", "sas", "xml"]:
+        assert re.search(f"{reader}_table", contents), f"read_{reader}() did not insert the table"
+    assert contents.count("531456") == 5
+
+
+def test_read_html(tmp_path):
+    """
+    A project that uses read_html(), which returns all tables it finds.
+    """
+    pytest.importorskip("lxml")
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/pandas_readers_html/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    # Without 'match', the first table in the file is inserted
+    assert re.search(r"html_table", contents)
+    # With 'match', the table that matches is inserted
+    assert re.search(r"second_html_table", contents)
+    assert re.search(r"539956", contents)
+    # read_xml() with the default (lxml) parser
+    assert re.search(r"xml_table", contents)
+
+
+def test_read_spss(tmp_path):
+    """
+    A project that uses read_spss(), which requires pyreadstat.
+    """
+    pytest.importorskip("pyreadstat")
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/pandas_readers_spss/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    assert re.search(r"spss_table", contents)
+    assert re.search(r"531456", contents)
+
+
+def test_read_hdf(tmp_path):
+    """
+    A project that uses read_hdf(), which requires pytables.
+    """
+    pytest.importorskip("tables")
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/pandas_readers_hdf/mkdocs.yml", tmp_path
+    )
+    table_path = tmp_proj / "assets/tables"
+    table_path.mkdir(parents=True)
+    # a pd.Series, to make sure read_hdf() can also insert those
+    pd.Series([531456, 80], name="hdf_table").to_hdf(table_path / "table.h5", key="table", mode="w")
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    contents = (tmp_proj / "site/index.html").read_text()
+    assert re.search(r"hdf_table", contents)
+    assert re.search(r"531456", contents)
