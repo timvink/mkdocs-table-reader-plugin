@@ -80,6 +80,8 @@ Example:
 
     {{ read_yaml('assets/tables/yaml_table.yml') | add_indentation(spaces=4) }}
 
+The file is read as UTF-8. Use the `encoding` argument for files in another encoding, for example {% raw %}`{{ read_yaml('assets/tables/yaml_table.yml', encoding='cp1251') }}`{% endraw %}.
+
 
 ### `read_table`
 
@@ -210,6 +212,8 @@ Example:
 
     {{ read_raw('assets/tables/markdown_table.md')  | add_indentation(spaces=4) }}
 
+The file is read as UTF-8. Use the `encoding` argument for files in another encoding, for example {% raw %}`{{ read_raw('assets/tables/markdown_table.md', encoding='cp1251') }}`{% endraw %}.
+
 
 ## Macros
 
@@ -268,6 +272,8 @@ Example:
 === "Output"
 
     {{ pd_read_yaml('assets/tables/yaml_table.yml').to_markdown(tablefmt="pipe", index=False) | add_indentation(spaces=4) }}
+
+The file is read as UTF-8. Use the `encoding` argument for files in another encoding, for example {% raw %}`{{ pd_read_yaml('assets/tables/yaml_table.yml', encoding='cp1251') }}`{% endraw %}.
 
 
 ### `pd_read_table`
