@@ -387,3 +387,24 @@ def test_macros_jinja2_syntax(tmp_path):
     contents = page_with_tag.read_text()
     assert re.search(r"531456", contents)
 
+
+def test_non_utf8_encoding(tmp_path):
+    """
+    A project where files are not UTF-8 encoded, and 'encoding' is specified.
+    """
+
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/encoding/mkdocs.yml", tmp_path
+    )
+
+    result = build_docs_setup(tmp_proj)
+    assert result.exit_code == 0, "'mkdocs build' command failed"
+
+    page_with_tag = tmp_proj / "site/index.html"
+    contents = page_with_tag.read_text(encoding="utf-8")
+    # read_yaml() inserted the cp1251 encoded yaml file
+    assert re.search(r"531456", contents)
+    assert re.search(r"Хлеб", contents)
+    # read_raw() inserted the cp1251 encoded markdown file
+    assert re.search(r"539956", contents)
+    assert re.search(r"Сыр", contents)

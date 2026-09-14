@@ -133,15 +133,17 @@ def read_excel(*args, **kwargs) -> str:
 
 @ParseArgs
 def pd_read_yaml(*args, **kwargs) -> str:
+    encoding = kwargs.pop("encoding", "utf-8")
     json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0]) as f:
+    with open(args[0], encoding=encoding) as f:
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
     return df
 
 @ParseArgs
 def read_yaml(*args, **kwargs) -> str:
+    encoding = kwargs.pop("encoding", "utf-8")
     json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0]) as f:
+    with open(args[0], encoding=encoding) as f:
         df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
 
     markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
@@ -170,7 +172,8 @@ def read_raw(*args, **kwargs) -> str:
     Returns:
         str: file contents
     """
-    with open(args[0]) as f:
+    encoding = kwargs.pop("encoding", "utf-8")
+    with open(args[0], encoding=encoding) as f:
         return f.read()
 
 
