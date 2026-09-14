@@ -40,7 +40,7 @@ In your markdown files you can now use:
 
 Where the path is relative to the location of your project's `mkdocs.yml` file, _or_ your project's `docs/` directory, _or_ the location of your markdown source file (all 3 possible locations will be searched, in that order).
 
-- There are [readers](https://timvink.github.io/mkdocs-table-reader-plugin/readers/) available for many common table formats, like `.csv`, `.fwf`, `.json`, `.xls`, `.xlsx`, `.yaml`, `.feather` and `.tsv`. There is also the `read_raw()` reader that will allow you to insert tables (or other content) already in markdown format.
+- There are [readers](https://timvink.github.io/mkdocs-table-reader-plugin/readers/) available for many common table formats, like `.csv`, `.fwf`, `.json`, `.xls`, `.xlsx`, `.yaml`, `.feather`, `.tsv`, `.parquet`, `.orc`, `.html` and `.xml`, as well as HDF5, SPSS, SAS and Stata files. There is also the `read_raw()` reader that will allow you to insert tables (or other content) already in markdown format.
 - `table-reader` is compatible with [`mkdocs-macros-plugin`](https://mkdocs-macros-plugin.readthedocs.io/en/latest/). This enables further automation like filtering tables or inserting directories of tables. See the documentation on [compatibility with macros plugin](howto/use_jinja2.md) for more examples.
 
 ## Documentation and how-to guides

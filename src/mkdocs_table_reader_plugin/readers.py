@@ -60,109 +60,80 @@ class ParseArgs:
         return self.func(valid_file_paths[0], *args, **kwargs)
 
 
-@ParseArgs
-def pd_read_csv(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_csv)
-    return pd.read_csv(*args, **read_kwargs)
+def read_yaml_file(filepath, encoding: str = "utf-8", **kwargs) -> pd.DataFrame:
+    """
+    Read a YAML file into a pd.DataFrame.
 
-@ParseArgs
-def read_csv(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_csv)
-    df = pd.read_csv(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_csv)
-    return convert_to_md_table(df, **markdown_kwargs)
+    The contents are parsed with yaml.safe_load() and passed to pd.json_normalize().
+    """
+    with open(filepath, encoding=encoding) as f:
+        return pd.json_normalize(yaml.safe_load(f), **kwargs)
 
 
-@ParseArgs
-def pd_read_table(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_table)
-    return pd.read_table(*args, **read_kwargs)
+def read_html_file(*args, **kwargs) -> pd.DataFrame:
+    """
+    Read the first table of an HTML file into a pd.DataFrame.
 
-@ParseArgs
-def read_table(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_table)
-    df = pd.read_table(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_table)
-    return convert_to_md_table(df, **markdown_kwargs)
+    pd.read_html() returns all tables it finds, use the 'match' argument to select one.
+    """
+    return pd.read_html(*args, **kwargs)[0]
 
 
-@ParseArgs
-def pd_read_fwf(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_fwf)
-    return pd.read_fwf(*args, **read_kwargs)
+def read_hdf_file(*args, **kwargs) -> pd.DataFrame:
+    """
+    Read a HDF5 file into a pd.DataFrame.
+
+    pd.read_hdf() returns a pd.Series when a Series was stored.
+    """
+    data = pd.read_hdf(*args, **kwargs)
+    if isinstance(data, pd.Series):
+        data = data.to_frame()
+    return data
 
 
-@ParseArgs
-def read_fwf(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_fwf)
-    df = pd.read_fwf(*args, **read_kwargs)
+def markdown_reader(load_function, *extra_kwarg_sources) -> ParseArgs:
+    """
+    Create a reader that inserts a file as a markdown table.
 
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_fwf)
-    return convert_to_md_table(df, **markdown_kwargs)
+    Args:
+        load_function: function that reads a file path into a pd.DataFrame
+        extra_kwarg_sources: functions with additional keyword arguments accepted
+            by load_function, on top of its own. Any other keyword arguments are
+            passed on to pd.DataFrame.to_markdown()
 
-@ParseArgs
-def pd_read_json(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_json)
-    return pd.read_json(*args, **read_kwargs)
+    Returns:
+        ParseArgs: reader that returns a markdown table
+    """
+    kwarg_sources = (load_function, *extra_kwarg_sources)
 
+    @functools.wraps(load_function)
+    def reader(*args, **kwargs) -> str:
+        df = load_function(*args, **kwargs_in_func(kwargs, *kwarg_sources))
+        markdown_kwargs = kwargs_not_in_func(kwargs, *kwarg_sources)
+        return convert_to_md_table(df, **markdown_kwargs)
 
-@ParseArgs
-def read_json(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_json)
-    df = pd.read_json(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_json)
-    return convert_to_md_table(df, **markdown_kwargs)
-
-@ParseArgs
-def pd_read_excel(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_excel)
-    return pd.read_excel(*args, **read_kwargs)
+    return ParseArgs(reader)
 
 
-@ParseArgs
-def read_excel(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_excel)
-    df = pd.read_excel(*args, **read_kwargs)
+def dataframe_reader(load_function, *extra_kwarg_sources) -> ParseArgs:
+    """
+    Create a macro that returns a file as a pd.DataFrame.
 
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_excel)
-    return convert_to_md_table(df, **markdown_kwargs)
+    Args:
+        load_function: function that reads a file path into a pd.DataFrame
+        extra_kwarg_sources: functions with additional keyword arguments accepted
+            by load_function, on top of its own
 
+    Returns:
+        ParseArgs: reader that returns a pd.DataFrame
+    """
+    kwarg_sources = (load_function, *extra_kwarg_sources)
 
-@ParseArgs
-def pd_read_yaml(*args, **kwargs) -> str:
-    encoding = kwargs.pop("encoding", "utf-8")
-    json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0], encoding=encoding) as f:
-        df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
-    return df
+    @functools.wraps(load_function)
+    def reader(*args, **kwargs) -> pd.DataFrame:
+        return load_function(*args, **kwargs_in_func(kwargs, *kwarg_sources))
 
-@ParseArgs
-def read_yaml(*args, **kwargs) -> str:
-    encoding = kwargs.pop("encoding", "utf-8")
-    json_kwargs = kwargs_in_func(kwargs, pd.json_normalize)
-    with open(args[0], encoding=encoding) as f:
-        df = pd.json_normalize(yaml.safe_load(f), **json_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.json_normalize)
-    return convert_to_md_table(df, **markdown_kwargs)
-
-
-@ParseArgs
-def pd_read_feather(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_feather)
-    return pd.read_feather(*args, **read_kwargs)
-
-
-@ParseArgs
-def read_feather(*args, **kwargs) -> str:
-    read_kwargs = kwargs_in_func(kwargs, pd.read_feather)
-    df = pd.read_feather(*args, **read_kwargs)
-
-    markdown_kwargs = kwargs_not_in_func(kwargs, pd.read_feather)
-    return convert_to_md_table(df, **markdown_kwargs)
+    return ParseArgs(reader)
 
 
 @ParseArgs
@@ -177,24 +148,29 @@ def read_raw(*args, **kwargs) -> str:
         return f.read()
 
 
-READERS = {
-    "read_csv": read_csv,
-    "read_table": read_table,
-    "read_fwf": read_fwf,
-    "read_excel": read_excel,
-    "read_yaml": read_yaml,
-    "read_json": read_json,
-    "read_feather": read_feather,
-    "read_raw": read_raw,
+# The function used to load each file format into a pd.DataFrame,
+# optionally followed by functions with additional keyword arguments it accepts.
+LOADERS = {
+    "read_csv": (pd.read_csv,),
+    "read_table": (pd.read_table,),
+    "read_fwf": (pd.read_fwf,),
+    "read_excel": (pd.read_excel,),
+    "read_yaml": (read_yaml_file, pd.json_normalize),
+    "read_json": (pd.read_json,),
+    "read_feather": (pd.read_feather,),
+    "read_parquet": (pd.read_parquet,),
+    "read_orc": (pd.read_orc,),
+    "read_html": (read_html_file, pd.read_html),
+    "read_xml": (pd.read_xml,),
+    "read_hdf": (read_hdf_file, pd.read_hdf),
+    "read_sas": (pd.read_sas,),
+    "read_spss": (pd.read_spss,),
+    "read_stata": (pd.read_stata,),
 }
 
-MACRO_ONLY = {
-    "pd_read_csv": pd_read_csv,
-    "pd_read_table": pd_read_table,
-    "pd_read_fwf": pd_read_fwf,
-    "pd_read_excel": pd_read_excel,
-    "pd_read_yaml": pd_read_yaml,
-    "pd_read_json": pd_read_json,
-    "pd_read_feather": pd_read_feather,
-}
+READERS = {name: markdown_reader(*loader) for name, loader in LOADERS.items()}
+READERS["read_raw"] = read_raw
+
+MACRO_ONLY = {f"pd_{name}": dataframe_reader(*loader) for name, loader in LOADERS.items()}
+
 MACROS = {**READERS, **MACRO_ONLY}
