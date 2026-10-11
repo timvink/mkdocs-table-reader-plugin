@@ -2,6 +2,16 @@
 
 Releases before 4.0.1 are described in the [GitHub releases](https://github.com/timvink/mkdocs-table-reader-plugin/releases).
 
+## 4.0.2
+
+Bug fixes:
+
+- Row labels and the index name are now escaped when you use `index=True`. A pipe in a label added an extra cell, and a newline split the row, which broke the table. A MultiIndex is left as is. See [#94](https://github.com/timvink/mkdocs-table-reader-plugin/pull/94), which includes benchmarks: the default `index=False` is unaffected, and `index=True` is at most about 7% slower.
+
+Project maintenance:
+
+- Python 3.15 is supported and tested in CI ([#95](https://github.com/timvink/mkdocs-table-reader-plugin/pull/95)).
+
 ## 4.0.1
 
 Bug fixes:
