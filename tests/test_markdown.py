@@ -62,6 +62,34 @@ def test_convert_to_md_table_multiline_other_tablefmt():
     assert "But not always" in md
 
 
+def test_convert_to_md_table_index():
+    df = pd.DataFrame({"value": [1, 2]}, index=pd.Index(["a|b", "two\nlines"], name="row|name"))
+    original = df.copy(deep=True)
+
+    md = convert_to_md_table(df, index=True)
+
+    assert "a\\|b" in md
+    assert "two<br>lines" in md
+    assert "row\\|name" in md
+    assert len(md.splitlines()) == 4
+    pd.testing.assert_frame_equal(df, original)
+
+
+@pytest.mark.parametrize(
+    "index",
+    [
+        pd.Index([1, 2], name="row"),
+        pd.date_range("2026-01-01", periods=2, name="row"),
+        pd.Index([(1, "a"), (2, "b")], name="row", tupleize_cols=False),
+        pd.MultiIndex.from_tuples([(1, "a|b"), (2, "c")], names=["number", "letter"]),
+    ],
+)
+def test_convert_to_md_table_non_string_index_unchanged(index):
+    df = pd.DataFrame({"value": [1, 2]}, index=index)
+
+    assert convert_to_md_table(df, index=True) == df.to_markdown(index=True)
+
+
 def test_add_indentation():
     """
     The filter used with mkdocs-macros-plugin, which strips indentation itself.
