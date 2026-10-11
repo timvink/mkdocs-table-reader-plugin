@@ -62,6 +62,76 @@ def test_convert_to_md_table_multiline_other_tablefmt():
     assert "But not always" in md
 
 
+@pytest.mark.parametrize("tablefmt", ["pipe", "github"])
+@pytest.mark.parametrize("newline", ["\n", "\r\n", "\r"])
+def test_convert_to_md_table_index(tablefmt, newline):
+    df = pd.DataFrame(
+        {"value": [1, 2]},
+        index=pd.Index(["a|b", f"two{newline}lines"], name=f"row|{newline}name"),
+    )
+    original = df.copy(deep=True)
+
+    md = convert_to_md_table(df, index=True, tablefmt=tablefmt)
+
+    assert "a\\|b" in md
+    assert "two<br>lines" in md
+    assert "row\\|<br>name" in md
+    assert len(md.splitlines()) == 4
+    pd.testing.assert_frame_equal(df, original)
+    assert convert_to_md_table(df, index=True, tablefmt=tablefmt) == md
+
+
+@pytest.mark.parametrize("tablefmt", ["pipe", "github"])
+def test_convert_to_md_table_index_preescaped_pipes(tablefmt):
+    df = pd.DataFrame({"value": [1]}, index=pd.Index([r"a\|b"], name=r"row\|name"))
+
+    md = convert_to_md_table(df, index=True, tablefmt=tablefmt)
+
+    assert r"a\|b" in md
+    assert r"row\|name" in md
+    assert r"a\\|b" not in md
+    assert r"row\\|name" not in md
+
+
+def test_convert_to_md_table_index_grid():
+    df = pd.DataFrame({"value": [1]}, index=pd.Index(["a|b\ntwo"], name="row|name"))
+
+    md = convert_to_md_table(df, index=True, tablefmt="grid")
+
+    assert "<br>" not in md
+    assert r"a\|b" in md
+    assert "two" in md
+    assert r"row\|name" in md
+
+
+@pytest.mark.parametrize(
+    "index",
+    [
+        pd.Index([1, 2], name="row"),
+        pd.Index([1.25, 2.5], name="row"),
+        pd.date_range("2026-01-01", periods=2, name="row"),
+        pd.CategoricalIndex(["a", "b"], name="row"),
+        pd.Index(["a", None], dtype=object, name="row"),
+        pd.Index([(1, "a"), (2, "b")], name="row", tupleize_cols=False),
+        pd.MultiIndex.from_tuples([(1, "a"), (2, "b")], names=["number", "letter"]),
+    ],
+)
+def test_convert_to_md_table_index_types(index):
+    df = pd.DataFrame({"value": [1, 2]}, index=index)
+    original = df.copy(deep=True)
+
+    assert convert_to_md_table(df, index=True, floatfmt=".1f") == df.to_markdown(index=True, floatfmt=".1f")
+    pd.testing.assert_frame_equal(df, original)
+
+
+def test_convert_to_md_table_hidden_index():
+    df = pd.DataFrame({"value": [1]}, index=pd.Index(["a|b\ntwo"], name="row|name"))
+    original = df.copy(deep=True)
+
+    assert convert_to_md_table(df, index=False) == df.to_markdown(index=False)
+    pd.testing.assert_frame_equal(df, original)
+
+
 def test_add_indentation():
     """
     The filter used with mkdocs-macros-plugin, which strips indentation itself.

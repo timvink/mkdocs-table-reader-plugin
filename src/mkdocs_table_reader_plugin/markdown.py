@@ -65,6 +65,13 @@ def convert_to_md_table(df: pd.DataFrame, **markdown_kwargs: dict) -> str:
     # Escape a copy, so that a DataFrame passed in by a macros user is left alone
     df = df.map(escape)
     df.columns = [escape(c) for c in df.columns]
+    if markdown_kwargs["index"] and not isinstance(df.index, pd.MultiIndex):
+        df.index = pd.Index(
+            [escape(value) for value in df.index],
+            name=escape(df.index.name),
+            dtype=object,
+            tupleize_cols=False,
+        )
 
     return df.to_markdown(**markdown_kwargs)
 
