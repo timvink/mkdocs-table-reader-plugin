@@ -65,6 +65,10 @@ def convert_to_md_table(df: pd.DataFrame, **markdown_kwargs: dict) -> str:
     # Escape a copy, so that a DataFrame passed in by a macros user is left alone
     df = df.map(escape)
     df.columns = [escape(c) for c in df.columns]
+    # Row labels and index name too, as they are rendered when index=True.
+    # A MultiIndex is rendered as tuple reprs, which escaping cannot fix.
+    if not isinstance(df.index, pd.MultiIndex):
+        df = df.rename(index=escape).rename_axis(index=escape)
 
     return df.to_markdown(**markdown_kwargs)
 
