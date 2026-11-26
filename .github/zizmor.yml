@@ -3,3 +3,7 @@ rules:
     ignore:
       # `mkdocs gh-deploy` pushes with the checkout's persisted token.
       - documentation.yml
+  dependabot-cooldown:
+    config:
+      # Monthly grouped updates; 3 days is enough to catch yanked releases.
+      days: 3
