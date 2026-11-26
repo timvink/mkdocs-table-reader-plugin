@@ -133,3 +133,8 @@ dev = [
     "tables>=3.9.2",
     "xlrd>=1.0.0",
 ]
+
+[tool.uv]
+# Only resolve releases at least a day old, to give the community time to
+# catch compromised packages before they reach this lockfile.
+exclude-newer = "24 hours"
