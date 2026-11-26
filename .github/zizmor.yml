@@ -1,0 +1,5 @@
+rules:
+  artipacked:
+    ignore:
+      # `mkdocs gh-deploy` pushes with the checkout's persisted token.
+      - documentation.yml
